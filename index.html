@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hybridbots — Criação de Sites</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700&family=Barlow:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/CustomEase.min.js"></script>
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #060608;
+  --bg2: #0d0d10;
+  --fg: #f0ece4;
+  --accent: #c8b89a;
+  --accent2: #7eb8a0;
+  --dim: rgba(240,236,228,.45);
+  --border: rgba(240,236,228,.08);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: 'Barlow', sans-serif;
+  overflow-x: hidden;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 2px; }
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 24px 48px;
+  background: linear-gradient(to bottom, rgba(6,6,8,.97) 0%, transparent 100%);
+  backdrop-filter: blur(0px);
+}
+.nav-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px; letter-spacing: .2em; color: var(--fg);
+}
+.nav-links {
+  display: flex; gap: 32px; list-style: none;
+}
+.nav-links a {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 12px; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--dim); text-decoration: none;
+  transition: color .25s;
+}
+.nav-links a:hover { color: var(--fg); }
+.nav-cta {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px; letter-spacing: .2em; text-transform: uppercase;
+  padding: 10px 24px; background: var(--accent); color: var(--bg);
+  border: none; cursor: pointer; text-decoration: none;
+  transition: opacity .25s;
+  display: inline-block;
+}
+.nav-cta:hover { opacity: .82; }
+
+/* ── HERO ── */
+#hero {
+  position: relative;
+  height: 100vh; min-height: 600px; max-height: 940px;
+  overflow: hidden;
+  display: flex; flex-direction: column;
+  justify-content: flex-end;
+  padding: 0 64px 72px;
+}
+
+/* Slides — apenas fundo, sem conteúdo próprio */
+.hslide {
+  position: absolute; inset: 0;
+  opacity: 0; pointer-events: none;
+  will-change: opacity; z-index: 0;
+}
+.hslide.active { opacity: 1; z-index: 1; }
+.hslide.prev   { opacity: 0; z-index: 0; }
+.hslide-bg {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+  transform: scale(1.05);
+  will-change: transform;
+  filter: grayscale(.55);
+}
+.hslide.active .hslide-bg {
+  transform: scale(1);
+  transition: transform 7s ease-out;
+}
+
+/* Gradientes sobre as imagens */
+.hero-grad-left {
+  position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background: linear-gradient(to right,
+    rgba(6,6,8,.97) 0%,
+    rgba(6,6,8,.72) 32%,
+    rgba(6,6,8,.22) 60%,
+    transparent 100%);
+}
+.hero-grad-bottom {
+  position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background: linear-gradient(to top,
+    rgba(6,6,8,.98) 0%,
+    rgba(6,6,8,.35) 35%,
+    transparent 60%);
+}
+
+/* Grid de fundo */
+.hero-grid {
+  position: absolute; inset: 0; z-index: 3; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(240,236,228,.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(240,236,228,.055) 1px, transparent 1px);
+  background-size: 80px 80px;
+  mask-image: linear-gradient(to bottom,
+    transparent 0%,
+    rgba(0,0,0,.5) 20%,
+    rgba(0,0,0,.5) 75%,
+    transparent 100%);
+}
+
+/* Linhas verticais animadas */
+.hero-vline {
+  position: absolute; top: 0; bottom: 0; z-index: 3;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent 0%, var(--accent2) 50%, transparent 100%);
+  opacity: 0; pointer-events: none;
+  animation: vlinePulse 6s ease-in-out infinite;
+}
+.hero-vline:nth-child(1) { left: 20%;  animation-delay: 0s;   opacity: .12; }
+.hero-vline:nth-child(2) { left: 52%;  animation-delay: 2.2s; opacity: .07; }
+.hero-vline:nth-child(3) { left: 78%;  animation-delay: 4.1s; opacity: .09; }
+@keyframes vlinePulse {
+  0%, 100% { opacity: .05; }
+  50%       { opacity: .2; }
+}
+
+/* Conteúdo fixo do hero — fica por cima de tudo */
+.hero-content {
+  position: relative; z-index: 10;
+}
+.hero-tag {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px; letter-spacing: .42em; text-transform: uppercase;
+  color: var(--accent2); margin-bottom: 18px;
+  display: flex; align-items: center; gap: 14px;
+  opacity: 0; animation: fadeUp .7s .4s forwards;
+}
+.hero-tag::before { content: ''; width: 40px; height: 1px; background: var(--accent2); flex-shrink: 0; }
+
+.hero-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(52px, 6.8vw, 98px);
+  line-height: .88; letter-spacing: -.01em;
+  color: var(--fg);
+  opacity: 0; animation: fadeUp .9s .55s forwards;
+}
+.hero-title em {
+  font-style: normal; color: transparent;
+  -webkit-text-stroke: 1.5px var(--accent);
+}
+.hero-sub {
+  font-size: 15px; line-height: 1.8;
+  color: var(--dim); max-width: 480px;
+  margin-top: 20px;
+  opacity: 0; animation: fadeUp .7s .72s forwards;
+}
+.hero-actions {
+  display: flex; gap: 14px; margin-top: 32px; flex-wrap: wrap;
+  opacity: 0; animation: fadeUp .7s .88s forwards;
+}
+
+/* Indicadores de slide — cantos inf. esq. */
+#hslider-indicators {
+  position: absolute; bottom: 32px; left: 64px;
+  z-index: 20; display: flex; gap: 8px; align-items: center;
+}
+.hindic {
+  height: 2px; background: rgba(240,236,228,.15);
+  cursor: pointer; position: relative; overflow: hidden;
+  transition: width .4s cubic-bezier(.76,0,.24,1);
+}
+.hindic.active { background: rgba(240,236,228,.1); }
+.hindic-fill {
+  position: absolute; top: 0; left: 0; bottom: 0;
+  background: var(--fg); width: 0%;
+}
+
+/* Thumbnails — canto inf. dir. */
+#hslider-thumbs {
+  position: absolute; bottom: 22px; right: 40px;
+  z-index: 20; display: flex; gap: 10px;
+}
+.hthumb {
+  width: 78px; height: 50px;
+  background-size: cover; background-position: center;
+  opacity: .28; cursor: pointer;
+  border: 1px solid transparent;
+  transition: opacity .35s, border-color .35s, filter .35s;
+  filter: grayscale(.7);
+}
+.hthumb.active { opacity: 1; border-color: rgba(240,236,228,.4); filter: grayscale(0); }
+.hthumb:hover  { opacity: .6; }
+
+/* Setas */
+.hslider-arrow {
+  position: absolute; top: 50%; z-index: 20;
+  transform: translateY(-50%);
+  width: 48px; height: 48px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; opacity: .35; transition: opacity .3s;
+  background: none; border: none; padding: 0;
+}
+.hslider-arrow:hover { opacity: 1; }
+#hslider-prev { left: 18px; }
+#hslider-next { right: 18px; }
+.hslider-arrow svg {
+  width: 22px; height: 22px;
+  stroke: var(--fg); stroke-width: 1.5;
+  fill: none; stroke-linecap: round; stroke-linejoin: round;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,.9));
+}
+
+/* Service label que muda no canto direito conforme slide */
+#hero-slide-label {
+  position: absolute; right: 48px; top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
+  text-align: right;
+  pointer-events: none;
+}
+.hsl-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 72px; line-height: 1;
+  color: rgba(240,236,228,.06);
+}
+.hsl-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px; letter-spacing: .35em; text-transform: uppercase;
+  color: rgba(240,236,228,.3);
+  margin-top: 4px;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── HERO fim ── */
+
+.btn-main {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px; letter-spacing: .22em; text-transform: uppercase;
+  padding: 14px 36px; background: var(--fg); color: var(--bg);
+  border: none; cursor: pointer; text-decoration: none;
+  display: inline-block;
+  transition: background .25s, transform .2s;
+}
+.btn-main:hover { background: var(--accent); transform: translateY(-2px); }
+.btn-outline {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px; letter-spacing: .22em; text-transform: uppercase;
+  padding: 14px 36px; background: transparent; color: var(--fg);
+  border: 1px solid rgba(240,236,228,.3); cursor: pointer; text-decoration: none;
+  display: inline-block;
+  transition: border-color .25s, transform .2s;
+}
+.btn-outline:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+/* ── MARQUEE ── */
+.marquee-wrap {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  overflow: hidden; padding: 18px 0;
+  background: rgba(200,184,154,.04);
+}
+.marquee-track {
+  display: flex; gap: 64px; white-space: nowrap;
+  animation: marquee 28s linear infinite;
+}
+.marquee-track:hover { animation-play-state: paused; }
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.marquee-item {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 12px; letter-spacing: .3em; text-transform: uppercase;
+  color: var(--dim); flex-shrink: 0;
+  display: flex; align-items: center; gap: 64px;
+}
+.marquee-item span { color: var(--accent2); }
+
+/* ── SECTION BASE ── */
+section { padding: 120px 64px; }
+.section-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px; letter-spacing: .4em; text-transform: uppercase;
+  color: var(--accent2); margin-bottom: 16px;
+  display: flex; align-items: center; gap: 12px;
+}
+.section-label::before { content: ''; width: 30px; height: 1px; background: var(--accent2); }
+.section-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(36px, 4.5vw, 68px); line-height: .9;
+  color: var(--fg);
+}
+
+/* ── O QUE ENTREGO ── */
+#servicos { background: var(--bg2); position: relative; overflow: hidden; }
+.servicos-photo {
+  position: absolute; inset: 0;
+  background-image: url('https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=1600&q=80&auto=format&fit=crop');
+  background-size: cover; background-position: center;
+  opacity: .10; filter: grayscale(1) brightness(.7);
+  pointer-events: none;
+}
+.services-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1px; margin-top: 64px;
+  border: 1px solid var(--border);
+}
+.service-card {
+  padding: 40px 36px;
+  border: 1px solid transparent;
+  position: relative; overflow: hidden;
+  transition: border-color .3s, background .3s;
+  cursor: default;
+}
+.service-card:hover {
+  border-color: rgba(200,184,154,.2);
+  background: rgba(200,184,154,.04);
+}
+.service-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 2px; background: linear-gradient(90deg, var(--accent2), var(--accent));
+  transform: scaleX(0); transform-origin: left;
+  transition: transform .4s cubic-bezier(.76,0,.24,1);
+}
+.service-card:hover::before { transform: scaleX(1); }
+.service-icon {
+  display: block; margin-bottom: 20px;
+  width: 28px; height: 28px;
+}
+.service-icon svg {
+  width: 28px; height: 28px;
+  stroke: var(--accent2); stroke-width: 1.25;
+  fill: none; stroke-linecap: round; stroke-linejoin: round;
+  transition: stroke .3s;
+}
+.service-card:hover .service-icon svg { stroke: var(--accent); }
+.service-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 48px; color: rgba(200,184,154,.12);
+  position: absolute; top: 28px; right: 32px;
+  line-height: 1;
+}
+.service-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 22px; letter-spacing: .06em; font-weight: 600;
+  color: var(--fg); margin-bottom: 10px;
+}
+.service-desc {
+  font-size: 14px; line-height: 1.75;
+  color: var(--dim);
+}
+
+/* ── BRINDES / INCLUSO ── */
+#incluso { position: relative; overflow: hidden; }
+.incluso-bg {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(126,184,160,.06) 0%, transparent 65%);
+  pointer-events: none;
+}
+.incluso-intro {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 80px; align-items: end; margin-bottom: 80px;
+}
+.incluso-intro-right {
+  font-size: 15px; line-height: 1.85; color: var(--dim);
+}
+.incluso-intro-right strong { color: var(--accent); font-weight: 400; }
+
+.brindes-list {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 24px; margin-top: 0;
+}
+.brinde-card {
+  padding: 36px 32px;
+  border: 1px solid var(--border);
+  position: relative;
+  transition: border-color .3s, transform .3s;
+}
+.brinde-card:hover {
+  border-color: rgba(126,184,160,.3);
+  transform: translateY(-4px);
+}
+.brinde-icon {
+  width: 44px; height: 44px;
+  margin-bottom: 24px;
+  display: flex; align-items: center; justify-content: center;
+}
+.brinde-icon svg {
+  width: 26px; height: 26px;
+  stroke: var(--accent2); stroke-width: 1.25;
+  fill: none; stroke-linecap: round; stroke-linejoin: round;
+  transition: stroke .3s;
+}
+.brinde-card:hover .brinde-icon svg { stroke: var(--accent); }
+.brinde-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 16px; letter-spacing: .1em; font-weight: 600;
+  color: var(--fg); text-transform: uppercase; margin-bottom: 6px;
+}
+.brinde-desc {
+  font-size: 13px; line-height: 1.65; color: var(--dim);
+}
+.brinde-tag {
+  display: inline-block; margin-top: 16px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 10px; letter-spacing: .2em; text-transform: uppercase;
+  padding: 4px 12px; background: rgba(126,184,160,.12);
+  color: var(--accent2); border: 1px solid rgba(126,184,160,.2);
+}
+
+/* ── COMO FUNCIONA ── */
+#como-funciona {
+  background: var(--bg2);
+  position: relative; overflow: hidden;
+}
+.como-photo {
+  position: absolute; inset: 0;
+  background-image: url('https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?w=1600&q=80&auto=format&fit=crop');
+  background-size: cover; background-position: center;
+  opacity: .10; filter: grayscale(1) brightness(.75);
+  pointer-events: none;
+}
+.steps-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0; margin-top: 64px;
+  counter-reset: steps;
+}
+.step {
+  padding: 48px 36px;
+  border-right: 1px solid var(--border);
+  position: relative;
+}
+.step:last-child { border-right: none; }
+.step-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 72px; line-height: 1;
+  color: rgba(200,184,154,.1);
+  margin-bottom: 16px;
+}
+.step-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 20px; font-weight: 700; letter-spacing: .05em;
+  color: var(--fg); text-transform: uppercase; margin-bottom: 12px;
+}
+.step-desc {
+  font-size: 14px; line-height: 1.75; color: var(--dim);
+}
+.step-connector {
+  position: absolute; right: -1px; top: 50%;
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--accent); transform: translate(50%, -50%);
+}
+.step:last-child .step-connector { display: none; }
+
+/* ── GARANTIA ── */
+#garantia {
+  background: linear-gradient(135deg, rgba(126,184,160,.08) 0%, rgba(200,184,154,.06) 100%);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  text-align: center; padding: 100px 64px;
+  position: relative; overflow: hidden;
+}
+.garantia-photo {
+  position: absolute; inset: 0;
+  background-image: url('https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=1600&q=80&auto=format&fit=crop');
+  background-size: cover; background-position: center 40%;
+  opacity: .12; filter: grayscale(1) brightness(.7);
+  pointer-events: none;
+}
+.garantia-big {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(48px, 7vw, 110px); line-height: .85;
+  color: var(--fg);
+}
+.garantia-big em {
+  font-style: normal; color: transparent;
+  -webkit-text-stroke: 1.5px var(--accent2);
+}
+.garantia-desc {
+  font-size: 16px; line-height: 1.85; color: var(--dim);
+  max-width: 640px; margin: 32px auto 0;
+}
+.garantia-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  margin-top: 40px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px; letter-spacing: .2em; text-transform: uppercase;
+  padding: 12px 28px; border: 1px solid var(--accent2);
+  color: var(--accent2);
+}
+.garantia-badge::before { content: '✓'; }
+
+/* ── CTA FINAL ── */
+#cta-final {
+  padding: 140px 64px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 60px; flex-wrap: wrap;
+  position: relative; overflow: hidden;
+}
+.cta-photo {
+  position: absolute; inset: 0;
+  background-image: url('https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=1600&q=80&auto=format&fit=crop');
+  background-size: cover; background-position: center;
+  opacity: .12; filter: grayscale(1) brightness(.7);
+  pointer-events: none;
+}
+.cta-text .section-title { margin-bottom: 20px; }
+.cta-text p { font-size: 15px; line-height: 1.8; color: var(--dim); max-width: 480px; }
+.cta-actions { display: flex; flex-direction: column; gap: 16px; min-width: 280px; }
+.btn-whatsapp {
+  display: flex; align-items: center; gap: 12px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 14px; letter-spacing: .2em; text-transform: uppercase;
+  padding: 18px 36px; background: #25D366; color: #fff;
+  border: none; cursor: pointer; text-decoration: none;
+  transition: opacity .25s, transform .2s;
+}
+.btn-whatsapp:hover { opacity: .87; transform: translateY(-2px); }
+.cta-note {
+  font-size: 13px; color: var(--dim); text-align: center;
+}
+
+/* ── FOOTER ── */
+footer {
+  padding: 40px 64px;
+  border-top: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 20px;
+}
+.footer-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 16px; letter-spacing: .2em; color: var(--accent);
+}
+.footer-links {
+  display: flex; gap: 24px; list-style: none;
+}
+.footer-links a {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--dim); text-decoration: none; transition: color .2s;
+}
+.footer-links a:hover { color: var(--fg); }
+.footer-copy {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px; letter-spacing: .1em; color: rgba(240,236,228,.2);
+}
+
+/* ── PORTFÓLIO ── */
+#portfolio {
+  padding: 120px 64px;
+  position: relative; overflow: hidden;
+}
+.portfolio-header {
+  display: flex; justify-content: space-between; align-items: flex-end;
+  margin-bottom: 64px; gap: 40px; flex-wrap: wrap;
+}
+.portfolio-filters {
+  display: flex; gap: 8px; flex-wrap: wrap;
+}
+.filter-btn {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px; letter-spacing: .2em; text-transform: uppercase;
+  padding: 8px 20px;
+  background: transparent; color: var(--dim);
+  border: 1px solid var(--border);
+  cursor: pointer; transition: all .25s;
+}
+.filter-btn:hover,
+.filter-btn.active {
+  color: var(--fg);
+  border-color: rgba(240,236,228,.35);
+  background: rgba(240,236,228,.05);
+}
+.filter-btn.active { color: var(--accent); border-color: var(--accent); }
+
+.portfolio-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-auto-rows: 260px;
+  gap: 12px;
+}
+.port-item {
+  position: relative; overflow: hidden;
+  cursor: pointer;
+  background: var(--bg2);
+}
+.port-item:nth-child(1) { grid-column: span 7; grid-row: span 2; }
+.port-item:nth-child(2) { grid-column: span 5; grid-row: span 1; }
+.port-item:nth-child(3) { grid-column: span 5; grid-row: span 1; }
+.port-item:nth-child(4) { grid-column: span 4; grid-row: span 1; }
+.port-item:nth-child(5) { grid-column: span 4; grid-row: span 1; }
+.port-item:nth-child(6) { grid-column: span 4; grid-row: span 1; }
+
+.port-img {
+  position: absolute; inset: 0;
+  background-size: cover; background-position: center;
+  filter: grayscale(.55);
+  transform: scale(1.04);
+  transition: transform .7s cubic-bezier(.25,.1,.25,1), filter .5s ease;
+}
+.port-item:hover .port-img {
+  transform: scale(1);
+  filter: grayscale(0);
+}
+.port-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(6,6,8,.92) 0%, rgba(6,6,8,.3) 50%, transparent 100%);
+  transition: background .4s ease;
+}
+.port-item:hover .port-overlay {
+  background: linear-gradient(to top, rgba(6,6,8,.85) 0%, rgba(6,6,8,.5) 60%, rgba(6,6,8,.2) 100%);
+}
+.port-info {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 28px 32px;
+  transform: translateY(8px);
+  transition: transform .4s cubic-bezier(.25,.1,.25,1);
+}
+.port-item:hover .port-info { transform: translateY(0); }
+
+.port-category {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 10px; letter-spacing: .3em; text-transform: uppercase;
+  color: var(--accent2); margin-bottom: 6px;
+  opacity: 0; transform: translateY(10px);
+  transition: opacity .35s .05s, transform .35s .05s;
+}
+.port-item:hover .port-category { opacity: 1; transform: translateY(0); }
+
+.port-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(22px, 2.5vw, 34px);
+  color: var(--fg); line-height: 1;
+  letter-spacing: .02em;
+}
+.port-desc {
+  font-size: 13px; line-height: 1.6; color: var(--dim);
+  margin-top: 8px; max-width: 420px;
+  opacity: 0; transform: translateY(10px);
+  transition: opacity .35s .1s, transform .35s .1s;
+}
+.port-item:hover .port-desc { opacity: 1; transform: translateY(0); }
+
+.port-link {
+  display: inline-flex; align-items: center; gap: 8px;
+  margin-top: 14px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--accent);
+  opacity: 0; transform: translateY(10px);
+  transition: opacity .35s .15s, transform .35s .15s;
+}
+.port-item:hover .port-link { opacity: 1; transform: translateY(0); }
+.port-link::after { content: '→'; transition: transform .2s; }
+.port-item:hover .port-link:hover::after { transform: translateX(4px); }
+
+.port-tag {
+  position: absolute; top: 20px; right: 20px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 10px; letter-spacing: .2em; text-transform: uppercase;
+  padding: 5px 12px;
+  background: rgba(6,6,8,.7); border: 1px solid var(--border);
+  color: var(--dim); backdrop-filter: blur(4px);
+}
+
+/* ── MOBILE portfolio ── */
+@media (max-width: 900px) {
+  .portfolio-grid {
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: 220px;
+  }
+  .port-item:nth-child(1) { grid-column: span 2; grid-row: span 1; }
+  .port-item:nth-child(2),
+  .port-item:nth-child(3),
+  .port-item:nth-child(4),
+  .port-item:nth-child(5),
+  .port-item:nth-child(6) { grid-column: span 1; }
+  .portfolio-header { flex-direction: column; align-items: flex-start; }
+}
+@media (max-width: 560px) {
+  .portfolio-grid {
+    grid-template-columns: 1fr;
+    grid-auto-rows: 240px;
+  }
+  .port-item { grid-column: span 1 !important; grid-row: span 1 !important; }
+}
+
+/* ── MOBILE ── */
+@media (max-width: 768px) {
+  nav { padding: 20px 24px; }
+  .nav-links { display: none; }
+  #hero { max-height: 100vh; padding: 0 24px 80px; }
+  .hslide-content { left: 24px; bottom: 90px; }
+  #hslider-indicators { left: 24px; }
+  #hslider-thumbs { display: none; }
+  #hero-slide-label { display: none; }
+  section { padding: 80px 24px; }
+  .incluso-intro { grid-template-columns: 1fr; gap: 32px; }
+  .steps-grid { grid-template-columns: 1fr; }
+  .step { border-right: none; border-bottom: 1px solid var(--border); }
+  .step-connector { display: none; }
+  #cta-final { padding: 80px 24px; }
+  footer { padding: 32px 24px; flex-direction: column; align-items: flex-start; }
+}
+
+/* ── SCROLL REVEAL ── */
+.reveal {
+  opacity: 0; transform: translateY(40px);
+  transition: opacity .8s cubic-bezier(.25,.1,.25,1), transform .8s cubic-bezier(.25,.1,.25,1);
+}
+.reveal.visible { opacity: 1; transform: none; }
+.reveal-delay-1 { transition-delay: .1s; }
+.reveal-delay-2 { transition-delay: .2s; }
+.reveal-delay-3 { transition-delay: .3s; }
+.reveal-delay-4 { transition-delay: .4s; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Hybridbots</div>
+  <ul class="nav-links">
+    <li><a href="#servicos">Serviços</a></li>
+    <li><a href="#portfolio">Portfólio</a></li>
+    <li><a href="#incluso">Incluso</a></li>
+    <li><a href="#como-funciona">Como funciona</a></li>
+    <li><a href="#garantia">Garantia</a></li>
+  </ul>
+  <a href="https://wa.me/5511999999999" target="_blank" class="nav-cta">Falar pelo WhatsApp</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+
+  <!-- Slides — só imagens de fundo, sem conteúdo -->
+  <div class="hslide">
+    <div class="hslide-bg" style="background-image:url('https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=1800&q=80&auto=format&fit=crop')"></div>
+  </div>
+  <div class="hslide">
+    <div class="hslide-bg" style="background-image:url('https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=1800&q=80&auto=format&fit=crop')"></div>
+  </div>
+  <div class="hslide">
+    <div class="hslide-bg" style="background-image:url('https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=1800&q=80&auto=format&fit=crop')"></div>
+  </div>
+
+  <!-- Gradientes -->
+  <div class="hero-grad-left"></div>
+  <div class="hero-grad-bottom"></div>
+
+  <!-- Grid quadriculado -->
+  <div class="hero-grid"></div>
+  <div class="hero-vline"></div>
+  <div class="hero-vline"></div>
+  <div class="hero-vline"></div>
+
+  <!-- Label do serviço atual — direita -->
+  <div id="hero-slide-label">
+    <div class="hsl-num" id="hsl-num">01</div>
+    <div class="hsl-name" id="hsl-name">Site Institucional</div>
+  </div>
+
+  <!-- Conteúdo fixo -->
+  <div class="hero-content">
+    <div class="hero-tag">Criação de Sites Profissionais</div>
+    <h1 class="hero-title">
+      SEU NEGÓCIO<br>
+      <em>ONLINE</em><br>
+      DE VERDADE
+    </h1>
+    <p class="hero-sub">
+      Sites personalizados, landing pages e portais de notícias — feitos sob medida para o seu negócio. Design moderno, SEO avançado e resultado garantido.
+    </p>
+    <div class="hero-actions">
+      <a href="https://wa.me/5511999999999" target="_blank" class="btn-main">Quero meu site</a>
+      <a href="#como-funciona" class="btn-outline">Como funciona</a>
+    </div>
+  </div>
+
+  <!-- Setas -->
+  <button class="hslider-arrow" id="hslider-prev">
+    <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+  </button>
+  <button class="hslider-arrow" id="hslider-next">
+    <svg viewBox="0 0 24 24"><polyline points="9 6 15 12 9 18"/></svg>
+  </button>
+
+  <!-- Indicadores e thumbnails -->
+  <div id="hslider-indicators"></div>
+  <div id="hslider-thumbs"></div>
+
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <div class="marquee-item">Sites Personalizados <span>✦</span> Landing Pages <span>✦</span> Blog & Portal de Notícias <span>✦</span> SEO Avançado <span>✦</span> Certificado SSL <span>✦</span> Integração WhatsApp <span>✦</span> Design Responsivo <span>✦</span> Hospedagem Gratuita <span>✦</span> Domínio Grátis <span>✦</span></div>
+    <div class="marquee-item">Sites Personalizados <span>✦</span> Landing Pages <span>✦</span> Blog & Portal de Notícias <span>✦</span> SEO Avançado <span>✦</span> Certificado SSL <span>✦</span> Integração WhatsApp <span>✦</span> Design Responsivo <span>✦</span> Hospedagem Gratuita <span>✦</span> Domínio Grátis <span>✦</span></div>
+  </div>
+</div>
+
+<!-- SERVIÇOS -->
+<section id="servicos">
+  <div class="servicos-photo"></div>
+  <div class="section-label reveal">O que eu entrego</div>
+  <h2 class="section-title reveal reveal-delay-1">TIPOS DE<br>PROJETO</h2>
+
+  <div class="services-grid">
+    <div class="service-card reveal">
+      <span class="service-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1"/><path d="M3 9h18M9 21V9"/></svg></span>
+      <div class="service-num">01</div>
+      <div class="service-name">Site Institucional</div>
+      <div class="service-desc">Presença digital completa para o seu negócio. Página sobre, serviços, contato e integração com redes sociais — tudo no seu estilo.</div>
+    </div>
+    <div class="service-card reveal reveal-delay-1">
+      <span class="service-icon"><svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></span>
+      <div class="service-num">02</div>
+      <div class="service-name">Landing Page</div>
+      <div class="service-desc">Página focada em conversão para campanhas, lançamentos ou captação de leads. Otimizada para vender e aparecer no Google.</div>
+    </div>
+    <div class="service-card reveal reveal-delay-2">
+      <span class="service-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16v3H4z"/><path d="M4 11h10"/><path d="M4 15h8"/><path d="M4 19h6"/><circle cx="18" cy="17" r="3"/><path d="M20.2 19.2L22 21"/></svg></span>
+      <div class="service-num">03</div>
+      <div class="service-name">Blog & Portal</div>
+      <div class="service-desc">Portal de notícias ou blog profissional com painel de gerenciamento, categorias, tags e SEO avançado para ranquear no Google.</div>
+    </div>
+  </div>
+</section>
+
+<!-- PORTFÓLIO -->
+<section id="portfolio">
+  <div class="portfolio-header">
+    <div>
+      <div class="section-label reveal">Trabalhos recentes</div>
+      <h2 class="section-title reveal reveal-delay-1">PORTFÓLIO</h2>
+    </div>
+    <div class="portfolio-filters reveal reveal-delay-2">
+      <button class="filter-btn active" data-filter="todos">Todos</button>
+      <button class="filter-btn" data-filter="site">Site</button>
+      <button class="filter-btn" data-filter="landing">Landing Page</button>
+      <button class="filter-btn" data-filter="blog">Blog & Portal</button>
+    </div>
+  </div>
+
+  <div class="portfolio-grid">
+
+    <div class="port-item reveal" data-type="site">
+      <div class="port-img" style="background-image:url('https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&q=80&auto=format&fit=crop')"></div>
+      <div class="port-overlay"></div>
+      <span class="port-tag">Site</span>
+      <div class="port-info">
+        <div class="port-category">Site Institucional</div>
+        <div class="port-title">Studio Arquitetura</div>
+        <div class="port-desc">Site completo para escritório de arquitetura contemporânea. Design minimalista com galeria de projetos e formulário de orçamento.</div>
+        <span class="port-link">Ver projeto</span>
+      </div>
+    </div>
+
+    <div class="port-item reveal reveal-delay-1" data-type="landing">
+      <div class="port-img" style="background-image:url('https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=900&q=80&auto=format&fit=crop')"></div>
+      <div class="port-overlay"></div>
+      <span class="port-tag">Landing Page</span>
+      <div class="port-info">
+        <div class="port-category">Landing Page</div>
+        <div class="port-title">Academia FitLife</div>
+        <div class="port-desc">Landing page de conversão para captação de matrículas com depoimentos e integração com WhatsApp.</div>
+        <span class="port-link">Ver projeto</span>
+      </div>
+    </div>
+
+    <div class="port-item reveal reveal-delay-2" data-type="blog">
+      <div class="port-img" style="background-image:url('https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=900&q=80&auto=format&fit=crop')"></div>
+      <div class="port-overlay"></div>
+      <span class="port-tag">Blog</span>
+      <div class="port-info">
+        <div class="port-category">Portal de Notícias</div>
+        <div class="port-title">Jornal Regional Online</div>
+        <div class="port-desc">Portal completo com painel de gestão, categorias, tags e SEO otimizado para Google Notícias.</div>
+        <span class="port-link">Ver projeto</span>
+      </div>
+    </div>
+
+    <div class="port-item reveal" data-type="site">
+      <div class="port-img" style="background-image:url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=900&q=80&auto=format&fit=crop')"></div>
+      <div class="port-overlay"></div>
+      <span class="port-tag">Site</span>
+      <div class="port-info">
+        <div class="port-category">Site Institucional</div>
+        <div class="port-title">Restaurante Origem</div>
+        <div class="port-desc">Site com cardápio digital, reservas online e integração com Instagram.</div>
+        <span class="port-link">Ver projeto</span>
+      </div>
+    </div>
+
+    <div class="port-item reveal reveal-delay-1" data-type="landing">
+      <div class="port-img" style="background-image:url('https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=900&q=80&auto=format&fit=crop')"></div>
+      <div class="port-overlay"></div>
+      <span class="port-tag">Landing Page</span>
+      <div class="port-info">
+        <div class="port-category">Landing Page</div>
+        <div class="port-title">Consultoria Empresarial</div>
+        <div class="port-desc">Página de captação para serviços B2B com formulário de diagnóstico e prova social.</div>
+        <span class="port-link">Ver projeto</span>
+      </div>
+    </div>
+
+    <div class="port-item reveal reveal-delay-2" data-type="site">
+      <div class="port-img" style="background-image:url('https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=900&q=80&auto=format&fit=crop')"></div>
+      <div class="port-overlay"></div>
+      <span class="port-tag">Site</span>
+      <div class="port-info">
+        <div class="port-category">Site Institucional</div>
+        <div class="port-title">Clínica Estética</div>
+        <div class="port-desc">Site elegante com agendamento online, serviços e depoimentos de clientes.</div>
+        <span class="port-link">Ver projeto</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- INCLUSO -->
+<section id="incluso">
+  <div class="incluso-bg"></div>
+  <div class="incluso-intro">
+    <div>
+      <div class="section-label reveal">Sem surpresas</div>
+      <h2 class="section-title reveal reveal-delay-1">TUDO<br>INCLUSO</h2>
+    </div>
+    <div class="incluso-intro-right reveal reveal-delay-2">
+      <strong>Nada de cobranças escondidas.</strong> Cada projeto já vem com hospedagem, domínio, suporte e todas as integrações que seu negócio precisa para rodar do primeiro dia.
+    </div>
+  </div>
+
+  <div class="brindes-list">
+    <div class="brinde-card reveal">
+      <div class="brinde-icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="1"/><path d="M8 21h8M12 17v4"/></svg></div>
+      <div class="brinde-title">Hospedagem</div>
+      <div class="brinde-desc">Servidor rápido e estável. Seu site no ar sem você precisar se preocupar com nada técnico.</div>
+      <span class="brinde-tag">Grátis por 1 ano</span>
+    </div>
+    <div class="brinde-card reveal reveal-delay-1">
+      <div class="brinde-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+      <div class="brinde-title">Domínio</div>
+      <div class="brinde-desc">Seu endereço na internet. Ex.: seunegocio.com.br — registrado no seu nome, com toda a documentação.</div>
+      <span class="brinde-tag">Grátis por 1 ano</span>
+    </div>
+    <div class="brinde-card reveal reveal-delay-2">
+      <div class="brinde-icon"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="1"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/><line x1="12" y1="15" x2="12" y2="17"/></svg></div>
+      <div class="brinde-title">Certificado SSL</div>
+      <div class="brinde-desc">O cadeado HTTPS que transmite segurança aos visitantes e melhora seu posicionamento no Google.</div>
+      <span class="brinde-tag">Incluso</span>
+    </div>
+    <div class="brinde-card reveal reveal-delay-3">
+      <div class="brinde-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+      <div class="brinde-title">Suporte Técnico</div>
+      <div class="brinde-desc">Ajustes, dúvidas e atualizações pontuais pelo WhatsApp, sem custo adicional durante o primeiro ano.</div>
+      <span class="brinde-tag">Grátis por 1 ano</span>
+    </div>
+    <div class="brinde-card reveal">
+      <div class="brinde-icon"><svg viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+      <div class="brinde-title">Velocidade</div>
+      <div class="brinde-desc">Código otimizado com nota alta no Google PageSpeed. Site rápido converte mais e ranqueia melhor.</div>
+      <span class="brinde-tag">Incluso</span>
+    </div>
+    <div class="brinde-card reveal reveal-delay-1">
+      <div class="brinde-icon"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+      <div class="brinde-title">SEO Avançado</div>
+      <div class="brinde-desc">Estrutura técnica, meta tags, sitemap e configurações para seu site aparecer nas primeiras posições do Google.</div>
+      <span class="brinde-tag">Incluso</span>
+    </div>
+    <div class="brinde-card reveal reveal-delay-2">
+      <div class="brinde-icon"><svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>
+      <div class="brinde-title">Design Responsivo</div>
+      <div class="brinde-desc">Layout perfeito no celular, tablet e computador. Mais de 70% dos acessos vêm do mobile — seu site vai estar pronto.</div>
+      <span class="brinde-tag">Incluso</span>
+    </div>
+    <div class="brinde-card reveal reveal-delay-3">
+      <div class="brinde-icon"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></div>
+      <div class="brinde-title">Integração Social</div>
+      <div class="brinde-desc">Botão de WhatsApp, links para Instagram, Facebook, e o que mais seu negócio usar — tudo conectado e funcional.</div>
+      <span class="brinde-tag">Incluso</span>
+    </div>
+  </div>
+</section>
+
+<!-- COMO FUNCIONA -->
+<section id="como-funciona">
+  <div class="como-photo"></div>
+  <div class="section-label reveal">Processo</div>
+  <h2 class="section-title reveal reveal-delay-1">COMO<br>FUNCIONA</h2>
+
+  <div class="steps-grid">
+    <div class="step reveal">
+      <div class="step-num">01</div>
+      <div class="step-title">Você me conta</div>
+      <div class="step-desc">Me fala sobre seu negócio, o que você precisa e o visual que imagina. Nenhum formulário complicado — só uma conversa pelo WhatsApp.</div>
+      <div class="step-connector"></div>
+    </div>
+    <div class="step reveal reveal-delay-1">
+      <div class="step-num">02</div>
+      <div class="step-title">Eu desenvolvo</div>
+      <div class="step-desc">Crio o site completo, personalizado e funcional. Cuido de tudo: design, código, hospedagem e configurações técnicas.</div>
+      <div class="step-connector"></div>
+    </div>
+    <div class="step reveal reveal-delay-2">
+      <div class="step-num">03</div>
+      <div class="step-title">Você aprova</div>
+      <div class="step-desc">Você vê o resultado antes de pagar qualquer coisa. Pedimos ajustes sem problema. Só fechamos quando você estiver satisfeito.</div>
+      <div class="step-connector"></div>
+    </div>
+    <div class="step reveal reveal-delay-3">
+      <div class="step-num">04</div>
+      <div class="step-title">Vai ao ar</div>
+      <div class="step-desc">Aprovado, publicamos tudo. Seu site fica no ar com domínio, hospedagem e suporte garantidos pelo primeiro ano.</div>
+    </div>
+  </div>
+</section>
+
+<!-- GARANTIA -->
+<section id="garantia">
+  <div class="garantia-photo"></div>
+  <div class="section-label reveal" style="justify-content:center;">Nossa promessa</div>
+  <div class="garantia-big reveal reveal-delay-1">
+    DESENVOLVIMENTO<br><em>100% GRATUITO</em>
+  </div>
+  <p class="garantia-desc reveal reveal-delay-2">
+    Você só paga se gostar do resultado. Desenvolvemos o projeto completo, você vê com seus próprios olhos — e decide. Sem contrato antecipado, sem risco nenhum.
+  </p>
+  <div class="reveal reveal-delay-3">
+    <span class="garantia-badge">Só paga se aprovar o resultado</span>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section id="cta-final">
+  <div class="cta-photo"></div>
+  <div class="cta-text">
+    <div class="section-label reveal">Pronto para começar?</div>
+    <h2 class="section-title reveal reveal-delay-1">VAMOS CRIAR<br>SEU SITE</h2>
+    <p class="reveal reveal-delay-2">Manda uma mensagem agora. Me fala o que você precisa e eu te explico como tudo funciona — sem compromisso.</p>
+  </div>
+  <div class="cta-actions reveal reveal-delay-2">
+    <a href="https://wa.me/5511999999999?text=Oi%2C+quero+saber+mais+sobre+criação+de+site" target="_blank" class="btn-whatsapp">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.127.558 4.122 1.532 5.852L.064 23.5l5.836-1.529A11.943 11.943 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.794 9.794 0 01-5.044-1.397l-.361-.215-3.741.981.998-3.641-.235-.374A9.794 9.794 0 012.182 12c0-5.424 4.394-9.818 9.818-9.818 5.424 0 9.818 4.394 9.818 9.818 0 5.424-4.394 9.818-9.818 9.818z"/></svg>
+      Falar pelo WhatsApp
+    </a>
+    <p class="cta-note">Resposta em até 2 horas · Sem compromisso</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Hybridbots</div>
+  <ul class="footer-links">
+    <li><a href="#servicos">Serviços</a></li>
+    <li><a href="#incluso">Incluso</a></li>
+    <li><a href="#garantia">Garantia</a></li>
+    <li><a href="https://wa.me/5511999999999" target="_blank">WhatsApp</a></li>
+  </ul>
+  <div class="footer-copy">© 2025 Hybridbots · Todos os direitos reservados</div>
+</footer>
+
+<script>
+// ── HERO SLIDER — fundo dinâmico ──────────
+(function() {
+  if (typeof gsap === 'undefined') return;
+
+  const AUTOPLAY_MS = 5500;
+  const slides   = Array.from(document.querySelectorAll('.hslide'));
+  const indWrap  = document.getElementById('hslider-indicators');
+  const thumbWrap= document.getElementById('hslider-thumbs');
+  const thumbBgs = [
+    'https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=300&q=70&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=300&q=70&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=300&q=70&auto=format&fit=crop'
+  ];
+  const slideLabels = [
+    { num: '01', name: 'Site Institucional' },
+    { num: '02', name: 'Landing Page'       },
+    { num: '03', name: 'Blog & Portal'      }
+  ];
+
+  let cur = 0, anim = false, timer = null;
+  const indicEls = [], thumbEls = [];
+
+  // Build indicators + thumbs
+  slides.forEach((_, i) => {
+    const ind = document.createElement('div');
+    ind.className = 'hindic' + (i === 0 ? ' active' : '');
+    ind.style.width = i === 0 ? '60px' : '28px';
+    ind.innerHTML = '<div class="hindic-fill"></div>';
+    ind.addEventListener('click', () => goTo(i));
+    indWrap.appendChild(ind); indicEls.push(ind);
+
+    const th = document.createElement('div');
+    th.className = 'hthumb' + (i === 0 ? ' active' : '');
+    th.style.backgroundImage = `url('${thumbBgs[i]}')`;
+    th.addEventListener('click', () => goTo(i));
+    thumbWrap.appendChild(th); thumbEls.push(th);
+  });
+
+  function setIndicators(idx) {
+    indicEls.forEach((el, i) => {
+      const fill = el.querySelector('.hindic-fill');
+      fill.style.transition = 'none'; fill.style.width = '0%';
+      el.classList.toggle('active', i === idx);
+      el.style.width = i === idx ? '60px' : '28px';
+    });
+    thumbEls.forEach((el, i) => el.classList.toggle('active', i === idx));
+  }
+
+  function updateLabel(idx) {
+    const numEl  = document.getElementById('hsl-num');
+    const nameEl = document.getElementById('hsl-name');
+    if (!numEl) return;
+    gsap.to([numEl, nameEl], { opacity: 0, y: -8, duration: .25, ease: 'power2.in',
+      onComplete: () => {
+        numEl.textContent  = slideLabels[idx].num;
+        nameEl.textContent = slideLabels[idx].name;
+        gsap.to([numEl, nameEl], { opacity: 1, y: 0, duration: .4, ease: 'power2.out' });
+      }
+    });
+  }
+
+  function startProgress() {
+    const fill = indicEls[cur].querySelector('.hindic-fill');
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      fill.style.transition = `width ${AUTOPLAY_MS}ms linear`;
+      fill.style.width = '100%';
+    }));
+  }
+
+  function stopProgress() {
+    const fill = indicEls[cur]?.querySelector('.hindic-fill');
+    if (!fill) return;
+    const w = fill.getBoundingClientRect().width;
+    const pw = fill.parentElement.getBoundingClientRect().width;
+    fill.style.transition = 'none';
+    fill.style.width = (w / pw * 100) + '%';
+  }
+
+  function startAutoplay() {
+    clearInterval(timer);
+    timer = setInterval(() => goTo((cur + 1) % slides.length, 1), AUTOPLAY_MS);
+  }
+  function stopAutoplay() { clearInterval(timer); stopProgress(); }
+
+  function goTo(next, dir) {
+    if (anim || next === cur) return;
+    anim = true; stopAutoplay();
+    const prev = cur; cur = next;
+    setIndicators(next);
+    updateLabel(next);
+
+    // Crossfade das imagens de fundo
+    const bg = slides[next].querySelector('.hslide-bg');
+    slides[prev].classList.add('prev');
+    slides[next].classList.add('active');
+    gsap.set(slides[next], { opacity: 0 });
+    gsap.set(bg, { x: (dir ?? 1) * 3 + '%' });
+    gsap.to(bg, { x: '0%', duration: 1.6, ease: 'power2.out' });
+    gsap.to(slides[next], { opacity: 1, duration: .8, ease: 'power2.inOut',
+      onComplete: () => {
+        gsap.to(slides[prev], { opacity: 0, duration: .4, ease: 'power2.inOut',
+          onComplete: () => slides[prev].classList.remove('active', 'prev')
+        });
+        anim = false; startProgress(); startAutoplay();
+      }
+    });
+  }
+
+  // Arrows
+  document.getElementById('hslider-prev').addEventListener('click', () => goTo((cur - 1 + slides.length) % slides.length, -1));
+  document.getElementById('hslider-next').addEventListener('click', () => goTo((cur + 1) % slides.length, 1));
+
+  // Keyboard
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight') goTo((cur + 1) % slides.length, 1);
+    if (e.key === 'ArrowLeft')  goTo((cur - 1 + slides.length) % slides.length, -1);
+  });
+
+  // Touch
+  let tx = 0;
+  const heroEl = document.getElementById('hero');
+  heroEl.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
+  heroEl.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].clientX - tx;
+    if (Math.abs(dx) > 48) dx < 0 ? goTo((cur+1)%slides.length,1) : goTo((cur-1+slides.length)%slides.length,-1);
+  });
+
+  // Pause on hover
+  heroEl.addEventListener('mouseenter', stopAutoplay);
+  heroEl.addEventListener('mouseleave', () => { startProgress(); startAutoplay(); });
+
+  // Init
+  slides[0].classList.add('active');
+  startProgress(); startAutoplay();
+})();
+
+// Scroll Reveal
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(el => {
+    if (el.isIntersecting) {
+      el.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Portfolio Filter
+const filterBtns = document.querySelectorAll('.filter-btn');
+const portItems  = document.querySelectorAll('.port-item');
+
+filterBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    filterBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = btn.dataset.filter;
+    portItems.forEach(item => {
+      const match = filter === 'todos' || item.dataset.type === filter;
+      item.style.transition = 'opacity .35s, transform .35s';
+      if (match) {
+        item.style.opacity = '1';
+        item.style.transform = 'scale(1)';
+        item.style.pointerEvents = 'all';
+      } else {
+        item.style.opacity = '0.15';
+        item.style.transform = 'scale(0.98)';
+        item.style.pointerEvents = 'none';
+      }
+    });
+  });
+});
+</script>
+</body>
+</html>
