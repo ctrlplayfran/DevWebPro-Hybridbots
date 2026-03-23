@@ -463,6 +463,173 @@ section { padding: 120px 64px; }
   color: var(--accent2); border: 1px solid rgba(126,184,160,.2);
 }
 
+.hero-radar-bonus {
+  margin-top: 36px;
+  opacity: 0; animation: fadeUp .7s 1.05s forwards;
+}
+.hero-radar-line {
+  width: 40px; height: 1px;
+  background: rgba(126,184,160,.4);
+  margin-bottom: 14px;
+}
+.hero-radar-items {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 10px 18px;
+}
+.hero-radar-item {
+  display: flex; align-items: center; gap: 8px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--accent2);
+}
+.hero-radar-item svg {
+  width: 14px; height: 14px;
+  stroke: var(--accent2); flex-shrink: 0;
+}
+.hero-radar-sep {
+  color: rgba(126,184,160,.3);
+  font-size: 14px;
+}
+@media (max-width: 560px) {
+  .hero-radar-sep { display: none; }
+  .hero-radar-items { gap: 8px; }
+}
+
+/* ── RADAR DE CLIENTES ── */
+#radar {
+  background: var(--bg);
+  position: relative; overflow: hidden;
+  padding: 120px 64px;
+  border-top: 1px solid var(--border);
+}
+.radar-glow {
+  position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(126,184,160,.07) 0%, transparent 70%);
+}
+.radar-header {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 80px; align-items: center; margin-bottom: 80px;
+}
+.radar-header-right {
+  font-size: 15px; line-height: 1.9; color: var(--dim);
+}
+.radar-header-right strong { color: var(--accent); font-weight: 400; }
+.radar-banner {
+  display: flex; align-items: center; gap: 20px;
+  margin-top: 28px;
+  padding: 16px 24px;
+  border: 1px solid rgba(126,184,160,.25);
+  background: rgba(126,184,160,.06);
+}
+.radar-banner-icon {
+  width: 36px; height: 36px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.radar-banner-icon svg {
+  width: 22px; height: 22px;
+  stroke: var(--accent2); stroke-width: 1.5;
+  fill: none; stroke-linecap: round; stroke-linejoin: round;
+}
+.radar-banner-text {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 12px; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--accent2);
+}
+.radar-cards {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  border: 1px solid var(--border);
+  margin-bottom: 64px;
+}
+.radar-card {
+  padding: 44px 36px;
+  background: var(--bg2);
+  position: relative; overflow: hidden;
+  transition: background .3s;
+}
+.radar-card:hover { background: rgba(200,184,154,.04); }
+.radar-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent2), var(--accent));
+  transform: scaleX(0); transform-origin: left;
+  transition: transform .4s cubic-bezier(.76,0,.24,1);
+}
+.radar-card:hover::before { transform: scaleX(1); }
+.radar-card-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 52px; line-height: 1;
+  color: rgba(200,184,154,.1);
+  position: absolute; top: 24px; right: 28px;
+}
+.radar-card-icon {
+  width: 48px; height: 48px; margin-bottom: 24px;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--border);
+}
+.radar-card-icon svg {
+  width: 22px; height: 22px;
+  stroke: var(--accent2); stroke-width: 1.5;
+  fill: none; stroke-linecap: round; stroke-linejoin: round;
+  transition: stroke .3s;
+}
+.radar-card:hover .radar-card-icon svg { stroke: var(--accent); }
+.radar-card-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 20px; font-weight: 700; letter-spacing: .06em;
+  color: var(--fg); text-transform: uppercase; margin-bottom: 10px;
+}
+.radar-card-desc {
+  font-size: 14px; line-height: 1.75; color: var(--dim);
+}
+.radar-cta-row {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 40px; flex-wrap: wrap;
+  padding: 48px 48px;
+  background: linear-gradient(135deg, rgba(126,184,160,.08) 0%, rgba(200,184,154,.07) 100%);
+  border: 1px solid rgba(126,184,160,.18);
+}
+.radar-cta-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(28px, 3vw, 48px); line-height: .9;
+  color: var(--fg); margin-bottom: 12px;
+}
+.radar-cta-title em {
+  font-style: normal; color: transparent;
+  -webkit-text-stroke: 1.5px var(--accent2);
+}
+.radar-cta-desc {
+  font-size: 14px; line-height: 1.75; color: var(--dim); max-width: 480px;
+}
+.radar-pills {
+  display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px;
+}
+.radar-pill {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 10px; letter-spacing: .2em; text-transform: uppercase;
+  padding: 5px 14px;
+  border: 1px solid rgba(126,184,160,.3);
+  color: var(--accent2);
+  background: rgba(126,184,160,.07);
+}
+.radar-cta-right {
+  display: flex; flex-direction: column; gap: 14px;
+  align-items: flex-start; min-width: 260px;
+}
+.radar-price-tag {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px; letter-spacing: .15em; text-transform: uppercase;
+  color: var(--accent2);
+}
+.radar-price-tag s { color: rgba(240,236,228,.25); margin-right: 6px; }
+
+@media (max-width: 900px) {
+  #radar { padding: 80px 24px; }
+  .radar-header { grid-template-columns: 1fr; gap: 32px; }
+  .radar-cards  { grid-template-columns: 1fr; }
+  .radar-cta-row { flex-direction: column; padding: 36px 28px; }
+}
+
 /* ── COMO FUNCIONA ── */
 #como-funciona {
   background: var(--bg2);
@@ -909,6 +1076,7 @@ footer {
     <li><a href="#servicos">Serviços</a></li>
     <li><a href="#portfolio">Portfólio</a></li>
     <li><a href="#incluso">Incluso</a></li>
+    <li><a href="#radar">Radar de Clientes</a></li>
     <li><a href="#como-funciona">Como funciona</a></li>
     <li><a href="#garantia">Garantia</a></li>
   </ul>
@@ -926,6 +1094,7 @@ footer {
     <li><a href="#servicos"      class="nav-mobile-link">Serviços</a></li>
     <li><a href="#portfolio"     class="nav-mobile-link">Portfólio</a></li>
     <li><a href="#incluso"       class="nav-mobile-link">Incluso</a></li>
+    <li><a href="#radar"         class="nav-mobile-link">Radar de Clientes</a></li>
     <li><a href="#como-funciona" class="nav-mobile-link">Como funciona</a></li>
     <li><a href="#garantia"      class="nav-mobile-link">Garantia</a></li>
   </ul>
@@ -978,7 +1147,26 @@ footer {
     </p>
     <div class="hero-actions">
       <a href="https://wa.me/5511999999999" target="_blank" class="btn-main">Quero meu site</a>
-      <a href="#como-funciona" class="btn-outline">Como funciona</a>
+      <a href="#radar" class="btn-outline">Ver bônus incluso</a>
+    </div>
+    <div class="hero-radar-bonus">
+      <div class="hero-radar-line"></div>
+      <div class="hero-radar-items">
+        <div class="hero-radar-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2"/><circle cx="12" cy="12" r="6" opacity=".4"/><circle cx="12" cy="12" r="10" opacity=".15"/><line x1="12" y1="2" x2="12" y2="4"/></svg>
+          <span>Radar de Clientes — 30 dias incluso</span>
+        </div>
+        <div class="hero-radar-sep">·</div>
+        <div class="hero-radar-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg>
+          <span>Lista diária de leads filtrados</span>
+        </div>
+        <div class="hero-radar-sep">·</div>
+        <div class="hero-radar-item">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+          <span>Começa com clientes chegando</span>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -1182,6 +1370,77 @@ footer {
   </div>
 </section>
 
+<!-- RADAR DE CLIENTES -->
+<section id="radar">
+  <div class="radar-glow"></div>
+
+  <div class="radar-header">
+    <div class="radar-header-left">
+      <div class="section-label reveal">Bônus Exclusivo</div>
+      <h2 class="section-title reveal reveal-delay-1">RADAR DE<br><em>CLIENTES</em></h2>
+      <div class="radar-banner reveal reveal-delay-2">
+        <div class="radar-banner-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2"/><path d="M12 2a10 10 0 0 1 0 20M12 6a6 6 0 0 1 0 12M4.93 4.93l14.14 14.14"/><circle cx="12" cy="12" r="8" opacity=".2"/></svg>
+        </div>
+        <span class="radar-banner-text">30 dias de oportunidades automáticas — incluso no seu pacote</span>
+      </div>
+    </div>
+    <div class="radar-header-right reveal reveal-delay-2">
+      Ao contratar seu site, landing page ou e-commerce conosco, você não recebe só o site — recebe
+      <strong>um mês completo de clientes chegando até você.</strong><br><br>
+      Entregamos uma lista diária de pessoas que estão ativamente buscando o que você oferece:
+      leads filtrados, sem curiosos, sem desperdício. Só contatos com <strong>real intenção de compra.</strong>
+      Seu negócio já começa em movimento.
+    </div>
+  </div>
+
+  <div class="radar-cards">
+    <div class="radar-card reveal">
+      <div class="radar-card-num">01</div>
+      <div class="radar-card-icon">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      </div>
+      <div class="radar-card-title">Lista Diária de Leads</div>
+      <div class="radar-card-desc">Todo dia você recebe uma lista fresca de pessoas que estão procurando exatamente o que seu negócio oferece. Sem esperar o cliente chegar — você vai até ele.</div>
+    </div>
+    <div class="radar-card reveal reveal-delay-1">
+      <div class="radar-card-num">02</div>
+      <div class="radar-card-icon">
+        <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.44 2 2 0 0 1 3.6 1.27h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.91a16 16 0 0 0 6 6l.92-.92a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 21.73 16z"/></svg>
+      </div>
+      <div class="radar-card-title">Contato Direto</div>
+      <div class="radar-card-desc">Leads filtrados com dados de contato de quem está procurando o seu serviço agora — não curiosos, não janeleiros. Pessoas com intenção real de contratar.</div>
+    </div>
+    <div class="radar-card reveal reveal-delay-2">
+      <div class="radar-card-num">03</div>
+      <div class="radar-card-icon">
+        <svg viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+      </div>
+      <div class="radar-card-title">30 Dias de Oportunidades</div>
+      <div class="radar-card-desc">Um mês inteiro com oportunidades chegando automaticamente. Seu site no ar e seu pipeline já cheio desde o primeiro dia. Zero tempo ocioso esperando resultado.</div>
+    </div>
+  </div>
+
+  <div class="radar-cta-row reveal">
+    <div class="radar-cta-left">
+      <div class="radar-cta-title">COMECE COM<br><em>CLIENTES CHEGANDO</em></div>
+      <p class="radar-cta-desc">Site profissional otimizado + 30 dias de Radar de Clientes. Tudo junto, entregue com o seu projeto.</p>
+      <div class="radar-pills">
+        <span class="radar-pill">✓ Site profissional otimizado</span>
+        <span class="radar-pill">✓ Lista diária de leads</span>
+        <span class="radar-pill">✓ Leads filtrados — só intenção de compra</span>
+        <span class="radar-pill">✓ Contatos diretos</span>
+        <span class="radar-pill">✓ 30 dias automáticos</span>
+      </div>
+    </div>
+    <div class="radar-cta-right">
+      <span class="radar-price-tag">Incluso em todos os pacotes</span>
+      <a href="https://wa.me/5511999999999" target="_blank" class="btn-main">Quero meu site + Radar</a>
+      <span class="cta-note">Sem custo adicional · Ativado na entrega</span>
+    </div>
+  </div>
+</section>
+
 <!-- COMO FUNCIONA -->
 <section id="como-funciona">
   <div class="como-photo"></div>
@@ -1253,6 +1512,7 @@ footer {
   <ul class="footer-links">
     <li><a href="#servicos">Serviços</a></li>
     <li><a href="#incluso">Incluso</a></li>
+    <li><a href="#radar">Radar de Clientes</a></li>
     <li><a href="#garantia">Garantia</a></li>
     <li><a href="https://wa.me/5511999999999" target="_blank">WhatsApp</a></li>
   </ul>
