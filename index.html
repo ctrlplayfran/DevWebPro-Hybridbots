@@ -1269,84 +1269,66 @@ footer {
 <section id="portfolio">
   <div class="portfolio-header">
     <div>
-      <div class="section-label reveal">Trabalhos recentes</div>
-      <h2 class="section-title reveal reveal-delay-1">PORTFÓLIO</h2>
+      <p class="section-label">Portfólio</p>
+      <h2 class="section-title">Nossos<br><em style="color:transparent;-webkit-text-stroke:1.5px var(--accent)">Projetos</em></h2>
     </div>
-    <div class="portfolio-filters reveal reveal-delay-2">
-      <button class="filter-btn active" data-filter="todos">Todos</button>
-      <button class="filter-btn" data-filter="site">Site</button>
-      <button class="filter-btn" data-filter="landing">Landing Page</button>
-      <button class="filter-btn" data-filter="ecommerce">E-Commerce</button>
+    <p style="font-size:15px;line-height:1.8;color:var(--dim);max-width:380px;align-self:flex-end;">
+      Sites que convertem visitantes em clientes — cada pixel pensado para o seu negócio.
+    </p>
+  </div>
+
+  <!-- CARROSSEL 3D -->
+  <div id="hb-carousel-wrap" style="width:100%;height:580px;position:relative;overflow:hidden;background:var(--bg2);border:1px solid var(--border);">
+    <canvas id="hb-canvas" style="width:100%;height:100%;display:block;"></canvas>
+
+    <!-- Label do slide atual -->
+    <div id="hb-label" style="
+      position:absolute;top:28px;left:50%;transform:translateX(-50%);
+      font-family:'Barlow Condensed',sans-serif;
+      font-size:11px;letter-spacing:.4em;text-transform:uppercase;
+      color:rgba(200,184,154,.55);pointer-events:none;white-space:nowrap;
+    "></div>
+
+    <!-- Descrição do projeto -->
+    <div id="hb-desc" style="
+      position:absolute;bottom:80px;left:50%;transform:translateX(-50%);
+      text-align:center;pointer-events:none;width:360px;
+    ">
+      <div id="hb-proj-name" style="
+        font-family:'Bebas Neue',sans-serif;
+        font-size:28px;letter-spacing:.06em;
+        color:#f0ece4;line-height:1;margin-bottom:6px;
+        text-shadow:0 2px 20px rgba(0,0,0,.8);
+      "></div>
+      <div id="hb-proj-type" style="
+        font-family:'Barlow Condensed',sans-serif;
+        font-size:11px;letter-spacing:.28em;text-transform:uppercase;
+        color:var(--accent2,#7eb8a0);
+        text-shadow:0 2px 12px rgba(0,0,0,.8);
+      "></div>
+    </div>
+
+    <!-- Navegação -->
+    <div style="position:absolute;bottom:24px;left:50%;transform:translateX(-50%);display:flex;gap:12px;align-items:center;">
+      <button id="hb-prev" style="
+        background:rgba(200,184,154,.1);border:0.5px solid rgba(200,184,154,.25);
+        color:#f0ece4;width:38px;height:38px;border-radius:50%;cursor:pointer;
+        font-size:18px;display:flex;align-items:center;justify-content:center;
+        transition:background .25s;font-family:inherit;
+      ">‹</button>
+      <div id="hb-dots" style="display:flex;gap:6px;align-items:center;"></div>
+      <button id="hb-next" style="
+        background:rgba(200,184,154,.1);border:0.5px solid rgba(200,184,154,.25);
+        color:#f0ece4;width:38px;height:38px;border-radius:50%;cursor:pointer;
+        font-size:18px;display:flex;align-items:center;justify-content:center;
+        transition:background .25s;font-family:inherit;
+      ">›</button>
     </div>
   </div>
 
-  <div class="portfolio-grid">
-    <div class="port-item reveal" data-type="site">
-      <div class="port-img" style="background-image:url('https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&q=80&auto=format&fit=crop')"></div>
-      <div class="port-overlay"></div>
-      <span class="port-tag">Site</span>
-      <div class="port-info">
-        <div class="port-category">Site Institucional</div>
-        <div class="port-title">Studio Arquitetura</div>
-        <div class="port-desc">Site completo para escritório de arquitetura contemporânea. Design minimalista com galeria de projetos e formulário de orçamento.</div>
-        <span class="port-link">Ver projeto</span>
-      </div>
-    </div>
-    <div class="port-item reveal reveal-delay-1" data-type="landing">
-      <div class="port-img" style="background-image:url('https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=900&q=80&auto=format&fit=crop')"></div>
-      <div class="port-overlay"></div>
-      <span class="port-tag">Landing Page</span>
-      <div class="port-info">
-        <div class="port-category">Landing Page</div>
-        <div class="port-title">Academia FitLife</div>
-        <div class="port-desc">Landing page de conversão para captação de matrículas com depoimentos e integração com WhatsApp.</div>
-        <span class="port-link">Ver projeto</span>
-      </div>
-    </div>
-    <div class="port-item reveal reveal-delay-2" data-type="ecommerce">
-      <div class="port-img" style="background-image:url('https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=900&q=80&auto=format&fit=crop')"></div>
-      <div class="port-overlay"></div>
-      <span class="port-tag">E-Commerce</span>
-      <div class="port-info">
-        <div class="port-category">Loja Virtual</div>
-        <div class="port-title">Loja Boutique</div>
-        <div class="port-desc">E-commerce completo com catálogo, carrinho, checkout e integração com gateway de pagamento. Pronto para vender.</div>
-        <span class="port-link">Ver projeto</span>
-      </div>
-    </div>
-    <div class="port-item reveal" data-type="site">
-      <div class="port-img" style="background-image:url('https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=900&q=80&auto=format&fit=crop')"></div>
-      <div class="port-overlay"></div>
-      <span class="port-tag">Site</span>
-      <div class="port-info">
-        <div class="port-category">Site Institucional</div>
-        <div class="port-title">Restaurante Origem</div>
-        <div class="port-desc">Site com cardápio digital, reservas online e integração com Instagram.</div>
-        <span class="port-link">Ver projeto</span>
-      </div>
-    </div>
-    <div class="port-item reveal reveal-delay-1" data-type="landing">
-      <div class="port-img" style="background-image:url('https://images.unsplash.com/photo-1542744173-8e7e53415bb0?w=900&q=80&auto=format&fit=crop')"></div>
-      <div class="port-overlay"></div>
-      <span class="port-tag">Landing Page</span>
-      <div class="port-info">
-        <div class="port-category">Landing Page</div>
-        <div class="port-title">Consultoria Empresarial</div>
-        <div class="port-desc">Página de captação para serviços B2B com formulário de diagnóstico e prova social.</div>
-        <span class="port-link">Ver projeto</span>
-      </div>
-    </div>
-    <div class="port-item reveal reveal-delay-2" data-type="site">
-      <div class="port-img" style="background-image:url('https://images.unsplash.com/photo-1559136555-9303baea8ebd?w=900&q=80&auto=format&fit=crop')"></div>
-      <div class="port-overlay"></div>
-      <span class="port-tag">Site</span>
-      <div class="port-info">
-        <div class="port-category">Site Institucional</div>
-        <div class="port-title">Clínica Estética</div>
-        <div class="port-desc">Site elegante com agendamento online, serviços e depoimentos de clientes.</div>
-        <span class="port-link">Ver projeto</span>
-      </div>
-    </div>
+  <!-- CTA abaixo do carrossel -->
+  <div style="margin-top:48px;display:flex;justify-content:center;">
+    <a href="#cta-final" class="btn-main">Quero meu site →</a>
   </div>
 </section>
 
@@ -1774,6 +1756,268 @@ hamburger.addEventListener('click', () => {
 
 // Fechar ao clicar em qualquer link
 mobileLinks.forEach(link => link.addEventListener('click', closeMenu));
+(function() {
+  // ── PROJETOS ──────────────────────────────────────────────
+  const PROJECTS = [
+    {
+      name:  'Corretor de Imóveis',
+      type:  'Landing Page',
+      label: '01 — IMÓVEIS',
+      color:   0xc8b89a,   // dourado Hybridbots
+      accent:  0x7eb8a0,   // verde Hybridbots
+    },
+    {
+      name:  'E-commerce',
+      type:  'Loja Virtual',
+      label: '02 — E-COMMERCE',
+      color:   0x7eb8a0,
+      accent:  0xc8b89a,
+    },
+    {
+      name:  'Portfólio',
+      type:  'Site Profissional',
+      label: '03 — PORTFÓLIO',
+      color:   0xa0b8c8,
+      accent:  0xc8b89a,
+    },
+  ];
+
+  // ── THREE.JS SETUP ────────────────────────────────────────
+  const canvas = document.getElementById('hb-canvas');
+  const wrap   = document.getElementById('hb-carousel-wrap');
+
+  if (!window.THREE) {
+    // fallback se Three.js não estiver carregado ainda
+    const s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
+    s.onload = init;
+    document.head.appendChild(s);
+  } else {
+    init();
+  }
+
+  function init() {
+    const T = window.THREE;
+
+    const renderer = new T.WebGLRenderer({ canvas, antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setClearColor(0x0d0d10, 1);
+
+    const scene  = new T.Scene();
+    scene.background = new T.Color(0x0d0d10);
+    scene.fog = new T.Fog(0x0d0d10, 8, 22);
+
+    const camera = new T.PerspectiveCamera(58, 1, 0.1, 100);
+    camera.position.set(0, 0, 6);
+
+    // ── CONSTANTES ──
+    const STRIPS  = 9;
+    const CARD_W  = 1.9;
+    const CARD_H  = 2.9;
+    const STRIP_W = CARD_W / STRIPS;
+    const COUNT   = PROJECTS.length;
+    const RADIUS  = 4.5;
+
+    const groups = [];
+
+    // ── CONSTRÓI CADA CARD ──
+    function makeCard(cfg) {
+      const group = new T.Group();
+
+      for (let s = 0; s < STRIPS; s++) {
+        const geo = new T.PlaneGeometry(STRIP_W - 0.022, CARD_H, 1, 28);
+        const pos = geo.attributes.position;
+
+        for (let i = 0; i < pos.count; i++) {
+          const y  = pos.getY(i);
+          const nx = (s / (STRIPS - 1)) * 2 - 1;
+          const curve = Math.cos(nx * Math.PI * 0.42) * 0.2;
+          pos.setZ(i, curve + Math.sin(y / CARD_H * Math.PI) * 0.07);
+        }
+        pos.needsUpdate = true;
+        geo.computeVertexNormals();
+
+        const t  = s / (STRIPS - 1);
+        const c1 = new T.Color(cfg.color);
+        const c2 = new T.Color(cfg.accent);
+        const sc = c1.clone().lerp(c2, t);
+
+        const mat = new T.MeshPhysicalMaterial({
+          color:       sc,
+          metalness:   0.35,
+          roughness:   0.38,
+          transparent: true,
+          opacity:     0.92,
+          side:        T.DoubleSide,
+        });
+
+        const mesh = new T.Mesh(geo, mat);
+        mesh.position.x = (s - (STRIPS - 1) / 2) * STRIP_W;
+        group.add(mesh);
+
+        // linha de divisão entre tiras
+        if (s < STRIPS - 1) {
+          const lGeo = new T.BufferGeometry().setFromPoints([
+            new T.Vector3(mesh.position.x + STRIP_W / 2, -CARD_H / 2, 0.025),
+            new T.Vector3(mesh.position.x + STRIP_W / 2,  CARD_H / 2, 0.025),
+          ]);
+          const lMat = new T.LineBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.45 });
+          group.add(new T.Line(lGeo, lMat));
+        }
+      }
+
+      // texto no card
+      const tc  = document.createElement('canvas');
+      tc.width  = 512; tc.height = 96;
+      const ctx = tc.getContext('2d');
+      ctx.clearRect(0, 0, 512, 96);
+      ctx.font = 'bold 52px "Bebas Neue", Georgia, serif';
+      ctx.fillStyle = 'rgba(255,255,255,0.9)';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(cfg.name.toUpperCase(), 256, 48);
+      const tex  = new T.CanvasTexture(tc);
+      const tGeo = new T.PlaneGeometry(CARD_W * 0.95, 0.38);
+      const tMat = new T.MeshBasicMaterial({ map: tex, transparent: true, depthTest: false });
+      const tMesh = new T.Mesh(tGeo, tMat);
+      tMesh.position.set(0, -CARD_H / 2 + 0.28, 0.14);
+      group.add(tMesh);
+
+      scene.add(group);
+      return group;
+    }
+
+    PROJECTS.forEach(p => groups.push(makeCard(p)));
+
+    // ── LUZES ──
+    scene.add(new T.AmbientLight(0xffffff, 0.45));
+    const key = new T.DirectionalLight(0xffffff, 1.3);
+    key.position.set(3, 4, 5);
+    scene.add(key);
+    const fill = new T.DirectionalLight(0x8899bb, 0.5);
+    fill.position.set(-4, -2, 3);
+    scene.add(fill);
+    const pt = new T.PointLight(0xc8b89a, 1.1, 14);
+    pt.position.set(0, 2, 4);
+    scene.add(pt);
+
+    // ── ESTADO ──
+    let current      = 0;
+    let targetAngle  = 0;
+    let currentAngle = 0;
+    let dragging     = false;
+    let dragStart    = 0;
+    let dragDelta    = 0;
+    let autoTimer    = 0;
+
+    function angleFor(idx) { return (idx / COUNT) * Math.PI * 2; }
+
+    function positionCards(angle) {
+      for (let i = 0; i < COUNT; i++) {
+        const a   = angleFor(i) - angle;
+        const x   = Math.sin(a) * RADIUS;
+        const z   = Math.cos(a) * RADIUS - RADIUS;
+        groups[i].position.set(x, 0, z);
+        groups[i].rotation.y = -a;
+        const dist  = Math.abs(Math.cos(a));
+        const scale = 0.65 + dist * 0.35;
+        groups[i].scale.setScalar(scale);
+        groups[i].children.forEach((ch, ci) => {
+          if (ch.material && ch.material.opacity !== undefined && ch.type === 'Mesh' && ci < STRIPS) {
+            ch.material.opacity = 0.42 + dist * 0.52;
+          }
+        });
+      }
+    }
+
+    // ── DOTS ──
+    const dotsEl = document.getElementById('hb-dots');
+    PROJECTS.forEach((_, i) => {
+      const d = document.createElement('div');
+      d.style.cssText = 'width:6px;height:6px;border-radius:3px;background:rgba(200,184,154,.28);cursor:pointer;transition:all .3s;';
+      d.addEventListener('click', () => goTo(i));
+      dotsEl.appendChild(d);
+    });
+
+    function updateUI() {
+      Array.from(dotsEl.children).forEach((d, i) => {
+        d.style.background  = i === current ? '#c8b89a' : 'rgba(200,184,154,.28)';
+        d.style.width       = i === current ? '20px' : '6px';
+      });
+      document.getElementById('hb-label').textContent     = PROJECTS[current].label;
+      document.getElementById('hb-proj-name').textContent = PROJECTS[current].name;
+      document.getElementById('hb-proj-type').textContent = PROJECTS[current].type;
+    }
+
+    function goTo(idx) {
+      current = ((idx % COUNT) + COUNT) % COUNT;
+      targetAngle = angleFor(current);
+      while (targetAngle - currentAngle >  Math.PI) targetAngle -= Math.PI * 2;
+      while (currentAngle - targetAngle >  Math.PI) targetAngle += Math.PI * 2;
+      updateUI();
+      autoTimer = 0;
+    }
+
+    document.getElementById('hb-prev').addEventListener('click', () => goTo(current - 1));
+    document.getElementById('hb-next').addEventListener('click', () => goTo(current + 1));
+
+    // drag mouse
+    canvas.addEventListener('mousedown', e => { dragging = true; dragStart = e.clientX; dragDelta = 0; });
+    canvas.addEventListener('mousemove', e => {
+      if (!dragging) return;
+      dragDelta = (e.clientX - dragStart) * 0.007;
+      positionCards(currentAngle - dragDelta);
+    });
+    canvas.addEventListener('mouseup', () => {
+      if (!dragging) return;
+      dragging = false;
+      if (Math.abs(dragDelta) > 0.14) goTo(dragDelta < 0 ? current + 1 : current - 1);
+    });
+    // drag touch
+    canvas.addEventListener('touchstart', e => { dragging = true; dragStart = e.touches[0].clientX; dragDelta = 0; });
+    canvas.addEventListener('touchmove',  e => {
+      if (!dragging) return;
+      dragDelta = (e.touches[0].clientX - dragStart) * 0.007;
+      positionCards(currentAngle - dragDelta);
+    });
+    canvas.addEventListener('touchend', () => {
+      dragging = false;
+      if (Math.abs(dragDelta) > 0.14) goTo(dragDelta < 0 ? current + 1 : current - 1);
+    });
+
+    // ── RESIZE ──
+    function resize() {
+      const w = wrap.clientWidth;
+      const h = wrap.clientHeight;
+      renderer.setSize(w, h);
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    // ── LOOP ──
+    updateUI();
+    let last = performance.now();
+    function animate(now) {
+      requestAnimationFrame(animate);
+      const dt = Math.min((now - last) / 1000, 0.05);
+      last = now;
+
+      if (!dragging) {
+        autoTimer += dt;
+        if (autoTimer > 5) goTo(current + 1);
+        currentAngle += (targetAngle - currentAngle) * Math.min(dt * 5, 1);
+      }
+
+      positionCards(currentAngle);
+      pt.position.x = Math.sin(now * 0.0005) * 2;
+      pt.position.y = 1.5 + Math.sin(now * 0.0008) * 0.5;
+      renderer.render(scene, camera);
+    }
+    animate(performance.now());
+  }
+})();
 </script>
 <!-- WHATSAPP FLUTUANTE -->
 <a href="https://wa.me/5566996915943" target="_blank" class="wa-float" aria-label="Falar pelo WhatsApp">

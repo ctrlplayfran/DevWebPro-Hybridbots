@@ -1,0 +1,248 @@
+
+<div style="width:100%;height:600px;position:relative;overflow:hidden;background:#0a0a0f;border-radius:16px;">
+  <canvas id="c" style="width:100%;height:100%;display:block;"></canvas>
+  <div id="nav" style="position:absolute;bottom:24px;left:50%;transform:translateX(-50%);display:flex;gap:12px;align-items:center;">
+    <button id="prev" style="background:rgba(255,255,255,0.1);border:0.5px solid rgba(255,255,255,0.2);color:#fff;width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;">‹</button>
+    <div id="dots" style="display:flex;gap:6px;"></div>
+    <button id="next" style="background:rgba(255,255,255,0.1);border:0.5px solid rgba(255,255,255,0.2);color:#fff;width:40px;height:40px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;">›</button>
+  </div>
+  <div id="label" style="position:absolute;top:24px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,0.7);font-family:Georgia,serif;font-size:14px;letter-spacing:0.1em;pointer-events:none;"></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const canvas = document.getElementById('c');
+const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+renderer.shadowMap.enabled = true;
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x0a0a0f);
+scene.fog = new THREE.Fog(0x0a0a0f, 8, 22);
+
+const camera = new THREE.PerspectiveCamera(60, 1, 0.1, 100);
+camera.position.set(0, 0, 6);
+
+const cards = [
+  { title: 'Aurora', color: 0x00ffb3, accent: 0x00c8ff, label: '01 — AURORA' },
+  { title: 'Nebula', color: 0xff4d8f, accent: 0xff8c42, label: '02 — NEBULA' },
+  { title: 'Prism',  color: 0xa259ff, accent: 0x4d8fff, label: '03 — PRISM' },
+  { title: 'Ember',  color: 0xff6b35, accent: 0xffd166, label: '04 — EMBER' },
+  { title: 'Abyss',  color: 0x00d4ff, accent: 0x7b2fff, label: '05 — ABYSS' },
+  { title: 'Nova',   color: 0xffec40, accent: 0xff4d8f, label: '06 — NOVA' },
+];
+
+const STRIPS = 9;
+const CARD_W = 1.8;
+const CARD_H = 2.8;
+const STRIP_W = CARD_W / STRIPS;
+const COUNT = cards.length;
+const RADIUS = 5.5;
+
+const groups = [];
+
+function makeCard(cfg, idx) {
+  const group = new THREE.Group();
+
+  for (let s = 0; s < STRIPS; s++) {
+    const geo = new THREE.PlaneGeometry(STRIP_W - 0.02, CARD_H, 1, 24);
+    const pos = geo.attributes.position;
+
+    // curve each strip vertically
+    for (let i = 0; i < pos.count; i++) {
+      const y = pos.getY(i);
+      const nx = (s / (STRIPS - 1)) * 2 - 1;
+      const curve = Math.cos(nx * Math.PI * 0.4) * 0.18;
+      pos.setZ(i, curve + Math.sin(y / CARD_H * Math.PI) * 0.06);
+    }
+    pos.needsUpdate = true;
+    geo.computeVertexNormals();
+
+    const t = s / (STRIPS - 1);
+    const c1 = new THREE.Color(cfg.color);
+    const c2 = new THREE.Color(cfg.accent);
+    const stripColor = c1.clone().lerp(c2, t);
+
+    const mat = new THREE.MeshPhysicalMaterial({
+      color: stripColor,
+      metalness: 0.3,
+      roughness: 0.4,
+      transparent: true,
+      opacity: 0.92,
+      side: THREE.DoubleSide,
+    });
+
+    const mesh = new THREE.Mesh(geo, mat);
+    mesh.position.x = (s - (STRIPS - 1) / 2) * STRIP_W;
+    group.add(mesh);
+
+    // thin gap line between strips
+    if (s < STRIPS - 1) {
+      const lineGeo = new THREE.BufferGeometry().setFromPoints([
+        new THREE.Vector3(mesh.position.x + STRIP_W / 2, -CARD_H / 2, 0.02),
+        new THREE.Vector3(mesh.position.x + STRIP_W / 2,  CARD_H / 2, 0.02),
+      ]);
+      const lineMat = new THREE.LineBasicMaterial({color: 0x000000, transparent:true, opacity:0.4});
+      group.add(new THREE.Line(lineGeo, lineMat));
+    }
+  }
+
+  // text plane
+  const tCanvas = document.createElement('canvas');
+  tCanvas.width = 512; tCanvas.height = 128;
+  const ctx = tCanvas.getContext('2d');
+  ctx.fillStyle = 'rgba(0,0,0,0)';
+  ctx.fillRect(0, 0, 512, 128);
+  ctx.font = 'bold 64px Georgia';
+  ctx.fillStyle = '#ffffff';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(cfg.title, 256, 64);
+  const tex = new THREE.CanvasTexture(tCanvas);
+  const tGeo = new THREE.PlaneGeometry(CARD_W * 0.9, 0.4);
+  const tMat = new THREE.MeshBasicMaterial({map: tex, transparent:true, depthTest:false});
+  const tMesh = new THREE.Mesh(tGeo, tMat);
+  tMesh.position.set(0, -CARD_H/2 + 0.3, 0.12);
+  group.add(tMesh);
+
+  scene.add(group);
+  return group;
+}
+
+cards.forEach((c, i) => groups.push(makeCard(c, i)));
+
+// lights
+const ambient = new THREE.AmbientLight(0xffffff, 0.4);
+scene.add(ambient);
+const key = new THREE.DirectionalLight(0xffffff, 1.2);
+key.position.set(3, 4, 5);
+scene.add(key);
+const fill = new THREE.DirectionalLight(0x8888ff, 0.5);
+fill.position.set(-4, -2, 3);
+scene.add(fill);
+const pt = new THREE.PointLight(0xffffff, 1, 12);
+pt.position.set(0, 2, 4);
+scene.add(pt);
+
+let current = 0;
+let targetAngle = 0;
+let currentAngle = 0;
+let dragging = false;
+let dragStart = 0;
+let dragDelta = 0;
+let autoTimer = 0;
+
+function angleForIndex(idx) {
+  return (idx / COUNT) * Math.PI * 2;
+}
+
+function positionCards(angle) {
+  for (let i = 0; i < COUNT; i++) {
+    const a = angleForIndex(i) - angle;
+    const x = Math.sin(a) * RADIUS;
+    const z = Math.cos(a) * RADIUS - RADIUS;
+    groups[i].position.set(x, 0, z);
+    groups[i].rotation.y = -a;
+
+    const dist = Math.abs(Math.cos(a));
+    const scale = 0.7 + dist * 0.3;
+    groups[i].scale.setScalar(scale);
+
+    groups[i].children.forEach((child, ci) => {
+      if (child.material && child.material.opacity !== undefined && child.type === 'Mesh' && ci < STRIPS) {
+        child.material.opacity = 0.5 + dist * 0.45;
+      }
+    });
+  }
+}
+
+// dots
+const dotsEl = document.getElementById('dots');
+cards.forEach((_, i) => {
+  const d = document.createElement('div');
+  d.style.cssText = `width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,0.3);cursor:pointer;transition:all 0.3s;`;
+  d.addEventListener('click', () => goTo(i));
+  dotsEl.appendChild(d);
+});
+
+function updateDots() {
+  Array.from(dotsEl.children).forEach((d, i) => {
+    d.style.background = i === current ? '#fff' : 'rgba(255,255,255,0.3)';
+    d.style.width = i === current ? '18px' : '6px';
+    d.style.borderRadius = '3px';
+  });
+  document.getElementById('label').textContent = cards[current].label;
+}
+
+function goTo(idx) {
+  current = ((idx % COUNT) + COUNT) % COUNT;
+  targetAngle = angleForIndex(current);
+  // unwrap
+  while (targetAngle - currentAngle > Math.PI) targetAngle -= Math.PI * 2;
+  while (currentAngle - targetAngle > Math.PI) targetAngle += Math.PI * 2;
+  updateDots();
+  autoTimer = 0;
+}
+
+document.getElementById('prev').addEventListener('click', () => goTo(current - 1));
+document.getElementById('next').addEventListener('click', () => goTo(current + 1));
+
+canvas.addEventListener('mousedown', e => { dragging = true; dragStart = e.clientX; dragDelta = 0; });
+canvas.addEventListener('mousemove', e => {
+  if (!dragging) return;
+  dragDelta = (e.clientX - dragStart) * 0.006;
+  positionCards(currentAngle - dragDelta);
+});
+canvas.addEventListener('mouseup', () => {
+  if (!dragging) return;
+  dragging = false;
+  if (Math.abs(dragDelta) > 0.15) goTo(dragDelta < 0 ? current + 1 : current - 1);
+  else positionCards(currentAngle);
+});
+canvas.addEventListener('touchstart', e => { dragging = true; dragStart = e.touches[0].clientX; dragDelta = 0; });
+canvas.addEventListener('touchmove', e => {
+  if (!dragging) return;
+  dragDelta = (e.touches[0].clientX - dragStart) * 0.006;
+  positionCards(currentAngle - dragDelta);
+});
+canvas.addEventListener('touchend', () => {
+  dragging = false;
+  if (Math.abs(dragDelta) > 0.15) goTo(dragDelta < 0 ? current + 1 : current - 1);
+  else positionCards(currentAngle);
+});
+
+function resize() {
+  const el = canvas.parentElement;
+  const w = el.clientWidth;
+  const h = el.clientHeight;
+  renderer.setSize(w, h);
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+}
+resize();
+window.addEventListener('resize', resize);
+
+updateDots();
+targetAngle = 0;
+
+let last = performance.now();
+function animate(now) {
+  requestAnimationFrame(animate);
+  const dt = Math.min((now - last) / 1000, 0.05);
+  last = now;
+
+  if (!dragging) {
+    autoTimer += dt;
+    if (autoTimer > 4) { goTo(current + 1); }
+    currentAngle += (targetAngle - currentAngle) * Math.min(dt * 5, 1);
+  }
+
+  positionCards(currentAngle);
+
+  pt.position.x = Math.sin(now * 0.0005) * 2;
+  pt.position.y = 1.5 + Math.sin(now * 0.0008) * 0.5;
+
+  renderer.render(scene, camera);
+}
+animate(performance.now());
+</script>
