@@ -1,111 +1,1134 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Cubes</title>
-    <style>
-      body {
-        background-color: black;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        perspective: 2000px;
-      }
-      .grid {
-        display: grid;
-        grid-template-columns: repeat(15, 30px);
-        transform: rotateX(60deg) rotateZ(45deg) scale(0.8);
-        transform-style: preserve-3d;
-      }
-      .cube-container {
-        width: 30px;
-        height: 30px;
-        transform-style: preserve-3d;
-      }
-      .cube {
-        width: 100%;
-        height: 100%;
-        position: relative;
-        transform-style: preserve-3d;
-        animation: wave 3s ease-in-out infinite;
-        animation-delay: calc(var(--delay) * -3s);
-      }
-      .face {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        border: 1px solid white;
-        box-sizing: border-box;
-        background-color: rgba(0, 0, 0, 0.8);
-      }
-      .top {
-        transform: rotateX(-90deg) translateZ(15px);
-      }
-      .bottom {
-        transform: rotateX(90deg) translateZ(15px);
-      }
-      .front {
-        transform: translateZ(15px);
-      }
-      .back {
-        transform: translateZ(-15px);
-      }
-      .left {
-        transform: rotateY(-90deg) translateZ(15px);
-      }
-      .right {
-        transform: rotateY(90deg) translateZ(15px);
-      }
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>HybridBots — Carrossel de Tiras 3D</title>
 
-      @keyframes wave {
-        0%,
-        100% {
-          transform: translateZ(-30px);
-        }
-        50% {
-          transform: translateZ(40px);
-        }
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600&family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body{
+  margin:0;
+  background:#070707;
+  font-family:'DM Sans', sans-serif;
+  overflow:hidden;
+  position:relative;
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  z-index:1;
+  pointer-events:none;
+  opacity:.025;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:128px 128px;
+}
+
+/* ─── LOADING OVERLAY COM CUBOS 3D ─── */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #000000;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 1.2s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+  backdrop-filter: blur(0px);
+}
+
+.loading-overlay.fade-out {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.loader-grid {
+  display: grid;
+  grid-template-columns: repeat(15, 30px);
+  transform: rotateX(60deg) rotateZ(45deg) scale(0.8);
+  transform-style: preserve-3d;
+}
+
+.cube-container {
+  width: 30px;
+  height: 30px;
+  transform-style: preserve-3d;
+}
+
+.cube {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  animation: wave 3s ease-in-out infinite;
+  animation-delay: calc(var(--delay) * -3s);
+}
+
+.face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 1px solid rgba(0, 232, 122, 0.6);
+  box-sizing: border-box;
+  background-color: rgba(0, 0, 0, 0.85);
+}
+
+.top {
+  transform: rotateX(-90deg) translateZ(15px);
+  background: linear-gradient(135deg, rgba(0,232,122,0.25), rgba(0,200,255,0.08));
+  border-color: #00E87A;
+}
+
+.front {
+  transform: translateZ(15px);
+  background: linear-gradient(45deg, rgba(0,232,122,0.15), rgba(0,150,200,0.04));
+  border-color: #00E87A;
+}
+
+.right {
+  transform: rotateY(90deg) translateZ(15px);
+  background: linear-gradient(225deg, rgba(0,232,122,0.2), rgba(0,200,255,0.06));
+  border-color: #00E87A;
+}
+
+@keyframes wave {
+  0%, 100% {
+    transform: translateZ(-35px);
+  }
+  50% {
+    transform: translateZ(45px);
+  }
+}
+
+/* Texto de carregamento */
+.loading-text {
+  position: absolute;
+  bottom: 12%;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: #00E87A;
+  opacity: 0.8;
+  animation: pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.3; text-shadow: 0 0 0px #00E87A; }
+  50% { opacity: 1; text-shadow: 0 0 8px #00E87A; }
+}
+
+/* ─── VÍDEO DE FUNDO ─── */
+.hero-video-wrap{
+  position:fixed;
+  inset:0;
+  z-index:0;
+  overflow:hidden;
+}
+.hero-video-wrap video{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  opacity:.12;
+  filter:saturate(0.8);
+}
+
+/* ─── CANVAS DAS PARTÍCULAS ─── */
+#three-bg{
+  position:fixed;
+  inset:0;
+  z-index:0;
+  opacity:0.65;
+  pointer-events:none;
+}
+
+/* ═══════════════════════════════════════
+   NAVBAR
+═══════════════════════════════════════ */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  height: 70px;
+  background: rgba(7, 7, 7, 0.18);
+  backdrop-filter: blur(8px) saturate(1.2);
+  -webkit-backdrop-filter: blur(8px) saturate(1.2);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.navbar::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, #00E87A 40%, #00b8ff 70%, transparent 100%);
+  opacity: 0.35;
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.nav-logo-mark {
+  height: 40px;
+  width: auto;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+
+.nav-logo-text {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px;
+  letter-spacing: 0.12em;
+  color: #f0ece4;
+  line-height: 1;
+}
+
+.nav-logo-text span {
+  color: #00E87A;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  list-style: none;
+}
+
+.nav-links li a {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.55);
+  text-decoration: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: color 0.2s, background 0.2s;
+  position: relative;
+}
+
+.nav-links li a::after {
+  content: "";
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%) scaleX(0);
+  width: 16px;
+  height: 1.5px;
+  background: #00E87A;
+  border-radius: 2px;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-links li a:hover {
+  color: rgba(255,255,255,0.95);
+  background: rgba(255,255,255,0.05);
+}
+
+.nav-links li a:hover::after {
+  transform: translateX(-50%) scaleX(1);
+}
+
+.nav-links li a.active {
+  color: #00E87A;
+}
+
+.nav-links li a.active::after {
+  transform: translateX(-50%) scaleX(1);
+}
+
+.nav-whatsapp {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 20px;
+  background: rgba(0,232,122,0.12);
+  border: 1px solid rgba(0,232,122,0.35);
+  border-radius: 40px;
+  color: #00E87A;
+  text-decoration: none;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.15s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.nav-whatsapp:hover {
+  background: #00E87A;
+  color: #060c09;
+  border-color: #00E87A;
+  transform: translateY(-1px);
+}
+
+.nav-whatsapp svg {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  fill: currentColor;
+}
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 40px;
+  height: 40px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 10px;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.hamburger:hover {
+  background: rgba(0,232,122,0.1);
+  border-color: rgba(0,232,122,0.3);
+}
+
+.hamburger span {
+  display: block;
+  width: 18px;
+  height: 1.5px;
+  background: rgba(255,255,255,0.8);
+  border-radius: 2px;
+  transition: transform 0.3s cubic-bezier(0.4,0,0.2,1), opacity 0.2s;
+  transform-origin: center;
+}
+
+.hamburger.open span:nth-child(1) {
+  transform: translateY(6.5px) rotate(45deg);
+}
+.hamburger.open span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+.hamburger.open span:nth-child(3) {
+  transform: translateY(-6.5px) rotate(-45deg);
+}
+
+.mobile-menu {
+  position: fixed;
+  top: 70px;
+  left: 0;
+  right: 0;
+  z-index: 99;
+  background: rgba(7, 7, 7, 0.96);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-bottom: 1px solid rgba(0,232,122,0.15);
+  padding: 0;
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.45s cubic-bezier(0.4,0,0.2,1), padding 0.3s;
+}
+
+.mobile-menu.open {
+  max-height: 420px;
+  padding: 8px 0 20px;
+}
+
+.mobile-menu ul {
+  list-style: none;
+  padding: 8px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.mobile-menu ul li a {
+  display: block;
+  padding: 13px 16px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.65);
+  text-decoration: none;
+  border-radius: 10px;
+  transition: background 0.2s, color 0.2s, padding-left 0.2s;
+  border-left: 2px solid transparent;
+}
+
+.mobile-menu ul li a:hover,
+.mobile-menu ul li a.active {
+  background: rgba(255,255,255,0.05);
+  color: #ffffff;
+  padding-left: 22px;
+  border-left-color: #00E87A;
+}
+
+.mobile-menu-divider {
+  height: 1px;
+  background: rgba(255,255,255,0.07);
+  margin: 10px 24px;
+}
+
+.mobile-whatsapp {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 10px 24px 0;
+  padding: 14px 24px;
+  background: rgba(0,232,122,0.12);
+  border: 1px solid rgba(0,232,122,0.3);
+  border-radius: 14px;
+  color: #00E87A;
+  text-decoration: none;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  transition: background 0.2s, color 0.2s;
+}
+
+.mobile-whatsapp:hover {
+  background: #00E87A;
+  color: #060c09;
+}
+
+.mobile-whatsapp svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+  flex-shrink: 0;
+}
+
+/* ─── CARROSSEL ─── */
+.hero{
+  height:100vh;
+  display:flex;
+  flex-direction: column;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+  z-index:2;
+  padding-top: 70px;
+}
+
+.carousel-shell{
+  width:560px;
+  height:480px;
+  position:relative;
+  border-radius:22px;
+  background:rgba(12,12,16,0.02);
+  backdrop-filter:blur(2px);
+  border:1px solid rgba(255,255,255,0.08);
+  box-shadow:
+    0 20px 80px rgba(0,0,0,0.7),
+    inset 0 0 60px rgba(0,232,122,0.05);
+  transition:transform .2s ease-out;
+  margin-bottom: 28px;
+}
+
+.carousel-shell::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:22px;
+  background:radial-gradient(circle at var(--mx,50%) var(--my,50%),
+              rgba(255,255,255,0.08),
+              rgba(0,232,122,0.02) 35%,
+              transparent 70%);
+  pointer-events:none;
+  transition:opacity 0.1s;
+}
+
+canvas{
+  width:100%;
+  height:100%;
+  display:block;
+  border-radius:22px;
+}
+
+#nav{
+  position:absolute;
+  bottom:18px;
+  left:50%;
+  transform:translateX(-50%);
+  display:flex;
+  gap:12px;
+  z-index:10;
+}
+
+#label{
+  position:absolute;
+  top:18px;
+  left:50%;
+  transform:translateX(-50%);
+  color:rgba(255,255,255,0.85);
+  font-size:13px;
+  letter-spacing:0.1em;
+  z-index:10;
+  background:rgba(0,0,0,0.3);
+  backdrop-filter:blur(4px);
+  padding:5px 14px;
+  border-radius:40px;
+  font-weight:500;
+  pointer-events:none;
+  font-family: 'Barlow Condensed', monospace;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+button{
+  background:rgba(20,20,30,0.5);
+  border:1px solid rgba(0,232,122,0.3);
+  color:white;
+  font-size:24px;
+  width:40px;
+  height:40px;
+  border-radius:40px;
+  cursor:pointer;
+  backdrop-filter:blur(4px);
+  transition:0.2s;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+button:hover{
+  background:#00E87A;
+  color:#000;
+  border-color:white;
+}
+
+#dots {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.3);
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+}
+
+.dot.active {
+  background: #00E87A;
+  width: 18px;
+  border-radius: 4px;
+}
+
+.project-metadata {
+  text-align: center;
+  pointer-events: none;
+  width: 100%;
+  max-width: 600px;
+  margin-top: 6px;
+  animation: fadeUp 0.5s ease-out;
+}
+
+.project-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 38px;
+  letter-spacing: 0.06em;
+  color: #f0ece4;
+  line-height: 1.1;
+  margin-bottom: 8px;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.8);
+}
+
+.project-subtitle {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: #7eb8a0;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.8);
+  background: rgba(0, 0, 0, 0.2);
+  display: inline-block;
+  padding: 0 8px;
+  border-radius: 20px;
+  backdrop-filter: blur(2px);
+}
+
+@keyframes fadeUp {
+  0% { opacity: 0; transform: translateY(12px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 900px) {
+  .nav-links { display: none; }
+  .nav-whatsapp { display: none; }
+  .hamburger { display: flex; }
+}
+
+@media (max-width: 640px) {
+  .navbar { padding: 0 20px; }
+  .carousel-shell {
+    width: 88vw;
+    height: 68vw;
+    max-height: 420px;
+    margin-bottom: 20px;
+  }
+  .project-title { font-size: 28px; }
+  .project-subtitle { font-size: 10px; letter-spacing: 0.22em; }
+  .hero { padding-top: 70px; }
+  .loader-grid {
+    transform: rotateX(60deg) rotateZ(45deg) scale(0.55);
+  }
+  .loading-text {
+    bottom: 8%;
+    font-size: 10px;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- LOADING OVERLAY COM CUBOS 3D (cor verde original) -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loader-grid" id="loaderGrid"></div>
+  <div class="loading-text">CARREGANDO EXPERIÊNCIA</div>
+</div>
+
+<!-- VÍDEO DE FUNDO -->
+<div class="hero-video-wrap">
+  <video autoplay muted loop playsinline>
+    <source src="background.webm" type="video/webm">
+    <source src="background.mp4" type="video/mp4">
+  </video>
+</div>
+
+<!-- CANVAS DAS PARTÍCULAS -->
+<canvas id="three-bg"></canvas>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="#" class="nav-logo">
+    <img src="logo.jpg" alt="HybridBots" class="nav-logo-mark" />
+  </a>
+  <ul class="nav-links">
+    <li><a href="#" class="active">Início</a></li>
+    <li><a href="#">Projetos</a></li>
+    <li><a href="#">Serviços</a></li>
+    <li><a href="#">Sobre</a></li>
+  </ul>
+  <a href="https://wa.me/5566996915943" target="_blank" rel="noopener" class="nav-whatsapp">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/>
+    </svg>
+    Fale Conosco
+  </a>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <ul>
+    <li><a href="#" class="active">Início</a></li>
+    <li><a href="#">Projetos</a></li>
+    <li><a href="#">Serviços</a></li>
+    <li><a href="#">Sobre</a></li>
+  </ul>
+  <div class="mobile-menu-divider"></div>
+  <a href="https://wa.me/5566996915943" target="_blank" rel="noopener" class="mobile-whatsapp">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/>
+    </svg>
+    Entrar em Contato
+  </a>
+</div>
+
+<section class="hero">
+  <div class="carousel-shell">
+    <canvas id="carousel-canvas"></canvas>
+    <div id="label"></div>
+    <div id="nav">
+      <button id="prev">‹</button>
+      <div id="dots"></div>
+      <button id="next">›</button>
+    </div>
+  </div>
+  <div class="project-metadata">
+    <div class="project-title" id="dynamicTitle">E-COMMERCE</div>
+    <div class="project-subtitle" id="dynamicSubtitle">02 — LOJA VIRTUAL</div>
+  </div>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+<script>
+// ====================== LOADER: CUBOS 3D (COR VERDE ORIGINAL) ======================
+function createLoaderCubes() {
+  const gridContainer = document.getElementById("loaderGrid");
+  if (!gridContainer) return;
+  const size = 15;
+  const totalCubes = size * size;
+  const centerX = size / 2 - 0.5;
+  const centerY = size / 2 - 0.5;
+  const maxDistance = Math.sqrt(centerX * centerX + centerY * centerY);
+  
+  for (let i = 0; i < totalCubes; i++) {
+    const container = document.createElement("div");
+    container.className = "cube-container";
+    const row = Math.floor(i / size);
+    const col = i % size;
+    const dx = col - centerX;
+    const dy = row - centerY;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+    const delay = (Math.cos((distance / maxDistance) * Math.PI) + 1) / 3;
+    container.innerHTML = `
+      <div class="cube" style="--delay: ${delay}">
+        <div class="face top"></div>
+        <div class="face front"></div>
+        <div class="face right"></div>
+      </div>
+    `;
+    gridContainer.appendChild(container);
+  }
+}
+createLoaderCubes();
+
+// ====================== HAMBURGUER ======================
+const hamburger = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobileMenu');
+
+hamburger.addEventListener('click', () => {
+  const open = mobileMenu.classList.toggle('open');
+  hamburger.classList.toggle('open', open);
+  hamburger.setAttribute('aria-expanded', open);
+});
+
+mobileMenu.querySelectorAll('a').forEach(link => {
+  link.addEventListener('click', () => {
+    mobileMenu.classList.remove('open');
+    hamburger.classList.remove('open');
+  });
+});
+
+const navbar = document.querySelector('.navbar');
+window.addEventListener('scroll', () => {
+  navbar.style.background = window.scrollY > 10
+    ? 'rgba(7,7,7,0.45)'
+    : 'rgba(7,7,7,0.18)';
+}, { passive: true });
+
+// ====================== FUNDO THREE.JS ======================
+const bgScene = new THREE.Scene();
+const bgCamera = new THREE.PerspectiveCamera(70, window.innerWidth/window.innerHeight, 0.1, 1000);
+const bgCanvas = document.getElementById('three-bg');
+const bgRenderer = new THREE.WebGLRenderer({canvas: bgCanvas, alpha: true});
+bgRenderer.setSize(window.innerWidth, window.innerHeight);
+bgRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+bgCamera.position.z = 5;
+
+const starGeo = new THREE.BufferGeometry();
+const starVerts = [];
+for(let i = 0; i < 1; i++){
+  starVerts.push((Math.random()-.5)*36, (Math.random()-.5)*24, (Math.random()-.5)*28);
+}
+starGeo.setAttribute('position', new THREE.Float32BufferAttribute(starVerts, 3));
+const starMat = new THREE.PointsMaterial({color: 0x00E87A, size: 0.022, transparent: true, opacity: 0.55});
+const stars = new THREE.Points(starGeo, starMat);
+bgScene.add(stars);
+
+const starGeo2 = new THREE.BufferGeometry();
+const starVerts2 = [];
+for(let i = 0; i < 12; i++){
+  starVerts2.push((Math.random()-.5)*42, (Math.random()-.5)*28, (Math.random()-.5)*32);
+}
+starGeo2.setAttribute('position', new THREE.Float32BufferAttribute(starVerts2, 3));
+const starMat2 = new THREE.PointsMaterial({color: 0x88aaff, size: 0.018, transparent: true, opacity: 0.3});
+const stars2 = new THREE.Points(starGeo2, starMat2);
+bgScene.add(stars2);
+
+let mouseX = 0, mouseY = 0;
+document.addEventListener('mousemove', (e) => {
+  mouseX = (e.clientX / window.innerWidth - 0.5) * 0.5;
+  mouseY = (e.clientY / window.innerHeight - 0.5) * 0.3;
+});
+
+function bgAnimate() {
+  requestAnimationFrame(bgAnimate);
+  stars.rotation.y += 0.0006;
+  stars.rotation.x += 0.0003;
+  stars2.rotation.y -= 0.0004;
+  stars2.rotation.x += 0.0002;
+  bgCamera.position.x += (mouseX - bgCamera.position.x) * 0.05;
+  bgCamera.position.y += (-mouseY - bgCamera.position.y) * 0.05;
+  bgCamera.lookAt(bgScene.position);
+  bgRenderer.render(bgScene, bgCamera);
+}
+bgAnimate();
+
+// ====================== CARROSSEL 3D ======================
+const canvas = document.getElementById('carousel-canvas');
+const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
+renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+renderer.shadowMap.enabled = true;
+
+const scene = new THREE.Scene();
+scene.background = null;
+
+const camera = new THREE.PerspectiveCamera(60, 1, 0.1, 100);
+camera.position.set(0, 0, 6);
+
+const cards = [
+  { title: 'E-COMMERCE', color: 0xffffff, accent: 0xd4f1f9, label: '02 — LOJA VIRTUAL' },
+  { title: 'PORTFÓLIO',  color: 0xffffff, accent: 0xffdd99, label: '03 — SITE PROFISSIONAL' },
+  { title: 'CORRETOR DE IMÓVEIS',  color: 0xffffff, accent: 0xffaa88, label: '04 — LANDING PAGE' },
+  { title: 'SITE PROFISSIONAL',  color: 0xffffff, accent: 0x9bb8e0, label: '05 — SITE INSTITUCIONAL MODERNO' },
+];
+
+const STRIPS = 9;
+const CARD_W = 1.8;
+const CARD_H = 2.8;
+const STRIP_W = CARD_W / STRIPS;
+const COUNT = cards.length;
+const RADIUS = 5.5;
+
+const groups = [];
+
+function makeCard(cfg) {
+  const group = new THREE.Group();
+  for (let s = 0; s < STRIPS; s++) {
+    const geo = new THREE.PlaneGeometry(STRIP_W - 0.02, CARD_H, 1, 32);
+    const positions = geo.attributes.position;
+    for (let i = 0; i < positions.count; i++) {
+      const y = positions.getY(i);
+      const nx = (s / (STRIPS - 1)) * 2 - 1;
+      const curve = Math.cos(nx * Math.PI * 0.45) * 0.2;
+      const rippleY = Math.sin(y / CARD_H * Math.PI) * 0.08;
+      positions.setZ(i, curve + rippleY);
+    }
+    positions.needsUpdate = true;
+    geo.computeVertexNormals();
+    const t = s / (STRIPS - 1);
+    const c1 = new THREE.Color(cfg.color);
+    const c2 = new THREE.Color(cfg.accent);
+    const stripColor = c1.clone().lerp(c2, t);
+    const mat = new THREE.MeshPhysicalMaterial({
+      color: stripColor,
+      metalness: 0.45,
+      roughness: 0.32,
+      transparent: true,
+      opacity: 0.92,
+      side: THREE.DoubleSide,
+      emissive: 0x111111,
+      emissiveIntensity: 0.1
+    });
+    const mesh = new THREE.Mesh(geo, mat);
+    mesh.position.x = (s - (STRIPS - 1) / 2) * STRIP_W;
+    mesh.castShadow = true;
+    group.add(mesh);
+    if (s < STRIPS - 1) {
+      const lineGeo = new THREE.BufferGeometry().setFromPoints([
+        new THREE.Vector3(mesh.position.x + STRIP_W / 2, -CARD_H / 2, 0.04),
+        new THREE.Vector3(mesh.position.x + STRIP_W / 2,  CARD_H / 2, 0.04),
+      ]);
+      const lineMat = new THREE.LineBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.35 });
+      group.add(new THREE.Line(lineGeo, lineMat));
+    }
+  }
+  const tCanvas = document.createElement('canvas');
+  tCanvas.width = 512;
+  tCanvas.height = 128;
+  const ctx = tCanvas.getContext('2d');
+  ctx.fillStyle = 'rgba(0,0,0,0)';
+  ctx.fillRect(0, 0, 512, 128);
+  ctx.font = 'bold 56px "Bebas Neue", sans-serif';
+  ctx.fillStyle = '#ffffff';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(cfg.title, 256, 64);
+  ctx.fillStyle = 'rgba(255,255,255,0.25)';
+  ctx.fillText(cfg.title, 258, 66);
+  const tex = new THREE.CanvasTexture(tCanvas);
+  const tGeo = new THREE.PlaneGeometry(CARD_W * 0.85, 0.45);
+  const tMat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, depthTest: false, side: THREE.DoubleSide });
+  const tMesh = new THREE.Mesh(tGeo, tMat);
+  tMesh.position.set(0, -CARD_H/2 + 0.32, 0.15);
+  group.add(tMesh);
+  scene.add(group);
+  return group;
+}
+
+cards.forEach((c) => groups.push(makeCard(c)));
+
+const ambient = new THREE.AmbientLight(0xffffff, 0.45);
+scene.add(ambient);
+const keyLight = new THREE.DirectionalLight(0xffffff, 1.2);
+keyLight.position.set(3, 4, 5);
+keyLight.castShadow = true;
+scene.add(keyLight);
+const fillLight = new THREE.DirectionalLight(0x88aaff, 0.55);
+fillLight.position.set(-3, 1, 3);
+scene.add(fillLight);
+const backLight = new THREE.PointLight(0xffaa66, 0.6);
+backLight.position.set(0, 1, -4);
+scene.add(backLight);
+const movingLight = new THREE.PointLight(0xffffff, 0.9, 12);
+movingLight.position.set(0, 1.5, 3);
+scene.add(movingLight);
+
+let current = 0;
+let targetAngle = 0;
+let currentAngle = 0;
+let dragging = false;
+let dragStartX = 0;
+let dragDelta = 0;
+let autoTimer = 0;
+
+function angleForIndex(idx) {
+  return (idx / COUNT) * Math.PI * 2;
+}
+
+function positionCards(angle) {
+  for (let i = 0; i < COUNT; i++) {
+    const a = angleForIndex(i) - angle;
+    const x = Math.sin(a) * RADIUS;
+    const z = Math.cos(a) * RADIUS - RADIUS;
+    groups[i].position.set(x, 0, z);
+    groups[i].rotation.y = -a;
+    const dist = Math.abs(Math.cos(a));
+    const scale = 0.7 + dist * 0.33;
+    groups[i].scale.setScalar(scale);
+    groups[i].children.forEach((child, ci) => {
+      if (child.material && child.material.opacity !== undefined && child.type === 'Mesh' && ci < STRIPS) {
+        child.material.opacity = 0.55 + dist * 0.42;
       }
-    </style>
-  </head>
-  <body>
-    <div class="grid" id="grid"></div>
+    });
+  }
+}
 
-    <script>
-      const grid = document.getElementById("grid");
-      const size = 15;
-      const totalCubes = size * size;
-      const centerX = size / 2 - 0.5;
-      const centerY = size / 2 - 0.5;
-      const maxDistance = Math.sqrt(centerX * centerX + centerY * centerY);
+const dotsContainer = document.getElementById('dots');
+function updateDots() {
+  document.querySelectorAll('.dot').forEach((dot, i) => {
+    dot.classList.toggle('active', i === current);
+  });
+  document.getElementById('label').textContent = cards[current].label;
+  const titleEl = document.getElementById('dynamicTitle');
+  const subtitleEl = document.getElementById('dynamicSubtitle');
+  if (titleEl && subtitleEl) {
+    titleEl.textContent = cards[current].title;
+    subtitleEl.textContent = cards[current].label;
+    titleEl.style.animation = 'none';
+    subtitleEl.style.animation = 'none';
+    titleEl.offsetHeight;
+    subtitleEl.offsetHeight;
+    titleEl.style.animation = 'fadeUp 0.35s ease-out';
+    subtitleEl.style.animation = 'fadeUp 0.35s ease-out';
+  }
+}
 
-      for (let i = 0; i < totalCubes; i++) {
-        const container = document.createElement("div");
-        container.className = "cube-container";
-        const row = Math.floor(i / size);
-        const col = i % size;
+function goTo(idx) {
+  current = ((idx % COUNT) + COUNT) % COUNT;
+  targetAngle = angleForIndex(current);
+  let diff = targetAngle - currentAngle;
+  while (diff > Math.PI) diff -= Math.PI * 2;
+  while (diff < -Math.PI) diff += Math.PI * 2;
+  targetAngle = currentAngle + diff;
+  updateDots();
+  autoTimer = 0;
+}
 
-        const dx = col - centerX;
-        const dy = row - centerY;
-        const distance = Math.sqrt(dx * dx + dy * dy);
+cards.forEach((_, i) => {
+  const dot = document.createElement('div');
+  dot.classList.add('dot');
+  if (i === 0) dot.classList.add('active');
+  dot.addEventListener('click', (e) => { e.stopPropagation(); goTo(i); });
+  dotsContainer.appendChild(dot);
+});
 
-        const angle = Math.atan2(dy, dx);
+document.getElementById('prev').addEventListener('click', () => goTo(current - 1));
+document.getElementById('next').addEventListener('click', () => goTo(current + 1));
 
-        const delay = (Math.cos((distance / maxDistance) * Math.PI) + 1) / 3;
+function onDragStart(clientX) { dragging = true; dragStartX = clientX; dragDelta = 0; autoTimer = 0; }
+function onDragMove(clientX) { if (!dragging) return; dragDelta = (clientX - dragStartX) * 0.007; positionCards(currentAngle - dragDelta); }
+function onDragEnd() {
+  if (!dragging) return;
+  dragging = false;
+  if (Math.abs(dragDelta) > 0.12) {
+    if (dragDelta < 0) goTo(current + 1);
+    else goTo(current - 1);
+  } else {
+    targetAngle = angleForIndex(current);
+    let diff = targetAngle - currentAngle;
+    while (diff > Math.PI) diff -= Math.PI * 2;
+    while (diff < -Math.PI) diff += Math.PI * 2;
+    targetAngle = currentAngle + diff;
+  }
+  dragDelta = 0;
+}
 
-        container.innerHTML = `
-                <div class="cube" style="--delay: ${delay}">
-                    <div class="face top"></div>
-                    <div class="face front"></div>
-                    <div class="face right"></div>
-                </div>
-            `;
-        grid.appendChild(container);
-      }
-    </script>
-  </body>
+canvas.addEventListener('mousedown', (e) => onDragStart(e.clientX));
+window.addEventListener('mousemove', (e) => onDragMove(e.clientX));
+window.addEventListener('mouseup', onDragEnd);
+canvas.addEventListener('touchstart', (e) => { e.preventDefault(); onDragStart(e.touches[0].clientX); });
+window.addEventListener('touchmove', (e) => { if (dragging) e.preventDefault(); onDragMove(e.touches[0].clientX); });
+window.addEventListener('touchend', onDragEnd);
+
+const glassMat = new THREE.ShaderMaterial({
+  uniforms: { u_time: { value: 0 }, u_mouse: { value: new THREE.Vector2(0.5, 0.5) } },
+  transparent: true,
+  side: THREE.DoubleSide,
+  fragmentShader: `
+    uniform float u_time;
+    uniform vec2 u_mouse;
+    varying vec2 vUv;
+    void main(){
+      vec2 uv = vUv;
+      float dist = distance(uv, u_mouse);
+      float wave = sin((uv.y + u_time * 0.9) * 12.0) * 0.05;
+      float ripple = cos((uv.x * 9.0 + u_time * 1.2)) * 0.04;
+      float strength = smoothstep(0.65, 0.0, dist);
+      uv.x += wave * strength;
+      uv.y += ripple * strength;
+      vec3 color;
+      color.r = uv.x + sin(u_time) * 0.12;
+      color.g = uv.y + cos(u_time * 0.8) * 0.12;
+      color.b = uv.x - uv.y + 0.25;
+      float highlight = pow(1.0 - dist, 3.2) * 0.5;
+      float pulse = sin(u_time * 5.0) * 0.04;
+      gl_FragColor = vec4(color * 0.14 + highlight + pulse, 0.28);
+    }
+  `,
+  vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`
+});
+
+const glassPlane = new THREE.Mesh(new THREE.PlaneGeometry(6.3, 4.35, 60, 60), glassMat);
+glassPlane.position.z = 2.15;
+scene.add(glassPlane);
+
+function resize() {
+  const w = canvas.clientWidth;
+  const h = canvas.clientHeight;
+  renderer.setSize(w, h, false);
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+}
+window.addEventListener('resize', resize);
+resize();
+
+goTo(0);
+positionCards(0);
+updateDots();
+
+let lastTime = performance.now();
+function animate(now) {
+  requestAnimationFrame(animate);
+  const dt = Math.min((now - lastTime) / 1000, 0.05);
+  lastTime = now;
+  if (!dragging) {
+    autoTimer += dt;
+    if (autoTimer > 4.2) { goTo(current + 1); autoTimer = 0; }
+    currentAngle += (targetAngle - currentAngle) * Math.min(dt * 6.5, 1);
+  }
+  if (dragging) positionCards(currentAngle - dragDelta);
+  else positionCards(currentAngle);
+  movingLight.position.x = Math.sin(now * 0.0012) * 1.8;
+  movingLight.position.y = 1.2 + Math.sin(now * 0.0018) * 0.6;
+  fillLight.intensity = 0.55 + Math.sin(now * 0.002) * 0.1;
+  glassMat.uniforms.u_time.value += 0.012;
+  renderer.render(scene, camera);
+}
+animate(performance.now());
+
+const shell = document.querySelector('.carousel-shell');
+let targetRotX = 0, targetRotY = 0, currentRotX = 0, currentRotY = 0;
+shell.addEventListener('mousemove', e => {
+  const rect = shell.getBoundingClientRect();
+  const x = (e.clientX - rect.left) / rect.width;
+  const y = (e.clientY - rect.top) / rect.height;
+  shell.style.setProperty('--mx', `${x * 100}%`);
+  shell.style.setProperty('--my', `${y * 100}%`);
+  glassMat.uniforms.u_mouse.value.set(x, 1.0 - y);
+  targetRotX = (y - 0.5) * 10;
+  targetRotY = (x - 0.5) * -10;
+});
+shell.addEventListener('mouseleave', () => {
+  targetRotX = 0; targetRotY = 0;
+  shell.style.setProperty('--mx', '50%');
+  shell.style.setProperty('--my', '50%');
+  glassMat.uniforms.u_mouse.value.set(0.5, 0.5);
+});
+function tiltAnim() {
+  requestAnimationFrame(tiltAnim);
+  currentRotX += (targetRotX - currentRotX) * 0.1;
+  currentRotY += (targetRotY - currentRotY) * 0.1;
+  shell.style.transform = `perspective(950px) rotateX(${currentRotX}deg) rotateY(${currentRotY}deg) scale(1.02)`;
+}
+tiltAnim();
+
+// ====================== REMOVER LOADING COM TEMPO MÍNIMO (2.5 segundos) ======================
+let loaderRemoved = false;
+function hideLoading() {
+  if (loaderRemoved) return;
+  loaderRemoved = true;
+  const overlay = document.getElementById('loadingOverlay');
+  if (overlay) {
+    overlay.classList.add('fade-out');
+    setTimeout(() => {
+      overlay.style.display = 'none';
+    }, 1300);
+  }
+}
+
+// Garantir tempo mínimo de exibição do loader (2500ms)
+const minLoadTime = 2500;
+const startTime = performance.now();
+
+function onLoadComplete() {
+  const elapsed = performance.now() - startTime;
+  const remaining = Math.max(0, minLoadTime - elapsed);
+  setTimeout(hideLoading, remaining);
+}
+
+// Aguarda todos os recursos (imagens, vídeos, scripts) carregarem
+if (document.readyState === 'complete') {
+  onLoadComplete();
+} else {
+  window.addEventListener('load', onLoadComplete);
+}
+</script>
+</body>
 </html>
