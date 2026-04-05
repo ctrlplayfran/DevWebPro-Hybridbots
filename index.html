@@ -81,36 +81,38 @@ body::before{
   position: absolute;
   width: 100%;
   height: 100%;
-  border: 1px solid rgba(0, 232, 122, 0.4);
+  border: 1px solid rgba(0, 232, 122, 0.6);
   box-sizing: border-box;
   background-color: rgba(0, 0, 0, 0.85);
 }
 
 .top {
   transform: rotateX(-90deg) translateZ(15px);
-  background: linear-gradient(135deg, rgba(0,232,122,0.15), rgba(0,200,255,0.05));
+  background: linear-gradient(135deg, rgba(0,232,122,0.25), rgba(0,200,255,0.08));
+  border-color: #00E87A;
 }
 
 .front {
   transform: translateZ(15px);
-  background: linear-gradient(45deg, rgba(0,232,122,0.08), rgba(0,150,200,0.02));
+  background: linear-gradient(45deg, rgba(0,232,122,0.15), rgba(0,150,200,0.04));
+  border-color: #00E87A;
 }
 
 .right {
   transform: rotateY(90deg) translateZ(15px);
-  background: linear-gradient(225deg, rgba(0,232,122,0.1), rgba(0,200,255,0.03));
+  background: linear-gradient(225deg, rgba(0,232,122,0.2), rgba(0,200,255,0.06));
+  border-color: #00E87A;
 }
 
 @keyframes wave {
   0%, 100% {
-    transform: translateZ(-30px);
+    transform: translateZ(-35px);
   }
   50% {
-    transform: translateZ(40px);
+    transform: translateZ(45px);
   }
 }
 
-/* Texto de carregamento opcional */
 .loading-text {
   position: absolute;
   bottom: 12%;
@@ -118,17 +120,17 @@ body::before{
   right: 0;
   text-align: center;
   font-family: 'Barlow Condensed', sans-serif;
-  font-size: 12px;
+  font-size: 13px;
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: #00E87A;
-  opacity: 0.7;
+  opacity: 0.8;
   animation: pulse 1.8s ease-in-out infinite;
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 0.3; }
-  50% { opacity: 0.9; }
+  0%, 100% { opacity: 0.3; text-shadow: 0 0 0px #00E87A; }
+  50% { opacity: 1; text-shadow: 0 0 8px #00E87A; }
 }
 
 /* ─── VÍDEO DE FUNDO ─── */
@@ -156,8 +158,8 @@ body::before{
 }
 
 /* ═══════════════════════════════════════
-   NAVBAR
-═══════════════════════════════════════ */
+   NAVBAR MINIMALISTA
+════════════════════════════════════════ */
 .navbar {
   position: fixed;
   top: 0;
@@ -167,133 +169,84 @@ body::before{
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 40px;
-  height: 70px;
-  background: rgba(7, 7, 7, 0.18);
-  backdrop-filter: blur(8px) saturate(1.2);
-  -webkit-backdrop-filter: blur(8px) saturate(1.2);
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-}
-
-.navbar::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent 0%, #00E87A 40%, #00b8ff 70%, transparent 100%);
-  opacity: 0.35;
+  padding: 0 32px;
+  height: 64px;
+  background: transparent;
+  transition: background 0.3s ease;
 }
 
 .nav-logo {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   text-decoration: none;
   flex-shrink: 0;
 }
 
 .nav-logo-mark {
-  height: 40px;
+  height: 36px;
   width: auto;
   flex-shrink: 0;
   object-fit: contain;
 }
 
-.nav-logo-text {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 22px;
-  letter-spacing: 0.12em;
-  color: #f0ece4;
-  line-height: 1;
-}
-
-.nav-logo-text span {
-  color: #00E87A;
-}
-
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 2px;
   list-style: none;
 }
 
 .nav-links li a {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.55);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: rgba(255,255,255,0.65);
   text-decoration: none;
-  padding: 8px 16px;
-  border-radius: 8px;
+  padding: 8px 14px;
+  border-radius: 24px;
   transition: color 0.2s, background 0.2s;
-  position: relative;
-}
-
-.nav-links li a::after {
-  content: "";
-  position: absolute;
-  bottom: 4px;
-  left: 50%;
-  transform: translateX(-50%) scaleX(0);
-  width: 16px;
-  height: 1.5px;
-  background: #00E87A;
-  border-radius: 2px;
-  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .nav-links li a:hover {
-  color: rgba(255,255,255,0.95);
-  background: rgba(255,255,255,0.05);
-}
-
-.nav-links li a:hover::after {
-  transform: translateX(-50%) scaleX(1);
+  color: #ffffff;
+  background: rgba(255,255,255,0.06);
 }
 
 .nav-links li a.active {
   color: #00E87A;
-}
-
-.nav-links li a.active::after {
-  transform: translateX(-50%) scaleX(1);
+  background: transparent;
 }
 
 .nav-whatsapp {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 9px 20px;
-  background: rgba(0,232,122,0.12);
-  border: 1px solid rgba(0,232,122,0.35);
-  border-radius: 40px;
-  color: #00E87A;
+  gap: 6px;
+  padding: 6px 14px;
+  background: transparent;
+  border: none;
+  border-radius: 24px;
+  color: rgba(255,255,255,0.75);
   text-decoration: none;
-  font-family: 'Barlow Condensed', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  transition: background 0.2s, border-color 0.2s, color 0.2s, transform 0.15s;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  transition: color 0.2s, background 0.2s;
   white-space: nowrap;
   flex-shrink: 0;
 }
 
 .nav-whatsapp:hover {
-  background: #00E87A;
-  color: #060c09;
-  border-color: #00E87A;
-  transform: translateY(-1px);
+  background: rgba(255,255,255,0.06);
+  color: #00E87A;
 }
 
 .nav-whatsapp svg {
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   flex-shrink: 0;
   fill: currentColor;
 }
@@ -303,21 +256,19 @@ body::before{
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 5px;
-  width: 40px;
-  height: 40px;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 10px;
+  gap: 4px;
+  width: 36px;
+  height: 36px;
+  background: transparent;
+  border: none;
   cursor: pointer;
   padding: 0;
   flex-shrink: 0;
-  transition: background 0.2s, border-color 0.2s;
+  transition: opacity 0.2s;
 }
 
 .hamburger:hover {
-  background: rgba(0,232,122,0.1);
-  border-color: rgba(0,232,122,0.3);
+  opacity: 0.7;
 }
 
 .hamburger span {
@@ -331,102 +282,96 @@ body::before{
 }
 
 .hamburger.open span:nth-child(1) {
-  transform: translateY(6.5px) rotate(45deg);
+  transform: translateY(5.5px) rotate(45deg);
 }
 .hamburger.open span:nth-child(2) {
   opacity: 0;
   transform: scaleX(0);
 }
 .hamburger.open span:nth-child(3) {
-  transform: translateY(-6.5px) rotate(-45deg);
+  transform: translateY(-5.5px) rotate(-45deg);
 }
 
 .mobile-menu {
   position: fixed;
-  top: 70px;
+  top: 64px;
   left: 0;
   right: 0;
   z-index: 99;
-  background: rgba(7, 7, 7, 0.96);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border-bottom: 1px solid rgba(0,232,122,0.15);
+  background: rgba(7, 7, 7, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
   padding: 0;
   overflow: hidden;
   max-height: 0;
-  transition: max-height 0.45s cubic-bezier(0.4,0,0.2,1), padding 0.3s;
+  transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1), padding 0.3s;
 }
 
 .mobile-menu.open {
-  max-height: 420px;
-  padding: 8px 0 20px;
+  max-height: 360px;
+  padding: 12px 0 20px;
 }
 
 .mobile-menu ul {
   list-style: none;
-  padding: 8px 24px;
+  padding: 4px 20px;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
 }
 
 .mobile-menu ul li a {
   display: block;
-  padding: 13px 16px;
-  font-family: 'Barlow Condensed', sans-serif;
+  padding: 12px 16px;
+  font-family: 'DM Sans', sans-serif;
   font-size: 15px;
-  font-weight: 600;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.65);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  color: rgba(255,255,255,0.7);
   text-decoration: none;
-  border-radius: 10px;
-  transition: background 0.2s, color 0.2s, padding-left 0.2s;
-  border-left: 2px solid transparent;
+  border-radius: 12px;
+  transition: background 0.2s, color 0.2s;
 }
 
 .mobile-menu ul li a:hover,
 .mobile-menu ul li a.active {
   background: rgba(255,255,255,0.05);
   color: #ffffff;
-  padding-left: 22px;
-  border-left-color: #00E87A;
 }
 
 .mobile-menu-divider {
   height: 1px;
-  background: rgba(255,255,255,0.07);
-  margin: 10px 24px;
+  background: rgba(255,255,255,0.06);
+  margin: 8px 20px;
 }
 
 .mobile-whatsapp {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  margin: 10px 24px 0;
-  padding: 14px 24px;
-  background: rgba(0,232,122,0.12);
-  border: 1px solid rgba(0,232,122,0.3);
-  border-radius: 14px;
-  color: #00E87A;
+  gap: 8px;
+  margin: 8px 20px 0;
+  padding: 12px 20px;
+  background: rgba(255,255,255,0.03);
+  border: none;
+  border-radius: 40px;
+  color: rgba(255,255,255,0.8);
   text-decoration: none;
-  font-family: 'Barlow Condensed', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   font-size: 14px;
-  font-weight: 600;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
+  font-weight: 400;
   transition: background 0.2s, color 0.2s;
 }
 
 .mobile-whatsapp:hover {
-  background: #00E87A;
-  color: #060c09;
+  background: rgba(255,255,255,0.08);
+  color: #00E87A;
 }
 
 .mobile-whatsapp svg {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   fill: currentColor;
   flex-shrink: 0;
 }
@@ -440,7 +385,7 @@ body::before{
   justify-content:center;
   position:relative;
   z-index:2;
-  padding-top: 70px;
+  padding-top: 64px;
 }
 
 .carousel-shell{
@@ -593,10 +538,11 @@ button:hover{
   .nav-links { display: none; }
   .nav-whatsapp { display: none; }
   .hamburger { display: flex; }
+  .navbar { padding: 0 20px; }
 }
 
 @media (max-width: 640px) {
-  .navbar { padding: 0 20px; }
+  .navbar { padding: 0 16px; height: 56px; }
   .carousel-shell {
     width: 88vw;
     height: 68vw;
@@ -605,7 +551,7 @@ button:hover{
   }
   .project-title { font-size: 28px; }
   .project-subtitle { font-size: 10px; letter-spacing: 0.22em; }
-  .hero { padding-top: 70px; }
+  .hero { padding-top: 56px; }
   .loader-grid {
     transform: rotateX(60deg) rotateZ(45deg) scale(0.55);
   }
@@ -613,6 +559,7 @@ button:hover{
     bottom: 8%;
     font-size: 10px;
   }
+  .mobile-menu.open { max-height: 320px; }
 }
 </style>
 </head>
@@ -635,23 +582,26 @@ button:hover{
 <!-- CANVAS DAS PARTÍCULAS -->
 <canvas id="three-bg"></canvas>
 
-<!-- NAVBAR -->
-<nav class="navbar">
+<!-- NAVBAR MINIMALISTA -->
+<nav class="navbar" id="navbar">
   <a href="#" class="nav-logo">
     <img src="logo.jpg" alt="HybridBots" class="nav-logo-mark" />
   </a>
+
   <ul class="nav-links">
     <li><a href="#" class="active">Início</a></li>
     <li><a href="#">Projetos</a></li>
     <li><a href="#">Serviços</a></li>
     <li><a href="#">Sobre</a></li>
   </ul>
+
   <a href="https://wa.me/5566996915943" target="_blank" rel="noopener" class="nav-whatsapp">
     <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
       <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/>
     </svg>
-    Fale Conosco
+    WhatsApp
   </a>
+
   <button class="hamburger" id="hamburger" aria-label="Menu">
     <span></span>
     <span></span>
@@ -671,7 +621,7 @@ button:hover{
     <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
       <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/>
     </svg>
-    Entrar em Contato
+    WhatsApp
   </a>
 </div>
 
@@ -725,7 +675,7 @@ function createLoaderCubes() {
 }
 createLoaderCubes();
 
-// ====================== HAMBURGUER ======================
+// ====================== MENU MOBILE ======================
 const hamburger = document.getElementById('hamburger');
 const mobileMenu = document.getElementById('mobileMenu');
 
@@ -742,11 +692,10 @@ mobileMenu.querySelectorAll('a').forEach(link => {
   });
 });
 
-const navbar = document.querySelector('.navbar');
+// Navbar scroll effect (minimalista: só muda o fundo levemente)
+const navbarEl = document.querySelector('.navbar');
 window.addEventListener('scroll', () => {
-  navbar.style.background = window.scrollY > 10
-    ? 'rgba(7,7,7,0.45)'
-    : 'rgba(7,7,7,0.18)';
+  navbarEl.style.background = window.scrollY > 10 ? 'rgba(7,7,7,0.4)' : 'transparent';
 }, { passive: true });
 
 // ====================== FUNDO THREE.JS ======================
@@ -760,7 +709,7 @@ bgCamera.position.z = 5;
 
 const starGeo = new THREE.BufferGeometry();
 const starVerts = [];
-for(let i = 0; i < 1800; i++){
+for(let i = 0; i < 18; i++){
   starVerts.push((Math.random()-.5)*36, (Math.random()-.5)*24, (Math.random()-.5)*28);
 }
 starGeo.setAttribute('position', new THREE.Float32BufferAttribute(starVerts, 3));
@@ -770,7 +719,7 @@ bgScene.add(stars);
 
 const starGeo2 = new THREE.BufferGeometry();
 const starVerts2 = [];
-for(let i = 0; i < 1200; i++){
+for(let i = 0; i < 12; i++){
   starVerts2.push((Math.random()-.5)*42, (Math.random()-.5)*28, (Math.random()-.5)*32);
 }
 starGeo2.setAttribute('position', new THREE.Float32BufferAttribute(starVerts2, 3));
@@ -1096,8 +1045,11 @@ function tiltAnim() {
 }
 tiltAnim();
 
-// ====================== REMOVER LOADING APÓS CARREGAMENTO COMPLETO ======================
+// ====================== REMOVER LOADING COM TEMPO MÍNIMO (2.5 segundos) ======================
+let loaderRemoved = false;
 function hideLoading() {
+  if (loaderRemoved) return;
+  loaderRemoved = true;
   const overlay = document.getElementById('loadingOverlay');
   if (overlay) {
     overlay.classList.add('fade-out');
@@ -1107,11 +1059,19 @@ function hideLoading() {
   }
 }
 
-// Aguarda todos os recursos (imagens, vídeos, scripts) carregarem
+const minLoadTime = 2500;
+const startTime = performance.now();
+
+function onLoadComplete() {
+  const elapsed = performance.now() - startTime;
+  const remaining = Math.max(0, minLoadTime - elapsed);
+  setTimeout(hideLoading, remaining);
+}
+
 if (document.readyState === 'complete') {
-  hideLoading();
+  onLoadComplete();
 } else {
-  window.addEventListener('load', hideLoading);
+  window.addEventListener('load', onLoadComplete);
 }
 </script>
 </body>
