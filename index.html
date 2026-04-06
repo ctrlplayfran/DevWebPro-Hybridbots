@@ -158,7 +158,7 @@ body::before{
 }
 
 /* ═══════════════════════════════════════
-   NAVBAR MINIMALISTA
+    NAVBAR MINIMALISTA
 ════════════════════════════════════════ */
 .navbar {
   position: fixed;
@@ -307,7 +307,7 @@ body::before{
   background: rgba(7, 7, 7, 0.92);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(255,255,255,0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   padding: 0;
   overflow: hidden;
   max-height: 0;
@@ -571,13 +571,11 @@ button:hover{
 </head>
 <body>
 
-<!-- LOADING OVERLAY COM CUBOS 3D -->
 <div class="loading-overlay" id="loadingOverlay">
   <div class="loader-grid" id="loaderGrid"></div>
   <div class="loading-text">CARREGANDO EXPERIÊNCIA</div>
 </div>
 
-<!-- VÍDEO DE FUNDO -->
 <div class="hero-video-wrap">
   <video autoplay muted loop playsinline>
     <source src="background.webm" type="video/webm">
@@ -585,10 +583,8 @@ button:hover{
   </video>
 </div>
 
-<!-- CANVAS DAS PARTÍCULAS -->
 <canvas id="three-bg"></canvas>
 
-<!-- NAVBAR MINIMALISTA -->
 <nav class="navbar" id="navbar">
   <a href="#" class="nav-logo">
     <img src="logo.jpg" alt="HybridBots" class="nav-logo-mark" />
@@ -758,87 +754,59 @@ scene.background = null;
 const camera = new THREE.PerspectiveCamera(60, 1, 0.1, 100);
 camera.position.set(0, 0, 6);
 
-const cards = [
-  { title: 'E-COMMERCE', color: 0xffffff, accent: 0xd4f1f9, label: '02 — LOJA VIRTUAL' },
-  { title: 'PORTFÓLIO',  color: 0xffffff, accent: 0xffdd99, label: '03 — SITE PROFISSIONAL' },
-  { title: 'CORRETOR DE IMÓVEIS',  color: 0xffffff, accent: 0xffaa88, label: '04 — LANDING PAGE' },
-  { title: 'SITE PROFISSIONAL',  color: 0xffffff, accent: 0x9bb8e0, label: '05 — SITE INSTITUCIONAL MODERNO' },
+const textureLoader = new THREE.TextureLoader();
+const cardTexture = textureLoader.load('telas.png', (tex) => {
+    const aspect = tex.image.width / tex.image.height;
+    updateCardsGeometry(aspect);
+    const elapsed = performance.now() - startTime;
+    setTimeout(hideLoading, Math.max(0, 2500 - elapsed));
+});
+
+const cardData = [
+  { title: 'E-COMMERCE', label: '02 — LOJA VIRTUAL' },
+  { title: 'PORTFÓLIO', label: '03 — SITE PROFISSIONAL' },
+  { title: 'CORRETOR DE IMÓVEIS', label: '04 — LANDING PAGE' },
+  { title: 'SITE PROFISSIONAL', label: '05 — SITE INSTITUCIONAL MODERNO' },
 ];
 
-const STRIPS = 9;
-const CARD_W = 1.8;
-const CARD_H = 2.8;
-const STRIP_W = CARD_W / STRIPS;
-const COUNT = cards.length;
+const cards = [];
 const RADIUS = 5.5;
-
+const BASE_H = 3.2; 
 const groups = [];
 
 function makeCard(cfg) {
   const group = new THREE.Group();
-  for (let s = 0; s < STRIPS; s++) {
-    const geo = new THREE.PlaneGeometry(STRIP_W - 0.02, CARD_H, 1, 32);
-    const positions = geo.attributes.position;
-    for (let i = 0; i < positions.count; i++) {
-      const y = positions.getY(i);
-      const nx = (s / (STRIPS - 1)) * 2 - 1;
-      const curve = Math.cos(nx * Math.PI * 0.45) * 0.2;
-      const rippleY = Math.sin(y / CARD_H * Math.PI) * 0.08;
-      positions.setZ(i, curve + rippleY);
-    }
-    positions.needsUpdate = true;
-    geo.computeVertexNormals();
-    const t = s / (STRIPS - 1);
-    const c1 = new THREE.Color(cfg.color);
-    const c2 = new THREE.Color(cfg.accent);
-    const stripColor = c1.clone().lerp(c2, t);
-    const mat = new THREE.MeshPhysicalMaterial({
-      color: stripColor,
-      metalness: 0.45,
-      roughness: 0.32,
-      transparent: true,
-      opacity: 0.92,
-      side: THREE.DoubleSide,
-      emissive: 0x111111,
-      emissiveIntensity: 0.1
-    });
-    const mesh = new THREE.Mesh(geo, mat);
-    mesh.position.x = (s - (STRIPS - 1) / 2) * STRIP_W;
-    mesh.castShadow = true;
-    group.add(mesh);
-    if (s < STRIPS - 1) {
-      const lineGeo = new THREE.BufferGeometry().setFromPoints([
-        new THREE.Vector3(mesh.position.x + STRIP_W / 2, -CARD_H / 2, 0.04),
-        new THREE.Vector3(mesh.position.x + STRIP_W / 2,  CARD_H / 2, 0.04),
-      ]);
-      const lineMat = new THREE.LineBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.35 });
-      group.add(new THREE.Line(lineGeo, lineMat));
-    }
-  }
-  const tCanvas = document.createElement('canvas');
-  tCanvas.width = 512;
-  tCanvas.height = 128;
-  const ctx = tCanvas.getContext('2d');
-  ctx.fillStyle = 'rgba(0,0,0,0)';
-  ctx.fillRect(0, 0, 512, 128);
-  ctx.font = 'bold 56px "Bebas Neue", sans-serif';
-  ctx.fillStyle = '#ffffff';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  ctx.fillText(cfg.title, 256, 64);
-  ctx.fillStyle = 'rgba(255,255,255,0.25)';
-  ctx.fillText(cfg.title, 258, 66);
-  const tex = new THREE.CanvasTexture(tCanvas);
-  const tGeo = new THREE.PlaneGeometry(CARD_W * 0.85, 0.45);
-  const tMat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, depthTest: false, side: THREE.DoubleSide });
-  const tMesh = new THREE.Mesh(tGeo, tMat);
-  tMesh.position.set(0, -CARD_H/2 + 0.32, 0.15);
-  group.add(tMesh);
+  const geo = new THREE.PlaneGeometry(2.2, BASE_H, 32, 32);
+  const mat = new THREE.MeshBasicMaterial({ map: cardTexture, transparent: true, opacity: 0, side: THREE.DoubleSide });
+
+  const mesh = new THREE.Mesh(geo, mat);
+  mesh.name = "mainMesh";
+  mesh.castShadow = false; 
+  group.add(mesh);
   scene.add(group);
   return group;
 }
 
-cards.forEach((c) => groups.push(makeCard(c)));
+function updateCardsGeometry(aspect) {
+  const w = BASE_H * aspect;
+  groups.forEach(group => {
+    const mainMesh = group.getObjectByName("mainMesh");
+    if (mainMesh) {
+      mainMesh.geometry.dispose();
+      const newGeo = new THREE.PlaneGeometry(w, BASE_H, 32, 32);
+      const pos = newGeo.attributes.position;
+      for (let i = 0; i < pos.count; i++) {
+        const x = pos.getX(i);
+        pos.setZ(i, Math.cos((x/(w/2)) * Math.PI * 0.2) * 0.15);
+      }
+      newGeo.computeVertexNormals();
+      mainMesh.geometry = newGeo;
+      mainMesh.material.opacity = 1;
+    }
+  });
+}
+
+cardData.forEach((c) => groups.push(makeCard(c)));
 
 const ambient = new THREE.AmbientLight(0xffffff, 0.45);
 scene.add(ambient);
@@ -852,7 +820,7 @@ scene.add(fillLight);
 const backLight = new THREE.PointLight(0xffaa66, 0.6);
 backLight.position.set(0, 1, -4);
 scene.add(backLight);
-const movingLight = new THREE.PointLight(0xffffff, 0.9, 12);
+const movingLight = new THREE.PointLight(0xffffff, 1.5, 12); 
 movingLight.position.set(0, 1.5, 3);
 scene.add(movingLight);
 
@@ -864,50 +832,37 @@ let dragStartX = 0;
 let dragDelta = 0;
 let autoTimer = 0;
 
-function angleForIndex(idx) {
-  return (idx / COUNT) * Math.PI * 2;
-}
+function angleForIndex(idx) { return (idx / cardData.length) * Math.PI * 2; }
 
 function positionCards(angle) {
-  for (let i = 0; i < COUNT; i++) {
+  for (let i = 0; i < cardData.length; i++) {
     const a = angleForIndex(i) - angle;
-    const x = Math.sin(a) * RADIUS;
-    const z = Math.cos(a) * RADIUS - RADIUS;
-    groups[i].position.set(x, 0, z);
+    groups[i].position.set(Math.sin(a) * RADIUS, 0, Math.cos(a) * RADIUS - RADIUS);
     groups[i].rotation.y = -a;
     const dist = Math.abs(Math.cos(a));
-    const scale = 0.7 + dist * 0.33;
-    groups[i].scale.setScalar(scale);
-    groups[i].children.forEach((child, ci) => {
-      if (child.material && child.material.opacity !== undefined && child.type === 'Mesh' && ci < STRIPS) {
-        child.material.opacity = 0.55 + dist * 0.42;
-      }
-    });
+    groups[i].scale.setScalar(0.75 + dist * 0.25);
+    const mainMesh = groups[i].getObjectByName("mainMesh");
+    if (mainMesh) mainMesh.material.opacity = (0.4 + dist * 0.6);
   }
 }
 
 const dotsContainer = document.getElementById('dots');
 function updateDots() {
-  document.querySelectorAll('.dot').forEach((dot, i) => {
-    dot.classList.toggle('active', i === current);
-  });
-  document.getElementById('label').textContent = cards[current].label;
+  document.querySelectorAll('.dot').forEach((dot, i) => dot.classList.toggle('active', i === current));
+  document.getElementById('label').textContent = cardData[current].label;
   const titleEl = document.getElementById('dynamicTitle');
   const subtitleEl = document.getElementById('dynamicSubtitle');
-  if (titleEl && subtitleEl) {
-    titleEl.textContent = cards[current].title;
-    subtitleEl.textContent = cards[current].label;
-    titleEl.style.animation = 'none';
-    subtitleEl.style.animation = 'none';
-    titleEl.offsetHeight;
-    subtitleEl.offsetHeight;
-    titleEl.style.animation = 'fadeUp 0.35s ease-out';
-    subtitleEl.style.animation = 'fadeUp 0.35s ease-out';
+  if (titleEl) {
+    titleEl.textContent = cardData[current].title;
+    subtitleEl.textContent = cardData[current].label;
+    titleEl.style.animation = 'none'; subtitleEl.style.animation = 'none';
+    titleEl.offsetHeight; subtitleEl.offsetHeight;
+    titleEl.style.animation = 'fadeUp 0.35s ease-out'; subtitleEl.style.animation = 'fadeUp 0.35s ease-out';
   }
 }
 
 function goTo(idx) {
-  current = ((idx % COUNT) + COUNT) % COUNT;
+  current = ((idx % cardData.length) + cardData.length) % cardData.length;
   targetAngle = angleForIndex(current);
   let diff = targetAngle - currentAngle;
   while (diff > Math.PI) diff -= Math.PI * 2;
@@ -917,10 +872,9 @@ function goTo(idx) {
   autoTimer = 0;
 }
 
-cards.forEach((_, i) => {
+cardData.forEach((_, i) => {
   const dot = document.createElement('div');
   dot.classList.add('dot');
-  if (i === 0) dot.classList.add('active');
   dot.addEventListener('click', (e) => { e.stopPropagation(); goTo(i); });
   dotsContainer.appendChild(dot);
 });
@@ -933,7 +887,7 @@ function onDragMove(clientX) { if (!dragging) return; dragDelta = (clientX - dra
 function onDragEnd() {
   if (!dragging) return;
   dragging = false;
-  if (Math.abs(dragDelta) > 0.12) {
+  if (Math.abs(dragDelta) > 0.1) {
     if (dragDelta < 0) goTo(current + 1);
     else goTo(current - 1);
   } else {
@@ -949,130 +903,51 @@ function onDragEnd() {
 canvas.addEventListener('mousedown', (e) => onDragStart(e.clientX));
 window.addEventListener('mousemove', (e) => onDragMove(e.clientX));
 window.addEventListener('mouseup', onDragEnd);
-canvas.addEventListener('touchstart', (e) => { e.preventDefault(); onDragStart(e.touches[0].clientX); });
-window.addEventListener('touchmove', (e) => { if (dragging) e.preventDefault(); onDragMove(e.touches[0].clientX); });
+canvas.addEventListener('touchstart', (e) => onDragStart(e.touches[0].clientX), {passive: false});
+window.addEventListener('touchmove', (e) => onDragMove(e.touches[0].clientX), {passive: false});
 window.addEventListener('touchend', onDragEnd);
 
 const glassMat = new THREE.ShaderMaterial({
   uniforms: { u_time: { value: 0 }, u_mouse: { value: new THREE.Vector2(0.5, 0.5) } },
-  transparent: true,
-  side: THREE.DoubleSide,
-  fragmentShader: `
-    uniform float u_time;
-    uniform vec2 u_mouse;
-    varying vec2 vUv;
-    void main(){
-      vec2 uv = vUv;
-      float dist = distance(uv, u_mouse);
-      float wave = sin((uv.y + u_time * 0.9) * 12.0) * 0.05;
-      float ripple = cos((uv.x * 9.0 + u_time * 1.2)) * 0.04;
-      float strength = smoothstep(0.65, 0.0, dist);
-      uv.x += wave * strength;
-      uv.y += ripple * strength;
-      vec3 color;
-      color.r = uv.x + sin(u_time) * 0.12;
-      color.g = uv.y + cos(u_time * 0.8) * 0.12;
-      color.b = uv.x - uv.y + 0.25;
-      float highlight = pow(1.0 - dist, 3.2) * 0.5;
-      float pulse = sin(u_time * 5.0) * 0.04;
-      gl_FragColor = vec4(color * 0.14 + highlight + pulse, 0.28);
-    }
-  `,
+  transparent: true, side: THREE.DoubleSide,
+  fragmentShader: `uniform float u_time; uniform vec2 u_mouse; varying vec2 vUv; void main(){ float dist = distance(vUv, u_mouse); float highlight = pow(1.0 - dist, 3.2) * 0.5; gl_FragColor = vec4(1.0, 1.0, 1.0, highlight * 0.15); }`,
   vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`
 });
-
-const glassPlane = new THREE.Mesh(new THREE.PlaneGeometry(6.3, 4.35, 60, 60), glassMat);
-glassPlane.position.z = 2.15;
-scene.add(glassPlane);
-
-function resize() {
-  const w = canvas.clientWidth;
-  const h = canvas.clientHeight;
-  renderer.setSize(w, h, false);
-  camera.aspect = w / h;
-  camera.updateProjectionMatrix();
-}
-window.addEventListener('resize', resize);
-resize();
-
-goTo(0);
-positionCards(0);
-updateDots();
-
-let lastTime = performance.now();
-function animate(now) {
-  requestAnimationFrame(animate);
-  const dt = Math.min((now - lastTime) / 1000, 0.05);
-  lastTime = now;
-  if (!dragging) {
-    autoTimer += dt;
-    if (autoTimer > 4.2) { goTo(current + 1); autoTimer = 0; }
-    currentAngle += (targetAngle - currentAngle) * Math.min(dt * 6.5, 1);
-  }
-  if (dragging) positionCards(currentAngle - dragDelta);
-  else positionCards(currentAngle);
-  movingLight.position.x = Math.sin(now * 0.0012) * 1.8;
-  movingLight.position.y = 1.2 + Math.sin(now * 0.0018) * 0.6;
-  fillLight.intensity = 0.55 + Math.sin(now * 0.002) * 0.1;
-  glassMat.uniforms.u_time.value += 0.012;
-  renderer.render(scene, camera);
-}
-animate(performance.now());
+scene.add(new THREE.Mesh(new THREE.PlaneGeometry(6.3, 4.35, 60, 60), glassMat).position.set(0,0,2.15));
 
 const shell = document.querySelector('.carousel-shell');
-let targetRotX = 0, targetRotY = 0, currentRotX = 0, currentRotY = 0;
+let tRotX = 0, tRotY = 0, cRotX = 0, cRotY = 0;
 shell.addEventListener('mousemove', e => {
   const rect = shell.getBoundingClientRect();
-  const x = (e.clientX - rect.left) / rect.width;
-  const y = (e.clientY - rect.top) / rect.height;
-  shell.style.setProperty('--mx', `${x * 100}%`);
-  shell.style.setProperty('--my', `${y * 100}%`);
+  const x = (e.clientX - rect.left) / rect.width, y = (e.clientY - rect.top) / rect.height;
+  shell.style.setProperty('--mx', `${x * 100}%`); shell.style.setProperty('--my', `${y * 100}%`);
   glassMat.uniforms.u_mouse.value.set(x, 1.0 - y);
-  targetRotX = (y - 0.5) * 10;
-  targetRotY = (x - 0.5) * -10;
+  tRotX = (y - 0.5) * 10; tRotY = (x - 0.5) * -10;
 });
-shell.addEventListener('mouseleave', () => {
-  targetRotX = 0; targetRotY = 0;
-  shell.style.setProperty('--mx', '50%');
-  shell.style.setProperty('--my', '50%');
-  glassMat.uniforms.u_mouse.value.set(0.5, 0.5);
-});
-function tiltAnim() {
-  requestAnimationFrame(tiltAnim);
-  currentRotX += (targetRotX - currentRotX) * 0.1;
-  currentRotY += (targetRotY - currentRotY) * 0.1;
-  shell.style.transform = `perspective(950px) rotateX(${currentRotX}deg) rotateY(${currentRotY}deg) scale(1.02)`;
-}
-tiltAnim();
+shell.addEventListener('mouseleave', () => { tRotX = 0; tRotY = 0; glassMat.uniforms.u_mouse.value.set(0.5, 0.5); });
 
-// ====================== REMOVER LOADING COM TEMPO MÍNIMO (2.5 segundos) ======================
-let loaderRemoved = false;
-function hideLoading() {
-  if (loaderRemoved) return;
-  loaderRemoved = true;
-  const overlay = document.getElementById('loadingOverlay');
-  if (overlay) {
-    overlay.classList.add('fade-out');
-    setTimeout(() => {
-      overlay.style.display = 'none';
-    }, 1300);
-  }
-}
-
-const minLoadTime = 2500;
 const startTime = performance.now();
+let lastTime = performance.now();
 
-function onLoadComplete() {
-  const elapsed = performance.now() - startTime;
-  const remaining = Math.max(0, minLoadTime - elapsed);
-  setTimeout(hideLoading, remaining);
+function animate(now) {
+  requestAnimationFrame(animate);
+  const dt = Math.min((now - lastTime) / 1000, 0.05); lastTime = now;
+  if (!dragging) {
+    autoTimer += dt; if (autoTimer > 4.2) goTo(current + 1);
+    currentAngle += (targetAngle - currentAngle) * Math.min(dt * 6.5, 1);
+  }
+  positionCards(dragging ? currentAngle - dragDelta : currentAngle);
+  movingLight.position.x = Math.sin(now * 0.0012) * 2.2;
+  movingLight.position.y = 1.2 + Math.sin(now * 0.0018) * 0.8;
+  cRotX += (tRotX - cRotX) * 0.1; cRotY += (tRotY - cRotY) * 0.1;
+  shell.style.transform = `perspective(950px) rotateX(${cRotX}deg) rotateY(${cRotY}deg) scale(1.02)`;
+  renderer.render(scene, camera);
 }
 
-if (document.readyState === 'complete') {
-  onLoadComplete();
-} else {
-  window.addEventListener('load', onLoadComplete);
-}
+function hideLoading() { document.getElementById('loadingOverlay').classList.add('fade-out'); }
+function resize() { renderer.setSize(canvas.clientWidth, canvas.clientHeight, false); camera.aspect = canvas.clientWidth / canvas.clientHeight; camera.updateProjectionMatrix(); }
+window.addEventListener('resize', resize);
+resize(); updateDots(); animate(performance.now());
 </script>
 </body>
 </html>
