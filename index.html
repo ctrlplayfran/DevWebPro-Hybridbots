@@ -171,8 +171,14 @@ body::before{
   justify-content: space-between;
   padding: 0 32px;
   height: 64px;
-  background: transparent;
-  transition: background 0.3s ease;
+  background: rgba(12, 12, 16, 0.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 4px 32px rgba(0, 0, 0, 0.5),
+    inset 0 0 40px rgba(0, 232, 122, 0.04);
+  transition: background 0.3s ease, box-shadow 0.3s ease;
 }
 
 .nav-logo {
@@ -691,12 +697,6 @@ mobileMenu.querySelectorAll('a').forEach(link => {
     hamburger.classList.remove('open');
   });
 });
-
-// Navbar scroll effect (minimalista: só muda o fundo levemente)
-const navbarEl = document.querySelector('.navbar');
-window.addEventListener('scroll', () => {
-  navbarEl.style.background = window.scrollY > 10 ? 'rgba(7,7,7,0.4)' : 'transparent';
-}, { passive: true });
 
 // ====================== FUNDO THREE.JS ======================
 const bgScene = new THREE.Scene();
