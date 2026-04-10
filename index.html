@@ -33,14 +33,14 @@ body::before{
   background-size:128px 128px;
 }
 
-/* ─── LOADING OVERLAY COM CUBOS 3D ─── */
+/* ─── LOADING OVERLAY COM CUBOS 3D — BRANCO ─── */
 .loading-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: #000000;
+  background: #ffffff;
   z-index: 1000;
   display: flex;
   justify-content: center;
@@ -81,27 +81,27 @@ body::before{
   position: absolute;
   width: 100%;
   height: 100%;
-  border: 1px solid rgba(0, 232, 122, 0.6);
+  border: 1px solid rgba(180, 180, 180, 0.7);
   box-sizing: border-box;
-  background-color: rgba(0, 0, 0, 0.85);
+  background-color: rgba(255, 255, 255, 0.9);
 }
 
 .top {
   transform: rotateX(-90deg) translateZ(15px);
-  background: linear-gradient(135deg, rgba(0,232,122,0.25), rgba(0,200,255,0.08));
-  border-color: #00E87A;
+  background: linear-gradient(135deg, rgba(220,220,220,0.6), rgba(240,240,240,0.3));
+  border-color: rgba(160, 160, 160, 0.8);
 }
 
 .front {
   transform: translateZ(15px);
-  background: linear-gradient(45deg, rgba(0,232,122,0.15), rgba(0,150,200,0.04));
-  border-color: #00E87A;
+  background: linear-gradient(45deg, rgba(230,230,230,0.5), rgba(245,245,245,0.2));
+  border-color: rgba(160, 160, 160, 0.8);
 }
 
 .right {
   transform: rotateY(90deg) translateZ(15px);
-  background: linear-gradient(225deg, rgba(0,232,122,0.2), rgba(0,200,255,0.06));
-  border-color: #00E87A;
+  background: linear-gradient(225deg, rgba(200,200,200,0.5), rgba(220,220,220,0.2));
+  border-color: rgba(160, 160, 160, 0.8);
 }
 
 @keyframes wave {
@@ -123,14 +123,14 @@ body::before{
   font-size: 13px;
   letter-spacing: 0.3em;
   text-transform: uppercase;
-  color: #00E87A;
+  color: #555555;
   opacity: 0.8;
   animation: pulse 1.8s ease-in-out infinite;
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 0.3; text-shadow: 0 0 0px #00E87A; }
-  50% { opacity: 1; text-shadow: 0 0 8px #00E87A; }
+  0%, 100% { opacity: 0.25; }
+  50% { opacity: 0.85; }
 }
 
 /* ─── VÍDEO DE FUNDO ─── */
@@ -558,14 +558,23 @@ button:hover{
   .project-title { font-size: 28px; }
   .project-subtitle { font-size: 10px; letter-spacing: 0.22em; }
   .hero { padding-top: 56px; }
+  /* Loader menor no mobile */
   .loader-grid {
-    transform: rotateX(60deg) rotateZ(45deg) scale(0.55);
+    transform: rotateX(60deg) rotateZ(45deg) scale(0.42);
   }
   .loading-text {
     bottom: 8%;
     font-size: 10px;
+    letter-spacing: 0.2em;
   }
   .mobile-menu.open { max-height: 320px; }
+  .mobile-menu { top: 56px; }
+}
+
+@media (max-width: 380px) {
+  .loader-grid {
+    transform: rotateX(60deg) rotateZ(45deg) scale(0.34);
+  }
 }
 </style>
 </head>
@@ -694,7 +703,7 @@ mobileMenu.querySelectorAll('a').forEach(link => {
   });
 });
 
-// ====================== FUNDO THREE.JS ======================
+// ====================== FUNDO THREE.JS — PARTÍCULAS MENORES ======================
 const bgScene = new THREE.Scene();
 const bgCamera = new THREE.PerspectiveCamera(70, window.innerWidth/window.innerHeight, 0.1, 1000);
 const bgCanvas = document.getElementById('three-bg');
@@ -703,23 +712,25 @@ bgRenderer.setSize(window.innerWidth, window.innerHeight);
 bgRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 bgCamera.position.z = 5;
 
+// Partículas verdes — quantidade e tamanho reduzidos
 const starGeo = new THREE.BufferGeometry();
 const starVerts = [];
-for(let i = 0; i < 18; i++){
+for(let i = 0; i < 8; i++){
   starVerts.push((Math.random()-.5)*36, (Math.random()-.5)*24, (Math.random()-.5)*28);
 }
 starGeo.setAttribute('position', new THREE.Float32BufferAttribute(starVerts, 3));
-const starMat = new THREE.PointsMaterial({color: 0x00E87A, size: 0.022, transparent: true, opacity: 0.55});
+const starMat = new THREE.PointsMaterial({color: 0x00E87A, size: 0.010, transparent: true, opacity: 0.45});
 const stars = new THREE.Points(starGeo, starMat);
 bgScene.add(stars);
 
+// Partículas azuis — quantidade e tamanho reduzidos
 const starGeo2 = new THREE.BufferGeometry();
 const starVerts2 = [];
-for(let i = 0; i < 12; i++){
+for(let i = 0; i < 6; i++){
   starVerts2.push((Math.random()-.5)*42, (Math.random()-.5)*28, (Math.random()-.5)*32);
 }
 starGeo2.setAttribute('position', new THREE.Float32BufferAttribute(starVerts2, 3));
-const starMat2 = new THREE.PointsMaterial({color: 0x88aaff, size: 0.018, transparent: true, opacity: 0.3});
+const starMat2 = new THREE.PointsMaterial({color: 0x88aaff, size: 0.008, transparent: true, opacity: 0.25});
 const stars2 = new THREE.Points(starGeo2, starMat2);
 bgScene.add(stars2);
 
@@ -945,7 +956,14 @@ function animate(now) {
 }
 
 function hideLoading() { document.getElementById('loadingOverlay').classList.add('fade-out'); }
-function resize() { renderer.setSize(canvas.clientWidth, canvas.clientHeight, false); camera.aspect = canvas.clientWidth / canvas.clientHeight; camera.updateProjectionMatrix(); }
+function resize() {
+  bgRenderer.setSize(window.innerWidth, window.innerHeight);
+  bgCamera.aspect = window.innerWidth / window.innerHeight;
+  bgCamera.updateProjectionMatrix();
+  renderer.setSize(canvas.clientWidth, canvas.clientHeight, false);
+  camera.aspect = canvas.clientWidth / canvas.clientHeight;
+  camera.updateProjectionMatrix();
+}
 window.addEventListener('resize', resize);
 resize(); updateDots(); animate(performance.now());
 </script>
