@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>HybridBots — Carrossel de Tiras 3D</title>
+<title>HybridBots — Criação de Sites, LPs e E-commerces</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600&family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 
@@ -48,8 +48,6 @@ body::before {
   transition: opacity 1.2s cubic-bezier(0.2, 0.9, 0.4, 1.1);
   overflow: hidden;
 }
-
-/* Reflexos espelhados estilo Apple */
 .loading-overlay::before {
   content: "";
   position: absolute;
@@ -59,25 +57,20 @@ body::before {
   height: 140%;
   background: radial-gradient(ellipse at 40% 30%, rgba(255, 255, 255, 0.08) 0%, rgba(0, 0, 0, 0) 60%);
   pointer-events: none;
-  z-index: 0;
 }
-
 .loading-overlay::after {
   content: "";
   position: absolute;
   inset: 0;
   background: radial-gradient(circle at 80% 90%, rgba(0, 232, 122, 0.03) 0%, transparent 70%);
   pointer-events: none;
-  z-index: 0;
 }
-
 .loading-overlay.fade-out {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
 }
 
-/* Grid de cubos 3D */
 .loader-grid {
   display: grid;
   grid-template-columns: repeat(15, 30px);
@@ -87,27 +80,19 @@ body::before {
   z-index: 2;
   gap: 0;
 }
-
 .cube-container {
   width: 30px;
   height: 30px;
   transform-style: preserve-3d;
 }
-
 .cube {
   width: 100%;
   height: 100%;
   position: relative;
   transform-style: preserve-3d;
   animation: wave 2.4s ease-in-out infinite;
-  will-change: transform;
-}
-
-/* Atraso individual via variável CSS */
-.cube {
   animation-delay: calc(var(--delay) * -2.4s);
 }
-
 .face {
   position: absolute;
   width: 100%;
@@ -117,34 +102,13 @@ body::before {
   background-color: rgba(20, 20, 25, 0.7);
   box-shadow: 0 0 4px rgba(0, 232, 122, 0.15);
 }
-
-.top {
-  transform: rotateX(-90deg) translateZ(15px);
-  background: linear-gradient(135deg, rgba(60, 60, 70, 0.6), rgba(30, 30, 35, 0.3));
-  border-color: rgba(0, 232, 122, 0.3);
-}
-
-.front {
-  transform: translateZ(15px);
-  background: linear-gradient(45deg, rgba(70, 70, 80, 0.5), rgba(40, 40, 45, 0.25));
-  border-color: rgba(0, 232, 122, 0.35);
-}
-
-.right {
-  transform: rotateY(90deg) translateZ(15px);
-  background: linear-gradient(225deg, rgba(55, 55, 65, 0.55), rgba(25, 25, 30, 0.25));
-  border-color: rgba(0, 232, 122, 0.25);
-}
-
+.top { transform: rotateX(-90deg) translateZ(15px); background: linear-gradient(135deg, rgba(60, 60, 70, 0.6), rgba(30, 30, 35, 0.3)); border-color: rgba(0, 232, 122, 0.3); }
+.front { transform: translateZ(15px); background: linear-gradient(45deg, rgba(70, 70, 80, 0.5), rgba(40, 40, 45, 0.25)); border-color: rgba(0, 232, 122, 0.35); }
+.right { transform: rotateY(90deg) translateZ(15px); background: linear-gradient(225deg, rgba(55, 55, 65, 0.55), rgba(25, 25, 30, 0.25)); border-color: rgba(0, 232, 122, 0.25); }
 @keyframes wave {
-  0%, 100% {
-    transform: translateZ(-30px);
-  }
-  50% {
-    transform: translateZ(40px);
-  }
+  0%, 100% { transform: translateZ(-30px); }
+  50% { transform: translateZ(40px); }
 }
-
 .loading-text {
   position: absolute;
   bottom: 12%;
@@ -156,13 +120,9 @@ body::before {
   letter-spacing: 0.3em;
   text-transform: uppercase;
   color: rgba(255, 255, 245, 0.75);
-  opacity: 0.9;
   animation: pulse 1.8s ease-in-out infinite;
   z-index: 2;
-  font-weight: 400;
-  text-shadow: 0 0 12px rgba(0, 232, 122, 0.2);
 }
-
 @keyframes pulse {
   0%, 100% { opacity: 0.3; letter-spacing: 0.3em; }
   50% { opacity: 0.9; letter-spacing: 0.35em; }
@@ -192,203 +152,226 @@ body::before {
   pointer-events: none;
 }
 
-/* NAVBAR */
-.navbar {
+/* ==================================================
+   TOP NAVBAR — HORIZONTAL (apenas portfólio e WhatsApp)
+   ================================================== */
+.top-navbar {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
-  z-index: 100;
+  z-index: 150;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 32px;
-  height: 64px;
-  background: rgba(12, 12, 16, 0.45);
-  backdrop-filter: blur(14px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 4px 32px rgba(0, 0, 0, 0.5), inset 0 0 40px rgba(0, 232, 122, 0.04);
+  height: 72px;
+  background: rgba(8, 8, 8, 0.78);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(240, 236, 228, 0.08);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35), inset 0 0 40px rgba(0, 232, 122, 0.02);
 }
 
-.nav-logo {
+.nav-brand {
   display: flex;
   align-items: center;
-  gap: 8px;
-  text-decoration: none;
-  flex-shrink: 0;
+  gap: 16px;
 }
-
-.nav-logo-mark {
-  height: 36px;
+.nav-brand img {
+  height: 46px;
   width: auto;
-  flex-shrink: 0;
-  object-fit: contain;
+  border-radius: 12px;
+  border: 1px solid rgba(200, 184, 154, 0.35);
+  transition: all 0.25s ease;
 }
-
-.nav-links {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  list-style: none;
+.nav-brand img:hover {
+  border-color: #00E87A;
+  transform: scale(1.02);
+  box-shadow: 0 0 14px rgba(0, 232, 122, 0.2);
 }
-
-.nav-links li a {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 14px;
+.brand-text {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.38em;
+  text-transform: uppercase;
+  color: #b8cfc0;
+  border-left: 1px solid rgba(0, 232, 122, 0.35);
+  padding-left: 16px;
   font-weight: 400;
-  letter-spacing: 0.02em;
-  color: rgba(255, 255, 255, 0.65);
-  text-decoration: none;
-  padding: 8px 14px;
-  border-radius: 24px;
-  transition: color 0.2s, background 0.2s;
+}
+@media (max-width: 580px) {
+  .brand-text { display: none; }
+  .top-navbar { padding: 0 20px; height: 64px; }
 }
 
-.nav-links li a:hover {
-  color: #ffffff;
-  background: rgba(255, 255, 255, 0.06);
-}
-
-.nav-links li a.active {
-  color: #00E87A;
-}
-
-.nav-whatsapp {
+.nav-icons {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 14px;
-  background: transparent;
-  border: none;
-  border-radius: 24px;
-  color: rgba(255, 255, 255, 0.75);
-  text-decoration: none;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 13px;
-  transition: color 0.2s, background 0.2s;
-  white-space: nowrap;
-  flex-shrink: 0;
+  gap: 12px;
 }
-
-.nav-whatsapp:hover {
-  background: rgba(255, 255, 255, 0.06);
+.icon-btn {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  border-radius: 40px;
+  border: 1px solid rgba(240, 236, 228, 0.18);
+  background: rgba(240, 236, 228, 0.03);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+.icon-btn:hover {
+  background: rgba(0, 232, 122, 0.12);
+  border-color: #00E87A;
+  transform: translateY(-2px);
+}
+.icon-btn svg {
+  width: 18px;
+  height: 18px;
+  stroke: #f0ece4;
+  stroke-width: 1.5;
+  fill: none;
+  transition: stroke 0.25s;
+}
+.icon-btn:hover svg {
+  stroke: #00E87A;
+}
+.icon-btn::after {
+  content: attr(data-tip);
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(8, 8, 8, 0.92);
+  border: 1px solid rgba(0, 232, 122, 0.35);
   color: #00E87A;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 30px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  z-index: 160;
+}
+.icon-btn:hover::after {
+  opacity: 1;
 }
 
-.nav-whatsapp svg {
-  width: 14px;
-  height: 14px;
-  fill: currentColor;
-}
-
-.hamburger {
+/* Mobile menu (hamburger) */
+.hamburger-btn {
   display: none;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 4px;
-  width: 36px;
-  height: 36px;
-  background: transparent;
-  border: none;
+  width: 44px;
+  height: 44px;
+  background: rgba(20, 20, 30, 0.5);
+  border: 1px solid rgba(0, 232, 122, 0.3);
+  border-radius: 30px;
   cursor: pointer;
-  padding: 0;
-  flex-shrink: 0;
 }
-
-.hamburger span {
+.hamburger-btn span {
   display: block;
   width: 18px;
   height: 1.5px;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.85);
   border-radius: 2px;
   transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s;
-  transform-origin: center;
 }
-
-.hamburger.open span:nth-child(1) { transform: translateY(5.5px) rotate(45deg); }
-.hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
-.hamburger.open span:nth-child(3) { transform: translateY(-5.5px) rotate(-45deg); }
+.hamburger-btn.open span:nth-child(1) { transform: translateY(5.5px) rotate(45deg); }
+.hamburger-btn.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.hamburger-btn.open span:nth-child(3) { transform: translateY(-5.5px) rotate(-45deg); }
 
 .mobile-menu {
   position: fixed;
-  top: 64px;
+  top: 72px;
   left: 0;
   right: 0;
-  z-index: 99;
-  background: rgba(7, 7, 7, 0.92);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  padding: 0;
+  z-index: 140;
+  background: rgba(7, 7, 7, 0.94);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
   overflow: hidden;
   max-height: 0;
   transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s;
 }
-
 .mobile-menu.open {
-  max-height: 360px;
+  max-height: 200px;
   padding: 12px 0 20px;
 }
-
 .mobile-menu ul {
   list-style: none;
   padding: 4px 20px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
 }
-
-.mobile-menu ul li a {
-  display: block;
-  padding: 12px 16px;
+.mobile-menu ul li button {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  background: transparent;
+  border: none;
+  padding: 14px 16px;
   font-family: 'DM Sans', sans-serif;
   font-size: 15px;
-  color: rgba(255, 255, 255, 0.7);
-  text-decoration: none;
-  border-radius: 12px;
+  color: rgba(255, 255, 255, 0.8);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  text-align: left;
 }
-
-.mobile-menu ul li a:hover,
-.mobile-menu ul li a.active {
-  background: rgba(255, 255, 255, 0.05);
-  color: #ffffff;
+.mobile-menu ul li button:hover {
+  background: rgba(0, 232, 122, 0.1);
+  color: #00E87A;
 }
-
-.mobile-menu-divider {
+.mobile-menu svg {
+  width: 18px;
+  height: 18px;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  fill: none;
+}
+.mobile-divider {
   height: 1px;
   background: rgba(255, 255, 255, 0.06);
   margin: 8px 20px;
 }
-
 .mobile-whatsapp {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 8px;
+  gap: 14px;
   margin: 8px 20px 0;
-  padding: 12px 20px;
-  background: rgba(255, 255, 255, 0.03);
-  border: none;
+  padding: 14px 16px;
+  background: rgba(0, 232, 122, 0.08);
+  border: 1px solid rgba(0, 232, 122, 0.3);
   border-radius: 40px;
-  color: rgba(255, 255, 255, 0.8);
+  color: #00E87A;
   text-decoration: none;
   font-family: 'DM Sans', sans-serif;
   font-size: 14px;
-  transition: background 0.2s, color 0.2s;
+  transition: background 0.2s;
 }
-
 .mobile-whatsapp:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: #00E87A;
+  background: rgba(0, 232, 122, 0.2);
+}
+@media (max-width: 767px) {
+  .nav-icons .icon-btn:not(#whatsapp-icon) { display: none; }
+  .hamburger-btn { display: flex; }
+  .top-navbar { padding: 0 20px; }
 }
 
-.mobile-whatsapp svg {
-  width: 16px;
-  height: 16px;
-  fill: currentColor;
-}
-
-/* CARROSSEL */
+/* CARROSSEL 3D (preservado) */
 .hero {
   height: 100vh;
   display: flex;
@@ -397,9 +380,8 @@ body::before {
   justify-content: center;
   position: relative;
   z-index: 2;
-  padding-top: 64px;
+  padding-top: 72px;
 }
-
 .carousel-shell {
   width: 560px;
   height: 480px;
@@ -412,7 +394,6 @@ body::before {
   transition: transform 0.2s ease-out;
   margin-bottom: 28px;
 }
-
 .carousel-shell::after {
   content: "";
   position: absolute;
@@ -421,14 +402,12 @@ body::before {
   background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(255, 255, 255, 0.08), rgba(0, 232, 122, 0.02) 35%, transparent 70%);
   pointer-events: none;
 }
-
 canvas {
   width: 100%;
   height: 100%;
   display: block;
   border-radius: 22px;
 }
-
 #nav {
   position: absolute;
   bottom: 18px;
@@ -438,7 +417,6 @@ canvas {
   gap: 12px;
   z-index: 10;
 }
-
 #label {
   position: absolute;
   top: 18px;
@@ -452,13 +430,10 @@ canvas {
   backdrop-filter: blur(4px);
   padding: 5px 14px;
   border-radius: 40px;
-  font-weight: 500;
-  pointer-events: none;
   font-family: 'Barlow Condensed', monospace;
   text-transform: uppercase;
   white-space: nowrap;
 }
-
 button {
   background: rgba(20, 20, 30, 0.5);
   border: 1px solid rgba(0, 232, 122, 0.3);
@@ -470,47 +445,34 @@ button {
   cursor: pointer;
   backdrop-filter: blur(4px);
   transition: 0.2s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
-
 button:hover {
   background: #00E87A;
   color: #000;
-  border-color: white;
 }
-
 #dots {
   display: flex;
   gap: 8px;
   align-items: center;
 }
-
 .dot {
   width: 6px;
   height: 6px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.3);
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+  transition: all 0.3s;
 }
-
 .dot.active {
   background: #00E87A;
   width: 18px;
   border-radius: 4px;
 }
-
 .project-metadata {
   text-align: center;
   pointer-events: none;
-  width: 100%;
   max-width: 600px;
-  margin-top: 6px;
-  animation: fadeUp 0.5s ease-out;
 }
-
 .project-title {
   font-family: 'Bebas Neue', sans-serif;
   font-size: 38px;
@@ -520,60 +482,22 @@ button:hover {
   margin-bottom: 8px;
   text-shadow: 0 2px 20px rgba(0, 0, 0, 0.8);
 }
-
 .project-subtitle {
   font-family: 'Barlow Condensed', sans-serif;
   font-size: 12px;
   letter-spacing: 0.32em;
   text-transform: uppercase;
   color: #7eb8a0;
-  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.8);
   background: rgba(0, 0, 0, 0.2);
   display: inline-block;
   padding: 0 8px;
   border-radius: 20px;
-  backdrop-filter: blur(2px);
 }
-
-@keyframes fadeUp {
-  0% { opacity: 0; transform: translateY(12px); }
-  100% { opacity: 1; transform: translateY(0); }
-}
-
-@media (max-width: 900px) {
-  .nav-links { display: none; }
-  .nav-whatsapp { display: none; }
-  .hamburger { display: flex; }
-  .navbar { padding: 0 20px; }
-}
-
 @media (max-width: 640px) {
-  .navbar { padding: 0 16px; height: 56px; }
-  .carousel-shell {
-    width: 88vw;
-    height: 68vw;
-    max-height: 420px;
-    margin-bottom: 20px;
-  }
+  .carousel-shell { width: 88vw; height: 68vw; max-height: 420px; }
   .project-title { font-size: 28px; }
-  .project-subtitle { font-size: 10px; letter-spacing: 0.22em; }
-  .hero { padding-top: 56px; }
-  .loader-grid {
-    transform: rotateX(60deg) rotateZ(45deg) scale(0.42);
-  }
-  .loading-text {
-    bottom: 8%;
-    font-size: 10px;
-    letter-spacing: 0.2em;
-  }
-  .mobile-menu.open { max-height: 320px; }
-  .mobile-menu { top: 56px; }
-}
-
-@media (max-width: 380px) {
-  .loader-grid {
-    transform: rotateX(60deg) rotateZ(45deg) scale(0.34);
-  }
+  .loader-grid { transform: rotateX(60deg) rotateZ(45deg) scale(0.42); }
+  .hero { padding-top: 64px; }
 }
 </style>
 </head>
@@ -590,45 +514,35 @@ button:hover {
     <source src="background.mp4" type="video/mp4">
   </video>
 </div>
-
 <canvas id="three-bg"></canvas>
 
-<nav class="navbar" id="navbar">
-  <a href="#" class="nav-logo">
-    <img src="logo.jpg" alt="HybridBots" class="nav-logo-mark" />
-  </a>
-  <ul class="nav-links">
-    <li><a href="#" class="active">Início</a></li>
-    <li><a href="#">Projetos</a></li>
-    <li><a href="#">Serviços</a></li>
-    <li><a href="#">Sobre</a></li>
-  </ul>
-  <a href="https://wa.me/5566996915943" target="_blank" rel="noopener" class="nav-whatsapp">
-    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/>
-    </svg>
-    WhatsApp
-  </a>
-  <button class="hamburger" id="hamburger" aria-label="Menu">
-    <span></span>
-    <span></span>
-    <span></span>
-  </button>
+<!-- TOP NAVBAR (apenas portfólio + WhatsApp) -->
+<nav class="top-navbar">
+  <div class="nav-brand">
+    <img src="logo.jpg" alt="HybridBots" />
+    <span class="brand-text">CRIAÇÃO DE SITES & E-COMMERCE</span>
+  </div>
+  <div class="nav-icons">
+    <button class="icon-btn" id="top-portfolio" data-tip="PORTFÓLIO">
+      <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+    </button>
+    <button class="icon-btn" id="top-whatsapp" data-tip="WHATSAPP / ORÇAMENTO">
+      <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+    </button>
+    <div class="hamburger-btn" id="hamburgerBtn">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
 </nav>
 
 <div class="mobile-menu" id="mobileMenu">
   <ul>
-    <li><a href="#" class="active">Início</a></li>
-    <li><a href="#">Projetos</a></li>
-    <li><a href="#">Serviços</a></li>
-    <li><a href="#">Sobre</a></li>
+    <li><button id="mobile-portfolio"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg> Portfólio</button></li>
   </ul>
-  <div class="mobile-menu-divider"></div>
-  <a href="https://wa.me/5566996915943" target="_blank" rel="noopener" class="mobile-whatsapp">
-    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/>
-    </svg>
-    WhatsApp
+  <div class="mobile-divider"></div>
+  <a href="https://wa.me/5511999999999" target="_blank" class="mobile-whatsapp">
+    <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+    Solicitar Orçamento via WhatsApp
   </a>
 </div>
 
@@ -643,384 +557,189 @@ button:hover {
     </div>
   </div>
   <div class="project-metadata">
-    <div class="project-title" id="dynamicTitle">E-COMMERCE</div>
-    <div class="project-subtitle" id="dynamicSubtitle">02 — LOJA VIRTUAL</div>
+    <div class="project-title" id="dynamicTitle">SITES PROFISSIONAIS</div>
+    <div class="project-subtitle" id="dynamicSubtitle">01 — LANDING PAGE</div>
   </div>
 </section>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
 <script>
-// ====================== LOADER: CUBOS 3D CORRIGIDO ======================
+// ====================== LOADER CUBOS ======================
 function createLoaderCubes() {
-  const gridContainer = document.getElementById("loaderGrid");
-  if (!gridContainer) return;
-  const size = 15;
-  const totalCubes = size * size;
-  const centerX = size / 2 - 0.5;
-  const centerY = size / 2 - 0.5;
-  const maxDistance = Math.sqrt(centerX * centerX + centerY * centerY);
-  
-  for (let i = 0; i < totalCubes; i++) {
+  const grid = document.getElementById("loaderGrid");
+  if (!grid) return;
+  const size = 15, total = size * size;
+  const center = size/2 - 0.5;
+  const maxDist = Math.sqrt(center*center + center*center);
+  for (let i = 0; i < total; i++) {
     const container = document.createElement("div");
     container.className = "cube-container";
-    const row = Math.floor(i / size);
-    const col = i % size;
-    const dx = col - centerX;
-    const dy = row - centerY;
-    const distance = Math.sqrt(dx * dx + dy * dy);
-    // delay entre 0 e 1 baseado na distância
-    const delayValue = (Math.cos((distance / maxDistance) * Math.PI) + 1) / 2;
-    container.innerHTML = `
-      <div class="cube" style="--delay: ${delayValue}">
-        <div class="face top"></div>
-        <div class="face front"></div>
-        <div class="face right"></div>
-      </div>
-    `;
-    gridContainer.appendChild(container);
+    const row = Math.floor(i / size), col = i % size;
+    const dx = col - center, dy = row - center;
+    const dist = Math.sqrt(dx*dx + dy*dy);
+    const delay = (Math.cos((dist / maxDist) * Math.PI) + 1) / 2;
+    container.innerHTML = `<div class="cube" style="--delay: ${delay}"><div class="face top"></div><div class="face front"></div><div class="face right"></div></div>`;
+    grid.appendChild(container);
   }
 }
 createLoaderCubes();
 
-// ====================== MENU MOBILE ======================
-const hamburger = document.getElementById('hamburger');
-const mobileMenu = document.getElementById('mobileMenu');
-
-hamburger.addEventListener('click', () => {
-  const open = mobileMenu.classList.toggle('open');
-  hamburger.classList.toggle('open', open);
-  hamburger.setAttribute('aria-expanded', open);
-});
-
-mobileMenu.querySelectorAll('a').forEach(link => {
-  link.addEventListener('click', () => {
-    mobileMenu.classList.remove('open');
-    hamburger.classList.remove('open');
-  });
-});
-
-// ====================== FUNDO THREE.JS — PARTÍCULAS ======================
+// ====================== FUNDO PARTÍCULAS THREE ======================
 const bgScene = new THREE.Scene();
-const bgCamera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 1000);
+const bgCamera = new THREE.PerspectiveCamera(70, window.innerWidth/window.innerHeight, 0.1, 1000);
 const bgCanvas = document.getElementById('three-bg');
 const bgRenderer = new THREE.WebGLRenderer({ canvas: bgCanvas, alpha: true });
 bgRenderer.setSize(window.innerWidth, window.innerHeight);
-bgRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 bgCamera.position.z = 5;
 
-// Partículas verdes
 const starGeo = new THREE.BufferGeometry();
 const starVerts = [];
-for (let i = 0; i < 8; i++) {
-  starVerts.push((Math.random() - 0.5) * 36, (Math.random() - 0.5) * 24, (Math.random() - 0.5) * 28);
-}
+for (let i = 0; i < 800; i++) starVerts.push((Math.random() - 0.5) * 60, (Math.random() - 0.5) * 40, (Math.random() - 0.5) * 40);
 starGeo.setAttribute('position', new THREE.Float32BufferAttribute(starVerts, 3));
-const starMat = new THREE.PointsMaterial({ color: 0x00E87A, size: 0.010, transparent: true, opacity: 0.45 });
+const starMat = new THREE.PointsMaterial({ color: 0x00E87A, size: 0.012, transparent: true, opacity: 0.45 });
 const stars = new THREE.Points(starGeo, starMat);
 bgScene.add(stars);
 
-// Partículas azuis
 const starGeo2 = new THREE.BufferGeometry();
 const starVerts2 = [];
-for (let i = 0; i < 6; i++) {
-  starVerts2.push((Math.random() - 0.5) * 42, (Math.random() - 0.5) * 28, (Math.random() - 0.5) * 32);
-}
+for (let i = 0; i < 600; i++) starVerts2.push((Math.random() - 0.5) * 80, (Math.random() - 0.5) * 50, (Math.random() - 0.5) * 60);
 starGeo2.setAttribute('position', new THREE.Float32BufferAttribute(starVerts2, 3));
-const starMat2 = new THREE.PointsMaterial({ color: 0x88aaff, size: 0.008, transparent: true, opacity: 0.25 });
+const starMat2 = new THREE.PointsMaterial({ color: 0x88aaff, size: 0.008, transparent: true, opacity: 0.3 });
 const stars2 = new THREE.Points(starGeo2, starMat2);
 bgScene.add(stars2);
 
 let mouseX = 0, mouseY = 0;
-document.addEventListener('mousemove', (e) => {
-  mouseX = (e.clientX / window.innerWidth - 0.5) * 0.5;
-  mouseY = (e.clientY / window.innerHeight - 0.5) * 0.3;
-});
-
+document.addEventListener('mousemove', (e) => { mouseX = (e.clientX/window.innerWidth - 0.5)*0.5; mouseY = (e.clientY/window.innerHeight - 0.5)*0.3; });
 function bgAnimate() {
   requestAnimationFrame(bgAnimate);
-  stars.rotation.y += 0.0006;
-  stars.rotation.x += 0.0003;
-  stars2.rotation.y -= 0.0004;
-  stars2.rotation.x += 0.0002;
-  bgCamera.position.x += (mouseX - bgCamera.position.x) * 0.05;
-  bgCamera.position.y += (-mouseY - bgCamera.position.y) * 0.05;
+  stars.rotation.y += 0.0006; stars.rotation.x += 0.0003;
+  stars2.rotation.y -= 0.0004; stars2.rotation.x += 0.0002;
+  bgCamera.position.x += (mouseX - bgCamera.position.x)*0.05;
+  bgCamera.position.y += (-mouseY - bgCamera.position.y)*0.05;
   bgCamera.lookAt(bgScene.position);
   bgRenderer.render(bgScene, bgCamera);
 }
 bgAnimate();
 
-// ====================== CARROSSEL 3D (com fallback de textura) ======================
-const canvasCarousel = document.getElementById('carousel-canvas');
-const renderer = new THREE.WebGLRenderer({ canvas: canvasCarousel, antialias: true, alpha: true });
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-renderer.shadowMap.enabled = true;
-
-const sceneCarousel = new THREE.Scene();
-sceneCarousel.background = null;
-
+// ====================== CARROSSEL 3D ======================
+const canvasCar = document.getElementById('carousel-canvas');
+const renderer = new THREE.WebGLRenderer({ canvas: canvasCar, alpha: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+const sceneCar = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(60, 1, 0.1, 100);
-camera.position.set(0, 0, 6);
+camera.position.set(0,0,6);
 
 const textureLoader = new THREE.TextureLoader();
 let cardTexture = null;
-
-// Fallback: cria uma textura gradiente caso telas.png não exista
 function createFallbackTexture() {
-  const canvas = document.createElement('canvas');
-  canvas.width = 1024;
-  canvas.height = 1024;
-  const ctx = canvas.getContext('2d');
-  ctx.fillStyle = '#111111';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  ctx.strokeStyle = '#00E87A';
-  ctx.lineWidth = 4;
-  ctx.strokeRect(40, 40, canvas.width - 80, canvas.height - 80);
-  ctx.fillStyle = '#ffffff';
-  ctx.font = 'bold 48px "DM Sans"';
-  ctx.textAlign = 'center';
-  ctx.fillText('HybridBots', canvas.width/2, canvas.height/2);
-  const texture = new THREE.CanvasTexture(canvas);
-  texture.needsUpdate = true;
-  return texture;
+  const canv = document.createElement('canvas'); canv.width=1024; canv.height=1024;
+  const ctx = canv.getContext('2d'); ctx.fillStyle='#111'; ctx.fillRect(0,0,canv.width,canv.height);
+  ctx.strokeStyle='#00E87A'; ctx.lineWidth=4; ctx.strokeRect(40,40,canv.width-80,canv.height-80);
+  ctx.fillStyle='#fff'; ctx.font='bold 48px "DM Sans"'; ctx.textAlign='center'; ctx.fillText('HybridBots', canv.width/2, canv.height/2);
+  const tex = new THREE.CanvasTexture(canv); tex.needsUpdate = true; return tex;
 }
+cardTexture = textureLoader.load('telas.png', (tex) => { updateCardsGeometry(tex.image.width/tex.image.height); hideLoading(); }, undefined, () => { cardTexture = createFallbackTexture(); updateCardsGeometry(1); hideLoading(); });
 
-cardTexture = textureLoader.load('telas.png', 
-  (tex) => {
-    // Sucesso
-    const aspect = tex.image.width / tex.image.height;
-    updateCardsGeometry(aspect);
-    hideLoadingAfterDelay();
-  },
-  undefined,
-  (err) => {
-    console.warn('Imagem telas.png não encontrada, usando fallback.');
-    cardTexture = createFallbackTexture();
-    const aspect = cardTexture.image.width / cardTexture.image.height;
-    updateCardsGeometry(aspect);
-    hideLoadingAfterDelay();
-  }
-);
-
-const cardData = [
-  { title: 'E-COMMERCE', label: '02 — LOJA VIRTUAL' },
-  { title: 'PORTFÓLIO', label: '03 — SITE PROFISSIONAL' },
-  { title: 'CORRETOR DE IMÓVEIS', label: '04 — LANDING PAGE' },
-  { title: 'SITE PROFISSIONAL', label: '05 — SITE INSTITUCIONAL MODERNO' },
+const serviceData = [
+  { title: 'LANDING PAGE', label: '01 — PÁGINA DE VENDAS' },
+  { title: 'SITE PROFISSIONAL', label: '02 — INSTITUCIONAL' },
+  { title: 'E-COMMERCE', label: '03 — LOJA VIRTUAL' },
+  { title: 'MANUTENÇÃO', label: '04 — SUPORTE CONTÍNUO' },
+  { title: 'SEO & PERFORMANCE', label: '05 — OTIMIZAÇÃO' }
 ];
-
-const groups = [];
-const RADIUS = 5.5;
-const BASE_H = 3.2;
-
+const groups = []; const RADIUS = 5.5; const BASE_H = 3.2;
 function makeCard() {
   const group = new THREE.Group();
   const geo = new THREE.PlaneGeometry(2.2, BASE_H, 32, 32);
   const mat = new THREE.MeshBasicMaterial({ map: cardTexture, transparent: true, opacity: 0, side: THREE.DoubleSide });
-  const mesh = new THREE.Mesh(geo, mat);
-  mesh.name = "mainMesh";
-  mesh.castShadow = false;
-  group.add(mesh);
-  sceneCarousel.add(group);
-  return group;
+  const mesh = new THREE.Mesh(geo, mat); mesh.name = "mainMesh"; group.add(mesh); sceneCar.add(group); return group;
 }
-
+serviceData.forEach(() => groups.push(makeCard()));
 function updateCardsGeometry(aspect) {
   const w = BASE_H * aspect;
-  groups.forEach(group => {
-    const mainMesh = group.getObjectByName("mainMesh");
-    if (mainMesh && mainMesh.geometry) {
-      mainMesh.geometry.dispose();
-      const newGeo = new THREE.PlaneGeometry(w, BASE_H, 32, 32);
-      const pos = newGeo.attributes.position;
-      for (let i = 0; i < pos.count; i++) {
-        const x = pos.getX(i);
-        pos.setZ(i, Math.cos((x / (w / 2)) * Math.PI * 0.2) * 0.15);
-      }
-      newGeo.computeVertexNormals();
-      mainMesh.geometry = newGeo;
-      mainMesh.material.opacity = 1;
-    }
-  });
+  groups.forEach(g => { const m = g.getObjectByName("mainMesh"); if(m && m.geometry) { m.geometry.dispose(); const newGeo = new THREE.PlaneGeometry(w, BASE_H, 32, 32); const pos = newGeo.attributes.position; for(let i=0;i<pos.count;i++) { const x = pos.getX(i); pos.setZ(i, Math.cos((x/(w/2))*Math.PI*0.2)*0.15); } newGeo.computeVertexNormals(); m.geometry = newGeo; m.material.opacity = 1; } });
 }
-
-cardData.forEach(() => groups.push(makeCard()));
-
-// Iluminação
-const ambient = new THREE.AmbientLight(0xffffff, 0.45);
-sceneCarousel.add(ambient);
-const keyLight = new THREE.DirectionalLight(0xffffff, 1.2);
-keyLight.position.set(3, 4, 5);
-keyLight.castShadow = true;
-sceneCarousel.add(keyLight);
-const fillLight = new THREE.DirectionalLight(0x88aaff, 0.55);
-fillLight.position.set(-3, 1, 3);
-sceneCarousel.add(fillLight);
-const backLight = new THREE.PointLight(0xffaa66, 0.6);
-backLight.position.set(0, 1, -4);
-sceneCarousel.add(backLight);
-const movingLight = new THREE.PointLight(0xffffff, 1.5, 12);
-movingLight.position.set(0, 1.5, 3);
-sceneCarousel.add(movingLight);
-
-let current = 0;
-let targetAngle = 0;
-let currentAngle = 0;
-let dragging = false;
-let dragStartX = 0;
-let dragDelta = 0;
-let autoTimer = 0;
-
-function angleForIndex(idx) { return (idx / cardData.length) * Math.PI * 2; }
-
+const ambient = new THREE.AmbientLight(0xffffff,0.45); sceneCar.add(ambient);
+const keyLight = new THREE.DirectionalLight(0xffffff,1.2); keyLight.position.set(3,4,5); sceneCar.add(keyLight);
+const movingLight = new THREE.PointLight(0xffffff,1.5,12); movingLight.position.set(0,1.5,3); sceneCar.add(movingLight);
+let current=0, targetAngle=0, currentAngle=0, dragging=false, dragStartX=0, dragDelta=0, autoTimer=0;
+function angleForIndex(i) { return (i/serviceData.length)*Math.PI*2; }
 function positionCards(angle) {
-  for (let i = 0; i < cardData.length; i++) {
-    const a = angleForIndex(i) - angle;
-    groups[i].position.set(Math.sin(a) * RADIUS, 0, Math.cos(a) * RADIUS - RADIUS);
+  for(let i=0;i<serviceData.length;i++) {
+    const a = angleForIndex(i)-angle;
+    groups[i].position.set(Math.sin(a)*RADIUS, 0, Math.cos(a)*RADIUS - RADIUS);
     groups[i].rotation.y = -a;
     const dist = Math.abs(Math.cos(a));
-    groups[i].scale.setScalar(0.75 + dist * 0.25);
-    const mainMesh = groups[i].getObjectByName("mainMesh");
-    if (mainMesh) mainMesh.material.opacity = (0.4 + dist * 0.6);
+    groups[i].scale.setScalar(0.75+dist*0.25);
+    groups[i].getObjectByName("mainMesh").material.opacity = 0.4+dist*0.6;
   }
 }
-
-const dotsContainer = document.getElementById('dots');
+const dotsDiv = document.getElementById('dots');
 function updateDots() {
-  document.querySelectorAll('.dot').forEach((dot, i) => dot.classList.toggle('active', i === current));
-  document.getElementById('label').textContent = cardData[current].label;
-  const titleEl = document.getElementById('dynamicTitle');
-  const subtitleEl = document.getElementById('dynamicSubtitle');
-  if (titleEl) {
-    titleEl.textContent = cardData[current].title;
-    subtitleEl.textContent = cardData[current].label;
-    titleEl.style.animation = 'none';
-    subtitleEl.style.animation = 'none';
-    titleEl.offsetHeight;
-    subtitleEl.offsetHeight;
-    titleEl.style.animation = 'fadeUp 0.35s ease-out';
-    subtitleEl.style.animation = 'fadeUp 0.35s ease-out';
-  }
+  document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active', i===current));
+  document.getElementById('label').innerText = serviceData[current].label;
+  document.getElementById('dynamicTitle').innerText = serviceData[current].title;
+  document.getElementById('dynamicSubtitle').innerText = serviceData[current].label;
 }
-
-function goTo(idx) {
-  current = ((idx % cardData.length) + cardData.length) % cardData.length;
-  targetAngle = angleForIndex(current);
-  let diff = targetAngle - currentAngle;
-  while (diff > Math.PI) diff -= Math.PI * 2;
-  while (diff < -Math.PI) diff += Math.PI * 2;
-  targetAngle = currentAngle + diff;
-  updateDots();
-  autoTimer = 0;
-}
-
-cardData.forEach((_, i) => {
-  const dot = document.createElement('div');
-  dot.classList.add('dot');
-  dot.addEventListener('click', (e) => { e.stopPropagation(); goTo(i); });
-  dotsContainer.appendChild(dot);
-});
-
-document.getElementById('prev').addEventListener('click', () => goTo(current - 1));
-document.getElementById('next').addEventListener('click', () => goTo(current + 1));
-
-function onDragStart(clientX) { dragging = true; dragStartX = clientX; dragDelta = 0; autoTimer = 0; }
-function onDragMove(clientX) { if (!dragging) return; dragDelta = (clientX - dragStartX) * 0.007; positionCards(currentAngle - dragDelta); }
-function onDragEnd() {
-  if (!dragging) return;
-  dragging = false;
-  if (Math.abs(dragDelta) > 0.1) {
-    if (dragDelta < 0) goTo(current + 1);
-    else goTo(current - 1);
-  } else {
-    targetAngle = angleForIndex(current);
-    let diff = targetAngle - currentAngle;
-    while (diff > Math.PI) diff -= Math.PI * 2;
-    while (diff < -Math.PI) diff += Math.PI * 2;
-    targetAngle = currentAngle + diff;
-  }
-  dragDelta = 0;
-}
-
-canvasCarousel.addEventListener('mousedown', (e) => onDragStart(e.clientX));
-window.addEventListener('mousemove', (e) => onDragMove(e.clientX));
-window.addEventListener('mouseup', onDragEnd);
-canvasCarousel.addEventListener('touchstart', (e) => onDragStart(e.touches[0].clientX), { passive: false });
-window.addEventListener('touchmove', (e) => onDragMove(e.touches[0].clientX), { passive: false });
-window.addEventListener('touchend', onDragEnd);
-
-const glassMat = new THREE.ShaderMaterial({
-  uniforms: { u_time: { value: 0 }, u_mouse: { value: new THREE.Vector2(0.5, 0.5) } },
-  transparent: true, side: THREE.DoubleSide,
-  fragmentShader: `uniform float u_time; uniform vec2 u_mouse; varying vec2 vUv; void main(){ float dist = distance(vUv, u_mouse); float highlight = pow(1.0 - dist, 3.2) * 0.5; gl_FragColor = vec4(1.0, 1.0, 1.0, highlight * 0.15); }`,
-  vertexShader: `varying vec2 vUv; void main(){ vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`
-});
-sceneCarousel.add(new THREE.Mesh(new THREE.PlaneGeometry(6.3, 4.35, 60, 60), glassMat).position.set(0, 0, 2.15));
-
+function goTo(idx) { current = ((idx%serviceData.length)+serviceData.length)%serviceData.length; targetAngle = angleForIndex(current); let diff = targetAngle-currentAngle; while(diff>Math.PI) diff-=Math.PI*2; while(diff<-Math.PI) diff+=Math.PI*2; targetAngle = currentAngle+diff; updateDots(); autoTimer=0; }
+serviceData.forEach((_,i)=>{ const d=document.createElement('div'); d.classList.add('dot'); d.addEventListener('click',()=>goTo(i)); dotsDiv.appendChild(d); });
+document.getElementById('prev').addEventListener('click',()=>goTo(current-1));
+document.getElementById('next').addEventListener('click',()=>goTo(current+1));
+function onDragStart(x) { dragging=true; dragStartX=x; dragDelta=0; autoTimer=0; }
+function onDragMove(x) { if(!dragging) return; dragDelta = (x-dragStartX)*0.007; positionCards(currentAngle - dragDelta); }
+function onDragEnd() { if(!dragging) return; dragging=false; if(Math.abs(dragDelta)>0.1) { if(dragDelta<0) goTo(current+1); else goTo(current-1); } else { targetAngle = angleForIndex(current); let diff = targetAngle-currentAngle; while(diff>Math.PI) diff-=Math.PI*2; while(diff<-Math.PI) diff+=Math.PI*2; targetAngle = currentAngle+diff; } dragDelta=0; }
+canvasCar.addEventListener('mousedown',e=>onDragStart(e.clientX));
+window.addEventListener('mousemove',e=>onDragMove(e.clientX));
+window.addEventListener('mouseup',onDragEnd);
+canvasCar.addEventListener('touchstart',e=>onDragStart(e.touches[0].clientX),{passive:false});
+window.addEventListener('touchmove',e=>onDragMove(e.touches[0].clientX),{passive:false});
+window.addEventListener('touchend',onDragEnd);
 const shell = document.querySelector('.carousel-shell');
-let tRotX = 0, tRotY = 0, cRotX = 0, cRotY = 0;
-shell.addEventListener('mousemove', e => {
-  const rect = shell.getBoundingClientRect();
-  const x = (e.clientX - rect.left) / rect.width, y = (e.clientY - rect.top) / rect.height;
-  shell.style.setProperty('--mx', `${x * 100}%`);
-  shell.style.setProperty('--my', `${y * 100}%`);
-  glassMat.uniforms.u_mouse.value.set(x, 1.0 - y);
-  tRotX = (y - 0.5) * 10;
-  tRotY = (x - 0.5) * -10;
-});
-shell.addEventListener('mouseleave', () => { tRotX = 0; tRotY = 0; glassMat.uniforms.u_mouse.value.set(0.5, 0.5); });
-
-let lastTime = performance.now();
-let hideTimeout = null;
-
-function hideLoadingAfterDelay() {
-  if (hideTimeout) return;
-  hideTimeout = setTimeout(() => {
-    const overlay = document.getElementById('loadingOverlay');
-    if (overlay) overlay.classList.add('fade-out');
-  }, 2500); // pequeno delay para garantir que a animação 3D já esteja rodando
-}
-
+let tRotX=0,tRotY=0,cRotX=0,cRotY=0;
+shell.addEventListener('mousemove',e=>{ const rect=shell.getBoundingClientRect(); const x=(e.clientX-rect.left)/rect.width, y=(e.clientY-rect.top)/rect.height; shell.style.setProperty('--mx',`${x*100}%`); shell.style.setProperty('--my',`${y*100}%`); tRotX=(y-0.5)*10; tRotY=(x-0.5)*-10; });
+shell.addEventListener('mouseleave',()=>{ tRotX=0; tRotY=0; });
+let lastTime=performance.now();
 function animateCarousel(now) {
   requestAnimationFrame(animateCarousel);
-  const dt = Math.min((now - lastTime) / 1000, 0.05);
-  lastTime = now;
-  if (!dragging) {
-    autoTimer += dt;
-    if (autoTimer > 4.2) goTo(current + 1);
-    currentAngle += (targetAngle - currentAngle) * Math.min(dt * 6.5, 1);
-  }
-  positionCards(dragging ? currentAngle - dragDelta : currentAngle);
-  movingLight.position.x = Math.sin(now * 0.0012) * 2.2;
-  movingLight.position.y = 1.2 + Math.sin(now * 0.0018) * 0.8;
-  cRotX += (tRotX - cRotX) * 0.1;
-  cRotY += (tRotY - cRotY) * 0.1;
+  const dt = Math.min((now-lastTime)/1000,0.05); lastTime=now;
+  if(!dragging) { autoTimer+=dt; if(autoTimer>4.2) goTo(current+1); currentAngle += (targetAngle-currentAngle)*Math.min(dt*6.5,1); }
+  positionCards(dragging ? currentAngle-dragDelta : currentAngle);
+  movingLight.position.x = Math.sin(now*0.0012)*2.2;
+  movingLight.position.y = 1.2+Math.sin(now*0.0018)*0.8;
+  cRotX += (tRotX-cRotX)*0.1; cRotY += (tRotY-cRotY)*0.1;
   shell.style.transform = `perspective(950px) rotateX(${cRotX}deg) rotateY(${cRotY}deg) scale(1.02)`;
-  renderer.render(sceneCarousel, camera);
+  renderer.render(sceneCar, camera);
 }
-
 function resize() {
-  bgRenderer.setSize(window.innerWidth, window.innerHeight);
-  bgCamera.aspect = window.innerWidth / window.innerHeight;
-  bgCamera.updateProjectionMatrix();
-  renderer.setSize(canvasCarousel.clientWidth, canvasCarousel.clientHeight, false);
-  camera.aspect = canvasCarousel.clientWidth / canvasCarousel.clientHeight;
-  camera.updateProjectionMatrix();
+  bgRenderer.setSize(window.innerWidth, window.innerHeight); bgCamera.aspect = window.innerWidth/window.innerHeight; bgCamera.updateProjectionMatrix();
+  renderer.setSize(canvasCar.clientWidth, canvasCar.clientHeight, false);
+  camera.aspect = canvasCar.clientWidth/canvasCar.clientHeight; camera.updateProjectionMatrix();
 }
+window.addEventListener('resize',resize); resize();
+updateDots(); animateCarousel(performance.now());
 
-window.addEventListener('resize', resize);
-resize();
-updateDots();
-animateCarousel(performance.now());
+// ====================== NAVEGAÇÃO ======================
+document.getElementById('top-portfolio')?.addEventListener('click', () => window.open('https://ctrlplayfran.github.io/Portfolio-Hybridbots-Francielly/', '_blank'));
+document.getElementById('top-whatsapp')?.addEventListener('click', () => window.open('https://wa.me/5511999999999', '_blank'));
+document.getElementById('mobile-portfolio')?.addEventListener('click', () => window.open('https://ctrlplayfran.github.io/Portfolio-Hybridbots-Francielly/', '_blank'));
 
-// Força a animação dos cubos mesmo se algo demorar
-setTimeout(() => {
-  const overlay = document.getElementById('loadingOverlay');
-  if (overlay && !overlay.classList.contains('fade-out')) {
-    // fallback: remove o loader após 5s independentemente
-    overlay.classList.add('fade-out');
+// Mobile menu toggle
+const hamburger = document.getElementById('hamburgerBtn');
+const mobileMenu = document.getElementById('mobileMenu');
+hamburger.addEventListener('click', () => {
+  mobileMenu.classList.toggle('open');
+  hamburger.classList.toggle('open');
+});
+document.addEventListener('click', (e) => {
+  if (!mobileMenu.contains(e.target) && !hamburger.contains(e.target)) {
+    mobileMenu.classList.remove('open');
+    hamburger.classList.remove('open');
   }
-}, 5000);
+});
+
+function hideLoading() { setTimeout(() => document.getElementById('loadingOverlay')?.classList.add('fade-out'), 2200); }
+setTimeout(() => { if(document.getElementById('loadingOverlay') && !document.getElementById('loadingOverlay').classList.contains('fade-out')) hideLoading(); }, 4800);
 </script>
 </body>
 </html>
