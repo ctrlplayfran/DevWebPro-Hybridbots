@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>HybridBots — Criação de Sites, LPs e E-commerces</title>
+<title>HybridBots | Criação de Sites, LPs e E-commerces</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600&family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 
@@ -23,7 +23,7 @@ body {
   font-family: 'DM Sans', sans-serif;
   overflow-x: hidden;
   position: relative;
-  background: #05070a; /* fallback escuro */
+  background: #05070a;
 }
 
 /* ─── VÍDEO DE FUNDO FIXO ─── */
@@ -37,26 +37,22 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.2; /* mais sutil para integrar com o gradiente escuro */
+  opacity: 0.2;
   filter: saturate(0.7) brightness(0.6);
 }
 
-/* ─── OVERLAY GRADIENTE INSPIRADO NO MENU (sem azul, tons escuros neutros) ─── */
 .video-gradient-overlay {
   position: fixed;
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  /* Cores baseadas no fundo da navbar: rgba(8,8,12,0.75) e tons escuros */
   background: radial-gradient(circle at 30% 20%, 
     rgba(10, 12, 18, 0.62) 0%, 
     rgba(6, 8, 12, 0.62) 60%,
     #020408 100%);
-  /* glow sutil escuro, sem azul */
   box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.4);
 }
 
-/* Camada extra de brilho suave, agora com tom esverdeado muito sutil (igual ao menu) */
 .video-gradient-overlay::after {
   content: "";
   position: absolute;
@@ -68,73 +64,7 @@ body {
   pointer-events: none;
 }
 
-/* ─── LOADING OVERLAY (mantido) ─── */
-.loading-overlay {
-  position: fixed;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  background: radial-gradient(circle at 30% 10%, #0a0c10, #010101);
-  z-index: 1000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: opacity 1.2s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-  overflow: hidden;
-}
-.loading-overlay.fade-out {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-}
 
-.loader-grid {
-  display: grid;
-  grid-template-columns: repeat(15, 30px);
-  transform: rotateX(60deg) rotateZ(45deg) scale(0.8);
-  transform-style: preserve-3d;
-  position: relative;
-  z-index: 2;
-  gap: 0;
-}
-.cube-container { width: 30px; height: 30px; transform-style: preserve-3d; }
-.cube {
-  width: 100%; height: 100%;
-  position: relative;
-  transform-style: preserve-3d;
-  animation: wave 2.4s ease-in-out infinite;
-  animation-delay: calc(var(--delay) * -2.4s);
-}
-.face {
-  position: absolute;
-  width: 100%; height: 100%;
-  border: 1px solid rgba(210,210,220,0.3);
-  box-sizing: border-box;
-  background-color: rgba(20,20,25,0.7);
-  box-shadow: 0 0 4px rgba(0,232,122,0.15);
-}
-.top { transform: rotateX(-90deg) translateZ(15px); background: linear-gradient(135deg, rgba(60,60,70,0.6), rgba(30,30,35,0.3)); border-color: rgba(0,232,122,0.3); }
-.front { transform: translateZ(15px); background: linear-gradient(45deg, rgba(70,70,80,0.5), rgba(40,40,45,0.25)); border-color: rgba(0,232,122,0.35); }
-.right { transform: rotateY(90deg) translateZ(15px); background: linear-gradient(225deg, rgba(55,55,65,0.55), rgba(25,25,30,0.25)); border-color: rgba(0,232,122,0.25); }
-@keyframes wave {
-  0%, 100% { transform: translateZ(-30px); }
-  50% { transform: translateZ(40px); }
-}
-.loading-text {
-  position: absolute;
-  bottom: 12%; left: 0; right: 0;
-  text-align: center;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 13px;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: rgba(255,255,245,0.75);
-  animation: pulse 1.8s ease-in-out infinite;
-  z-index: 2;
-}
-@keyframes pulse {
-  0%, 100% { opacity: 0.3; letter-spacing: 0.3em; }
-  50% { opacity: 0.9; letter-spacing: 0.35em; }
-}
 
 /* ─── NAVBAR ─── */
 .top-navbar {
@@ -297,64 +227,333 @@ body {
   .top-navbar { padding: 0 20px; }
 }
 
-/* ─── HERO (carrossel) ─── */
+/* ══════════════════════════════════════════════
+   HERO — ALTA CONVERSÃO
+   Estrutura: eyebrow → headline → sub → CTAs → 
+   prova social → layout 2 col (copy | carrossel)
+   ══════════════════════════════════════════════ */
 .hero {
-  height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
   position: relative;
   z-index: 2;
-  padding-top: 72px;
+  padding: 100px 48px 60px;
+  overflow: hidden;
 }
-.carousel-shell {
-  width: 560px; height: 480px;
+
+/* grade de fundo sutil */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,232,122,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,232,122,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: 0;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+}
+
+.hero-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
   position: relative;
-  border-radius: 22px;
-  background: rgba(12,12,16,0.15);
+  z-index: 2;
+}
+
+/* ── COLUNA DE COPY (esquerda) ── */
+.hero-copy { display: flex; flex-direction: column; }
+
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 28px;
+  opacity: 0;
+  animation: hFadeUp 0.7s cubic-bezier(0.22,1,0.36,1) 0.1s forwards;
+}
+.hero-eyebrow-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #00E87A;
+  box-shadow: 0 0 0 0 rgba(0,232,122,0.4);
+  animation: livePulseH 2s ease-out infinite;
+  flex-shrink: 0;
+}
+@keyframes livePulseH {
+  0%   { box-shadow: 0 0 0 0 rgba(0,232,122,0.5); }
+  70%  { box-shadow: 0 0 0 8px rgba(0,232,122,0); }
+  100% { box-shadow: 0 0 0 0 rgba(0,232,122,0); }
+}
+.hero-eyebrow-text {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 12px; letter-spacing: 0.3em; text-transform: uppercase;
+  color: #00E87A;
+}
+.hero-eyebrow-sep {
+  width: 1px; height: 14px;
+  background: rgba(0,232,122,0.3);
+}
+.hero-eyebrow-sub {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: rgba(200,220,210,0.6);
+}
+
+.hero-headline {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(52px, 5.8vw, 88px);
+  letter-spacing: 0.02em;
+  line-height: 0.95;
+  color: #f0ece4;
+  margin-bottom: 24px;
+  opacity: 0;
+  animation: hFadeUp 0.8s cubic-bezier(0.22,1,0.36,1) 0.2s forwards;
+}
+.hero-headline .hl-white { color: #f0ece4; display: block; }
+.hero-headline .hl-green {
+  color: #00E87A;
+  display: block;
+  font-size: 1.12em;
+  text-shadow: 0 0 48px rgba(0,232,122,0.35);
+}
+.hero-headline .hl-dim {
+  color: rgba(220,230,225,0.55);
+  display: block;
+  font-size: 0.72em;
+  letter-spacing: 0.06em;
+}
+
+.hero-sub {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 17px; font-weight: 300;
+  line-height: 1.7;
+  color: rgba(210,225,220,0.82);
+  margin-bottom: 36px;
+  max-width: 480px;
+  opacity: 0;
+  animation: hFadeUp 0.8s cubic-bezier(0.22,1,0.36,1) 0.32s forwards;
+}
+.hero-sub strong {
+  color: rgba(240,236,228,0.97);
+  font-weight: 500;
+}
+
+/* ── CTAs ── */
+.hero-ctas {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-bottom: 44px;
+  opacity: 0;
+  animation: hFadeUp 0.8s cubic-bezier(0.22,1,0.36,1) 0.44s forwards;
+}
+.hero-cta-primary {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 16px 36px;
+  background: #00E87A;
+  border-radius: 50px; border: none;
+  color: #020a06;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 14px; letter-spacing: 0.18em; text-transform: uppercase;
+  font-weight: 600; cursor: pointer; text-decoration: none;
+  box-shadow: 0 0 36px rgba(0,232,122,0.3), 0 8px 24px rgba(0,0,0,0.3);
+  transition: all 0.28s ease;
+  position: relative; overflow: hidden;
+}
+.hero-cta-primary::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.18) 50%, transparent 70%);
+  transform: translateX(-100%);
+  transition: transform 0.5s ease;
+}
+.hero-cta-primary:hover::after { transform: translateX(100%); }
+.hero-cta-primary:hover {
+  background: #06ff8a;
+  transform: translateY(-3px);
+  box-shadow: 0 0 52px rgba(0,232,122,0.45), 0 14px 32px rgba(0,0,0,0.35);
+}
+
+.hero-cta-secondary {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 16px 28px;
+  background: transparent;
+  border: 1px solid rgba(0,232,122,0.35);
+  border-radius: 50px;
+  color: rgba(200,240,220,0.9);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px; letter-spacing: 0.18em; text-transform: uppercase;
+  cursor: pointer; text-decoration: none;
+  transition: all 0.28s ease;
+  backdrop-filter: blur(6px);
+}
+.hero-cta-secondary:hover {
+  background: rgba(0,232,122,0.1);
+  border-color: rgba(0,232,122,0.65);
+  transform: translateY(-2px);
+}
+
+/* ── PROVA SOCIAL INLINE ── */
+.hero-proof {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  opacity: 0;
+  animation: hFadeUp 0.8s cubic-bezier(0.22,1,0.36,1) 0.56s forwards;
+}
+.hero-proof-avatars {
+  display: flex;
+}
+.hero-proof-avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  border: 2px solid #05070a;
+  background: linear-gradient(135deg, #1a2a3a, #0d1820);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 10px; font-weight: 600; letter-spacing: 0.04em;
+  margin-left: -8px; flex-shrink: 0;
+}
+.hero-proof-avatar:first-child { margin-left: 0; }
+.hero-proof-avatar:nth-child(1) { background: linear-gradient(135deg,#1a2a3a,#0d1820); color:#4a9ed4; }
+.hero-proof-avatar:nth-child(2) { background: linear-gradient(135deg,#0f2420,#071810); color:#00c46a; }
+.hero-proof-avatar:nth-child(3) { background: linear-gradient(135deg,#1e1528,#120d1a); color:#a070d0; }
+.hero-proof-avatar:nth-child(4) { background: linear-gradient(135deg,#1a1510,#0d0e08); color:#d4a44a; }
+.hero-proof-avatar.more {
+  background: rgba(0,232,122,0.1);
+  border: 1px solid rgba(0,232,122,0.3);
+  color: #00E87A; font-size: 9px;
+}
+
+.hero-proof-text {
+  display: flex; flex-direction: column; gap: 2px;
+}
+.hero-proof-stars {
+  display: flex; gap: 3px;
+}
+.hero-proof-star {
+  width: 11px; height: 11px;
+  clip-path: polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
+  background: #00E87A; opacity: 0.9;
+}
+.hero-proof-label {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px; font-weight: 300;
+  color: rgba(190,210,205,0.75);
+}
+.hero-proof-label strong {
+  color: rgba(240,236,228,0.9);
+  font-weight: 500;
+}
+
+.hero-proof-sep {
+  width: 1px; height: 32px;
+  background: rgba(255,255,255,0.1);
+}
+
+.hero-proof-stat {
+  display: flex; flex-direction: column; gap: 1px;
+}
+.hero-proof-stat-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px; letter-spacing: 0.04em; line-height: 1;
+  color: #00E87A;
+}
+.hero-proof-stat-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase;
+  color: rgba(170,190,185,0.6);
+}
+
+/* ── COLUNA VISUAL (carrossel — direita) ── */
+.hero-visual {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  opacity: 0;
+  animation: hFadeRight 0.9s cubic-bezier(0.22,1,0.36,1) 0.3s forwards;
+}
+
+@keyframes hFadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes hFadeRight {
+  from { opacity: 0; transform: translateX(32px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* glow atrás do carrossel */
+.hero-visual::before {
+  content: "";
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  width: 500px; height: 500px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,232,122,0.06) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.carousel-shell {
+  width: 100%;
+  max-width: 520px;
+  aspect-ratio: 520 / 440;
+  position: relative;
+  border-radius: 20px;
+  background: rgba(12,12,16,0.2);
   backdrop-filter: blur(2px);
   border: 1px solid rgba(255,255,255,0.08);
-  box-shadow: 0 20px 80px rgba(0,0,0,0.7), inset 0 0 60px rgba(0,232,122,0.05);
+  box-shadow: 0 24px 80px rgba(0,0,0,0.7), inset 0 0 60px rgba(0,232,122,0.04);
   transition: transform 0.2s ease-out;
-  margin-bottom: 28px;
+  margin-bottom: 20px;
+  z-index: 1;
 }
 .carousel-shell::after {
   content: "";
   position: absolute; inset: 0;
-  border-radius: 22px;
-  background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(255,255,255,0.08), rgba(0,232,122,0.02) 35%, transparent 70%);
+  border-radius: 20px;
+  background: radial-gradient(circle at var(--mx,50%) var(--my,50%), rgba(255,255,255,0.07), rgba(0,232,122,0.02) 35%, transparent 70%);
   pointer-events: none;
 }
-canvas { width: 100%; height: 100%; display: block; border-radius: 22px; }
+canvas { width: 100%; height: 100%; display: block; border-radius: 20px; }
 #nav {
   position: absolute;
-  bottom: 18px; left: 50%;
+  bottom: 16px; left: 50%;
   transform: translateX(-50%);
-  display: flex; gap: 12px; z-index: 10;
+  display: flex; gap: 10px; z-index: 10;
 }
 #label {
   position: absolute;
-  top: 18px; left: 50%;
+  top: 16px; left: 50%;
   transform: translateX(-50%);
-  color: rgba(255,255,255,0.85);
-  font-size: 13px;
-  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.8);
+  font-size: 11px; letter-spacing: 0.14em;
   z-index: 10;
-  background: rgba(0,0,0,0.3);
-  backdrop-filter: blur(4px);
-  padding: 5px 14px;
+  background: rgba(0,0,0,0.35);
+  backdrop-filter: blur(6px);
+  padding: 4px 14px;
   border-radius: 40px;
   font-family: 'Barlow Condensed', monospace;
   text-transform: uppercase;
   white-space: nowrap;
 }
 button {
-  background: rgba(20,20,30,0.5);
+  background: rgba(20,20,30,0.6);
   border: 1px solid rgba(0,232,122,0.3);
   color: white;
-  font-size: 24px;
-  width: 40px; height: 40px;
+  font-size: 22px;
+  width: 36px; height: 36px;
   border-radius: 40px;
   cursor: pointer;
   backdrop-filter: blur(4px);
@@ -363,44 +562,143 @@ button {
 button:hover { background: #00E87A; color: #000; }
 #dots { display: flex; gap: 8px; align-items: center; }
 .dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
+  width: 6px; height: 6px; border-radius: 50%;
   background: rgba(255,255,255,0.3);
-  cursor: pointer;
-  transition: all 0.3s;
+  cursor: pointer; transition: all 0.3s;
 }
 .dot.active { background: #00E87A; width: 18px; border-radius: 4px; }
-.project-metadata { text-align: center; pointer-events: none; max-width: 600px; }
+
+/* legenda do carrossel — serviço ativo */
+.carousel-caption {
+  text-align: center;
+  z-index: 1;
+}
 .project-title {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: 38px;
-  letter-spacing: 0.06em;
-  color: #f0ece4;
-  line-height: 1.1;
-  margin-bottom: 8px;
-  text-shadow: 0 2px 20px rgba(0,0,0,0.8);
+  font-size: 26px; letter-spacing: 0.08em;
+  color: rgba(240,236,228,0.9);
+  line-height: 1.1; margin-bottom: 4px;
 }
 .project-subtitle {
   font-family: 'Barlow Condensed', sans-serif;
-  font-size: 12px;
-  letter-spacing: 0.32em;
-  text-transform: uppercase;
-  color: #7eb8a0;
-  background: rgba(0,0,0,0.2);
-  display: inline-block;
-  padding: 0 8px;
-  border-radius: 20px;
-}
-@media (max-width: 640px) {
-  .carousel-shell { width: 88vw; height: 68vw; max-height: 420px; }
-  .project-title { font-size: 28px; }
-  .loader-grid { transform: rotateX(60deg) rotateZ(45deg) scale(0.42); }
-  .hero { padding-top: 64px; }
+  font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase;
+  color: rgba(0,232,122,0.7);
 }
 
-/* ══════════════════════════════════════════════
-   SEÇÃO DE DEPOIMENTOS (fundo transparente)
-   ══════════════════════════════════════════════ */
+/* badges flutuantes de prova no visual */
+.hero-badge {
+  position: absolute;
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 16px;
+  background: rgba(6,8,12,0.88);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0,232,122,0.25);
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  z-index: 10;
+  white-space: nowrap;
+  animation: badgeFloat 4s ease-in-out infinite;
+}
+.hero-badge-left  { left: -32px; top: 22%; animation-delay: 0s; }
+.hero-badge-right { right: -28px; bottom: 28%; animation-delay: 2s; }
+@keyframes badgeFloat {
+  0%,100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+.hero-badge-icon {
+  width: 32px; height: 32px; border-radius: 10px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: rgba(0,232,122,0.1);
+  border: 1px solid rgba(0,232,122,0.2);
+}
+.hero-badge-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px; letter-spacing: 0.04em;
+  color: #00E87A; line-height: 1;
+}
+.hero-badge-desc {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11px; font-weight: 300;
+  color: rgba(190,210,205,0.8); line-height: 1.35;
+}
+.hero-badge-desc strong {
+  display: block;
+  font-weight: 500;
+  color: rgba(240,236,228,0.95);
+  font-size: 12px;
+}
+
+/* ── RESPONSIVO ── */
+@media (max-width: 1020px) {
+  .hero-inner { grid-template-columns: 1fr; gap: 32px; }
+  .hero { padding: 90px 28px 40px; min-height: 100dvh; }
+  .hero-visual { order: 2; }
+  .hero-copy  { order: 1; }
+  .hero-badge-left { left: 0; }
+  .hero-badge-right { right: 0; }
+  .hero-headline { font-size: clamp(40px, 7vw, 68px); }
+}
+@media (max-width: 600px) {
+  .hero {
+    padding: 80px 18px 32px;
+    min-height: 100dvh;
+    justify-content: flex-start;
+  }
+  .hero-inner { gap: 24px; }
+
+  /* eyebrow menor */
+  .hero-eyebrow { margin-bottom: 16px; }
+  .hero-eyebrow-sub { display: none; }
+
+  /* headline compacta mas ainda impactante */
+  .hero-headline {
+    font-size: clamp(34px, 9.5vw, 52px);
+    margin-bottom: 14px;
+  }
+
+  /* sub mais curto no mobile */
+  .hero-sub {
+    font-size: 14px;
+    margin-bottom: 22px;
+    /* limita a 3 linhas para não empurrar CTAs */
+    display: -webkit-box;
+    --webkit-line-clamp: 4;
+    --webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* CTAs empilhados e cheios */
+  .hero-ctas {
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 22px;
+  }
+  .hero-cta-primary,
+  .hero-cta-secondary {
+    justify-content: center;
+    padding: 14px 24px;
+    font-size: 13px;
+  }
+
+  /* prova social compacta */
+  .hero-proof { gap: 12px; flex-wrap: nowrap; }
+  .hero-proof-sep { display: none; }
+  .hero-proof-stat:last-child { display: none; }
+  .hero-proof-label { font-size: 11px; }
+
+  /* carrossel menor — só referência visual */
+  .hero-visual { order: 2; }
+  .carousel-shell {
+    max-width: 100%;
+    aspect-ratio: 16 / 9;
+  }
+  .carousel-caption { display: none; }
+  .hero-badge { display: none; }
+  .hero-visual::before { display: none; }
+}
+/* remove o .project-metadata wrapper antigo */
+.project-metadata { text-align: center; }
+/* ─── DEPOIMENTOS ─── */
 .testimonials-section {
   position: relative;
   z-index: 2;
@@ -557,11 +855,7 @@ button:hover { background: #00E87A; color: #000; }
   );
 }
 
-.t-stars {
-  display: flex;
-  gap: 4px;
-  margin-bottom: 20px;
-}
+.t-stars { display: flex; gap: 4px; margin-bottom: 20px; }
 .t-star {
   width: 12px; height: 12px;
   clip-path: polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
@@ -592,41 +886,26 @@ button:hover { background: #00E87A; color: #000; }
 
 .t-line {
   height: 1px;
-  background: linear-gradient(90deg,
-    rgba(255,255,255,0.06),
-    rgba(0,232,122,0.2),
-    rgba(255,255,255,0.06)
-  );
+  background: linear-gradient(90deg, rgba(255,255,255,0.06), rgba(0,232,122,0.2), rgba(255,255,255,0.06));
   margin-bottom: 20px;
 }
 
-.t-author {
-  display: flex;
-  align-items: center;
-  gap: 13px;
-}
+.t-author { display: flex; align-items: center; gap: 13px; }
 .t-avatar {
   width: 40px; height: 40px;
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: flex; align-items: center; justify-content: center;
   font-family: 'Barlow Condensed', sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  flex-shrink: 0;
-  letter-spacing: 0.05em;
+  font-size: 14px; font-weight: 600;
+  flex-shrink: 0; letter-spacing: 0.05em;
   border: 1px solid rgba(255,255,255,0.15);
-  position: relative;
-  overflow: hidden;
+  position: relative; overflow: hidden;
   background: rgba(20,30,40,0.6);
   backdrop-filter: blur(4px);
 }
 .t-avatar::before {
-  content: "";
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 50%;
+  content: ""; position: absolute;
+  top: 0; left: 0; right: 0; height: 50%;
   background: rgba(255,255,255,0.1);
   border-radius: 50% 50% 0 0;
 }
@@ -634,117 +913,35 @@ button:hover { background: #00E87A; color: #000; }
 .t-av2 { background: linear-gradient(145deg, #0f2420aa, #071810cc); color: #00c46a; }
 .t-av3 { background: linear-gradient(145deg, #1e1528aa, #120d1acc); color: #a070d0; }
 
-.t-name {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 13.5px;
-  font-weight: 500;
-  color: #ffffffdd;
-  line-height: 1.3;
-}
-.t-role {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 11px;
-  font-weight: 400;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: rgba(180,200,210,0.7);
-  margin-top: 2px;
-}
+.t-name { font-family: 'DM Sans', sans-serif; font-size: 13.5px; font-weight: 500; color: #ffffffdd; line-height: 1.3; }
+.t-role { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; font-weight: 400; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(180,200,210,0.7); margin-top: 2px; }
 
-.t-metric {
-  position: absolute;
-  top: 28px; right: 24px;
-  text-align: right;
-}
-.t-metric-num {
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: 28px;
-  letter-spacing: 0.04em;
-  color: #00E87A;
-  line-height: 1;
-  opacity: 0.85;
-}
-.t-metric-label {
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 9px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: rgba(0,232,122,0.6);
-}
+.t-metric { position: absolute; top: 28px; right: 24px; text-align: right; }
+.t-metric-num { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 0.04em; color: #00E87A; line-height: 1; opacity: 0.85; }
+.t-metric-label { font-family: 'Barlow Condensed', sans-serif; font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: rgba(0,232,122,0.6); }
 
 .t-clients-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0;
-  flex-wrap: wrap;
-  border-top: 1px solid rgba(255,255,255,0.08);
-  padding-top: 48px;
-  background: transparent;
+  display: flex; align-items: center; justify-content: center; gap: 0; flex-wrap: wrap;
+  border-top: 1px solid rgba(255,255,255,0.08); padding-top: 48px;
 }
-.t-clients-label {
-  width: 100%;
-  text-align: center;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 10px;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: rgba(200,210,220,0.6);
-  margin-bottom: 28px;
-}
-.t-client-item {
-  padding: 10px 28px;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: rgba(210,225,235,0.5);
-  transition: color 0.3s;
-  position: relative;
-}
-.t-client-item:not(:last-child)::after {
-  content: "";
-  position: absolute;
-  right: 0; top: 50%;
-  transform: translateY(-50%);
-  width: 1px; height: 16px;
-  background: rgba(255,255,255,0.12);
-}
+.t-clients-label { width: 100%; text-align: center; font-family: 'Barlow Condensed', sans-serif; font-size: 10px; letter-spacing: 0.3em; text-transform: uppercase; color: rgba(200,210,220,0.6); margin-bottom: 28px; }
+.t-client-item { padding: 10px 28px; font-family: 'Barlow Condensed', sans-serif; font-size: 14px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(210,225,235,0.5); transition: color 0.3s; position: relative; }
+.t-client-item:not(:last-child)::after { content: ""; position: absolute; right: 0; top: 50%; transform: translateY(-50%); width: 1px; height: 16px; background: rgba(255,255,255,0.12); }
 .t-client-item:hover { color: #00E87A; }
 
-.t-cta-wrap {
-  text-align: center;
-  margin-top: 56px;
-}
+.t-cta-wrap { text-align: center; margin-top: 56px; }
 .t-cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
+  display: inline-flex; align-items: center; gap: 12px;
   padding: 16px 40px;
-  background: rgba(0,232,122,0.08);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(0,232,122,0.4);
-  border-radius: 50px;
+  background: rgba(0,232,122,0.08); backdrop-filter: blur(8px);
+  border: 1px solid rgba(0,232,122,0.4); border-radius: 50px;
   color: #00E87A;
   font-family: 'Barlow Condensed', sans-serif;
-  font-size: 13px;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  text-decoration: none;
-  transition: all 0.3s ease;
+  font-size: 13px; letter-spacing: 0.22em; text-transform: uppercase;
+  text-decoration: none; transition: all 0.3s ease;
 }
-.t-cta:hover {
-  background: rgba(0,232,122,0.18);
-  border-color: rgba(0,232,122,0.7);
-  transform: translateY(-2px);
-  box-shadow: 0 12px 30px rgba(0,232,122,0.15);
-}
-.t-cta-arrow {
-  font-size: 18px;
-  transition: transform 0.3s;
-  line-height: 1;
-}
+.t-cta:hover { background: rgba(0,232,122,0.18); border-color: rgba(0,232,122,0.7); transform: translateY(-2px); box-shadow: 0 12px 30px rgba(0,232,122,0.15); }
+.t-cta-arrow { font-size: 18px; transition: transform 0.3s; line-height: 1; }
 .t-cta:hover .t-cta-arrow { transform: translateX(4px); }
 
 .t-card {
@@ -752,12 +949,488 @@ button:hover { background: #00E87A; color: #000; }
   transform: translateY(30px) scale(0.97);
   transition: opacity 0.6s cubic-bezier(0.22,1,0.36,1), transform 0.6s cubic-bezier(0.22,1,0.36,1), border-color 0.3s;
 }
-.t-card.visible {
-  opacity: 1;
-  transform: translateY(0) scale(1);
+.t-card.visible { opacity: 1; transform: translateY(0) scale(1); }
+.t-card.visible:hover { transform: translateY(-6px) scale(1.01); }
+
+/* ══════════════════════════════════════════════
+   SEÇÃO PROBLEMA / DOR
+   ══════════════════════════════════════════════ */
+.pain-section {
+  position: relative;
+  z-index: 2;
+  padding: 120px 40px 80px;
 }
-.t-card.visible:hover {
-  transform: translateY(-6px) scale(1.01);
+.pain-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.pain-headline {
+  text-align: center;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(38px, 5.5vw, 68px);
+  letter-spacing: 0.04em;
+  line-height: 1.05;
+  margin-bottom: 16px;
+  background: linear-gradient(180deg, #f0ece4 0%, #c8c4bc 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.pain-headline em {
+  font-style: normal;
+  -webkit-text-fill-color: #00E87A;
+}
+.pain-sub {
+  text-align: center;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 300;
+  color: rgba(220,225,235,0.8);
+  max-width: 560px;
+  margin: 0 auto 72px;
+  line-height: 1.7;
+}
+.pain-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+@media (max-width: 860px) { .pain-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 520px) { .pain-grid { grid-template-columns: 1fr; } .pain-section { padding: 80px 20px 60px; } }
+.pain-card {
+  padding: 30px 26px;
+  border-radius: 20px;
+  background: linear-gradient(145deg, rgba(14,8,8,0.7), rgba(8,6,6,0.55));
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(200,60,60,0.2);
+  box-shadow: 0 16px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,80,80,0.06);
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.55s cubic-bezier(0.22,1,0.36,1), transform 0.55s cubic-bezier(0.22,1,0.36,1), border-color 0.3s;
+}
+.pain-card.visible { opacity: 1; transform: translateY(0); }
+.pain-card:hover { border-color: rgba(200,60,60,0.45); transform: translateY(-4px); }
+.pain-icon {
+  width: 42px; height: 42px;
+  border-radius: 14px;
+  background: rgba(200,60,60,0.1);
+  border: 1px solid rgba(200,60,60,0.2);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 18px;
+}
+.pain-card-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 16px; font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: rgba(255,255,255,0.9);
+  margin-bottom: 10px;
+}
+.pain-card-text {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13.5px; font-weight: 300;
+  line-height: 1.65;
+  color: rgba(220,215,215,0.75);
+}
+
+/* ══════════════════════════════════════════════
+   SEÇÃO SOLUÇÃO / SERVIÇOS
+   ══════════════════════════════════════════════ */
+.services-section {
+  position: relative;
+  z-index: 2;
+  padding: 80px 40px 120px;
+}
+.services-inner { max-width: 1100px; margin: 0 auto; }
+.services-eyebrow {
+  text-align: center;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px; font-weight: 500;
+  letter-spacing: 0.32em; text-transform: uppercase;
+  color: #00E87A; margin-bottom: 18px; opacity: 0.9;
+}
+.services-headline {
+  text-align: center;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(40px, 5.5vw, 68px);
+  letter-spacing: 0.04em; line-height: 1.0;
+  margin-bottom: 16px;
+  background: linear-gradient(180deg, #e8e4dc 0%, #f5f2ee 30%, #c8c4bc 60%, #a0a09a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.services-sub {
+  text-align: center;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px; font-weight: 300;
+  color: rgba(220,225,235,0.8);
+  margin-bottom: 72px;
+  max-width: 540px; margin-left: auto; margin-right: auto;
+  line-height: 1.7;
+}
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-bottom: 24px;
+}
+.services-grid-bottom {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+@media (max-width: 860px) {
+  .services-grid { grid-template-columns: 1fr; }
+  .services-grid-bottom { grid-template-columns: 1fr; }
+  .services-section { padding: 60px 20px 80px; }
+}
+.srv-card {
+  position: relative;
+  padding: 36px 32px 30px;
+  border-radius: 22px;
+  background: linear-gradient(145deg, rgba(10,14,20,0.75), rgba(6,9,14,0.65));
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(0,232,122,0.15);
+  box-shadow: 0 18px 36px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.04);
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.6s cubic-bezier(0.22,1,0.36,1), transform 0.6s cubic-bezier(0.22,1,0.36,1), border-color 0.3s, box-shadow 0.3s;
+}
+.srv-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 10%; right: 10%; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0,232,122,0.2), transparent);
+}
+.srv-card.visible { opacity: 1; transform: translateY(0); }
+.srv-card:hover { border-color: rgba(0,232,122,0.4); transform: translateY(-5px); box-shadow: 0 24px 44px rgba(0,0,0,0.55), 0 0 24px rgba(0,232,122,0.07); }
+.srv-card.featured {
+  border-color: rgba(0,232,122,0.35);
+  background: linear-gradient(145deg, rgba(0,232,122,0.06), rgba(6,9,14,0.7));
+}
+.srv-card.featured::after {
+  content: "MAIS POPULAR";
+  position: absolute; top: 18px; right: 18px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+  color: #00E87A;
+  background: rgba(0,232,122,0.12);
+  border: 1px solid rgba(0,232,122,0.3);
+  padding: 4px 10px; border-radius: 20px;
+}
+.srv-icon {
+  width: 48px; height: 48px;
+  border-radius: 16px;
+  background: rgba(0,232,122,0.07);
+  border: 1px solid rgba(0,232,122,0.18);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 22px;
+}
+.srv-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 26px; letter-spacing: 0.06em;
+  color: #f0ece4; margin-bottom: 10px;
+}
+.srv-desc {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px; font-weight: 300;
+  line-height: 1.7; color: rgba(210,220,230,0.8);
+  margin-bottom: 24px;
+}
+.srv-features {
+  list-style: none;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.srv-features li {
+  display: flex; align-items: flex-start; gap: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px; font-weight: 300;
+  color: rgba(200,220,210,0.85);
+  line-height: 1.5;
+}
+.srv-features li::before {
+  content: "";
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #00E87A;
+  margin-top: 5px;
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+/* ══════════════════════════════════════════════
+   SEÇÃO DIFERENCIAIS TÉCNICOS
+   ══════════════════════════════════════════════ */
+.tech-section {
+  position: relative;
+  z-index: 2;
+  padding: 80px 40px 120px;
+}
+.tech-inner { max-width: 1100px; margin: 0 auto; }
+.tech-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
+}
+@media (max-width: 860px) {
+  .tech-layout { grid-template-columns: 1fr; gap: 48px; }
+  .tech-section { padding: 60px 20px 80px; }
+}
+.tech-eyebrow {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px; font-weight: 500;
+  letter-spacing: 0.32em; text-transform: uppercase;
+  color: #00E87A; margin-bottom: 18px; opacity: 0.9;
+}
+.tech-headline {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(36px, 4.5vw, 58px);
+  letter-spacing: 0.04em; line-height: 1.0;
+  margin-bottom: 20px;
+  background: linear-gradient(180deg, #e8e4dc 0%, #f5f2ee 30%, #c8c4bc 70%, #909090 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.tech-body {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px; font-weight: 300;
+  line-height: 1.75; color: rgba(210,220,230,0.85);
+  margin-bottom: 36px;
+}
+.tech-stack-row {
+  display: flex; flex-wrap: wrap; gap: 10px;
+}
+.tech-tag {
+  padding: 7px 16px;
+  background: rgba(0,232,122,0.06);
+  border: 1px solid rgba(0,232,122,0.2);
+  border-radius: 30px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: rgba(0,232,122,0.9);
+  transition: background 0.2s, border-color 0.2s;
+}
+.tech-tag:hover { background: rgba(0,232,122,0.14); border-color: rgba(0,232,122,0.45); }
+
+.tech-cards-col {
+  display: flex; flex-direction: column; gap: 14px;
+}
+.tech-feat-card {
+  padding: 24px 26px;
+  border-radius: 18px;
+  background: linear-gradient(145deg, rgba(10,14,20,0.72), rgba(6,9,14,0.6));
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(0,232,122,0.15);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.35);
+  display: flex; gap: 18px; align-items: flex-start;
+  opacity: 0; transform: translateX(24px);
+  transition: opacity 0.55s cubic-bezier(0.22,1,0.36,1), transform 0.55s cubic-bezier(0.22,1,0.36,1), border-color 0.3s;
+}
+.tech-feat-card.visible { opacity: 1; transform: translateX(0); }
+.tech-feat-card:hover { border-color: rgba(0,232,122,0.35); }
+.tech-feat-icon {
+  width: 40px; height: 40px; flex-shrink: 0;
+  border-radius: 12px;
+  background: rgba(0,232,122,0.07);
+  border: 1px solid rgba(0,232,122,0.18);
+  display: flex; align-items: center; justify-content: center;
+}
+.tech-feat-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 14px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
+  color: rgba(255,255,255,0.9); margin-bottom: 6px;
+}
+.tech-feat-text {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px; font-weight: 300; line-height: 1.6;
+  color: rgba(200,215,225,0.75);
+}
+
+/* ══════════════════════════════════════════════
+   SEÇÃO CTA FINAL / CONTATO
+   ══════════════════════════════════════════════ */
+.cta-section {
+  position: relative;
+  z-index: 2;
+  padding: 100px 40px 80px;
+}
+.cta-inner {
+  max-width: 780px;
+  margin: 0 auto;
+  text-align: center;
+}
+.cta-glow-ring {
+  width: 1px; height: 1px;
+  position: relative;
+  margin: 0 auto 56px;
+}
+.cta-glow-ring::before {
+  content: "";
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  width: 340px; height: 340px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,232,122,0.06) 0%, transparent 70%);
+  border: 1px solid rgba(0,232,122,0.1);
+  animation: ringPulse 3.5s ease-in-out infinite;
+}
+.cta-glow-ring::after {
+  content: "";
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  width: 200px; height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,232,122,0.1) 0%, transparent 70%);
+  border: 1px solid rgba(0,232,122,0.2);
+  animation: ringPulse 3.5s ease-in-out infinite 0.6s;
+}
+@keyframes ringPulse {
+  0%, 100% { opacity: 0.4; transform: translate(-50%,-50%) scale(1); }
+  50% { opacity: 0.8; transform: translate(-50%,-50%) scale(1.04); }
+}
+.cta-eyebrow {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px; font-weight: 500;
+  letter-spacing: 0.32em; text-transform: uppercase;
+  color: #00E87A; margin-bottom: 20px; opacity: 0.9;
+}
+.cta-headline {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(44px, 6.5vw, 80px);
+  letter-spacing: 0.04em; line-height: 0.95;
+  margin-bottom: 20px;
+  background: linear-gradient(180deg, #f0ece4 0%, #f8f6f2 25%, #d0ccc4 60%, #989490 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.cta-sub {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px; font-weight: 300;
+  color: rgba(215,222,232,0.85);
+  line-height: 1.75; margin-bottom: 48px;
+  max-width: 520px; margin-left: auto; margin-right: auto;
+}
+.cta-actions {
+  display: flex; gap: 14px;
+  justify-content: center; flex-wrap: wrap;
+}
+.cta-primary {
+  display: inline-flex; align-items: center; gap: 12px;
+  padding: 18px 44px;
+  background: #00E87A;
+  border-radius: 50px; border: none;
+  color: #020a06;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 14px; letter-spacing: 0.2em; text-transform: uppercase;
+  text-decoration: none;
+  font-weight: 600;
+  box-shadow: 0 0 40px rgba(0,232,122,0.25), 0 8px 24px rgba(0,0,0,0.3);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+.cta-primary:hover {
+  background: #00ff88;
+  transform: translateY(-3px);
+  box-shadow: 0 0 56px rgba(0,232,122,0.4), 0 12px 32px rgba(0,0,0,0.35);
+}
+.cta-secondary {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 18px 36px;
+  background: rgba(0,232,122,0.06);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(0,232,122,0.3);
+  border-radius: 50px;
+  color: rgba(200,240,220,0.95);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+.cta-secondary:hover {
+  background: rgba(0,232,122,0.14);
+  border-color: rgba(0,232,122,0.6);
+  transform: translateY(-2px);
+}
+.cta-reassurance {
+  margin-top: 32px;
+  display: flex; gap: 32px;
+  justify-content: center; flex-wrap: wrap;
+}
+.cta-re-item {
+  display: flex; align-items: center; gap: 8px;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+  color: rgba(180,200,195,0.65);
+}
+.cta-re-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: #00E87A; opacity: 0.6;
+}
+
+/* ─── FOOTER ─── */
+.site-footer {
+  position: relative;
+  z-index: 2;
+  padding: 40px 40px 32px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  background: rgba(4,5,8,0.6);
+  backdrop-filter: blur(8px);
+}
+.footer-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+.footer-brand {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase;
+  color: rgba(160,175,170,0.5);
+}
+.footer-brand strong {
+  display: block;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px; letter-spacing: 0.1em;
+  color: rgba(220,230,225,0.7);
+  margin-bottom: 4px;
+}
+.footer-links {
+  display: flex; gap: 24px; flex-wrap: wrap;
+}
+.footer-links a {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+  color: rgba(180,200,195,0.5);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-links a:hover { color: #00E87A; }
+.footer-copy {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px; font-weight: 300;
+  color: rgba(150,160,155,0.4);
+  text-align: right;
+}
+@media (max-width: 640px) {
+  .footer-inner { flex-direction: column; align-items: flex-start; }
+  .footer-copy { text-align: left; }
+  .cta-section { padding: 80px 20px 60px; }
+}
+
+/* ─── SECTION BRIDGE (reutilizado) ─── */
+.section-divider {
+  position: relative; z-index: 2;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0,232,122,0.15), rgba(180,200,220,0.08), rgba(0,232,122,0.15), transparent);
 }
 </style>
 </head>
@@ -770,14 +1443,9 @@ button:hover { background: #00E87A; color: #000; }
     <source src="background.mp4" type="video/mp4">
   </video>
 </div>
-<!-- OVERLAY GRADIENTE COM CORES DO MENU (tons escuros) -->
 <div class="video-gradient-overlay"></div>
 
-<!-- LOADING -->
-<div class="loading-overlay" id="loadingOverlay">
-  <div class="loader-grid" id="loaderGrid"></div>
-  <div class="loading-text">CARREGANDO EXPERIÊNCIA</div>
-</div>
+
 
 <!-- NAVBAR -->
 <nav class="top-navbar">
@@ -813,20 +1481,123 @@ button:hover { background: #00E87A; color: #000; }
   </a>
 </div>
 
-<!-- HERO -->
+<!-- HERO — ALTA CONVERSÃO -->
 <section class="hero" id="hero">
-  <div class="carousel-shell">
-    <canvas id="carousel-canvas"></canvas>
-    <div id="label"></div>
-    <div id="nav">
-      <button id="prev">‹</button>
-      <div id="dots"></div>
-      <button id="next">›</button>
+  <div class="hero-inner">
+
+    <!-- ── COPY (esquerda) ── -->
+    <div class="hero-copy">
+
+      <!-- Eyebrow — credibilidade imediata -->
+      <div class="hero-eyebrow">
+        <span class="hero-eyebrow-dot"></span>
+        <span class="hero-eyebrow-text">+50 projetos entregues</span>
+        <span class="hero-eyebrow-sep"></span>
+        <span class="hero-eyebrow-sub">Sites · LPs · E-commerces</span>
+      </div>
+
+      <!-- Headline principal — proposta de valor clara -->
+      <h1 class="hero-headline">
+        <span class="hl-dim">Por quê vender só</span>
+        <span class="hl-dim">na sua cidade se você</span>
+        <span class="hl-dim">pode ter clientes no</span>
+        <span class="hl-green">Brasil inteiro</span>
+        <span class="hl-white">ou no mundo todo?</span>
+      </h1>
+
+      <!-- Sub — reforço da dor e solução -->
+      <p class="hero-sub">
+        Sites lentos, feios e invisíveis no Google <strong>custam clientes todos os dias.</strong>
+        A HybridBots cria soluções digitais com velocidade, SEO técnico e design que
+        <strong>transforma visitante em venda</strong>, seja no Brasil ou no mundo inteiro.
+      </p>
+
+      <!-- CTAs — ação primária e secundária -->
+      <div class="hero-ctas">
+        <a href="https://wa.me/5511999999999" target="_blank" class="hero-cta-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+          Quero meu site agora
+        </a>
+        <a href="https://ctrlplayfran.github.io/Portfolio-Hybridbots-Francielly/" target="_blank" class="hero-cta-secondary">
+          Ver portfólio →
+        </a>
+      </div>
+
+      <!-- Prova social — 3 micro-sinais de confiança -->
+      <div class="hero-proof">
+        <div class="hero-proof-avatars">
+          <div class="hero-proof-avatar">LA</div>
+          <div class="hero-proof-avatar">MC</div>
+          <div class="hero-proof-avatar">RF</div>
+          <div class="hero-proof-avatar">JB</div>
+          <div class="hero-proof-avatar more">+46</div>
+        </div>
+        <div class="hero-proof-text">
+          <div class="hero-proof-stars">
+            <div class="hero-proof-star"></div>
+            <div class="hero-proof-star"></div>
+            <div class="hero-proof-star"></div>
+            <div class="hero-proof-star"></div>
+            <div class="hero-proof-star"></div>
+          </div>
+          <div class="hero-proof-label"><strong>+50 clientes</strong> já dominam a internet</div>
+        </div>
+        <div class="hero-proof-sep"></div>
+        <div class="hero-proof-stat">
+          <div class="hero-proof-stat-num">98%</div>
+          <div class="hero-proof-stat-label">Satisfação</div>
+        </div>
+        <div class="hero-proof-sep"></div>
+        <div class="hero-proof-stat">
+          <div class="hero-proof-stat-num">+200%</div>
+          <div class="hero-proof-stat-label">Conversão</div>
+        </div>
+      </div>
+
     </div>
-  </div>
-  <div class="project-metadata">
-    <div class="project-title" id="dynamicTitle">SITES PROFISSIONAIS</div>
-    <div class="project-subtitle" id="dynamicSubtitle">01 — LANDING PAGE</div>
+
+    <!-- ── VISUAL (carrossel — direita) ── -->
+    <div class="hero-visual">
+
+      <!-- Badge flutuante esquerda -->
+      <div class="hero-badge hero-badge-left">
+        <div class="hero-badge-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00E87A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        </div>
+        <div>
+          <div class="hero-badge-desc"><strong>Carrega em &lt;1s</strong></div>
+          <div class="hero-badge-desc">React + Next.js</div>
+        </div>
+      </div>
+
+      <div class="carousel-shell">
+        <canvas id="carousel-canvas"></canvas>
+        <div id="label"></div>
+        <div id="nav">
+          <button id="prev">‹</button>
+          <div id="dots"></div>
+          <button id="next">›</button>
+        </div>
+      </div>
+
+      <!-- Legenda do slide ativo -->
+      <div class="carousel-caption">
+        <div class="project-title" id="dynamicTitle">LANDING PAGE</div>
+        <div class="project-subtitle" id="dynamicSubtitle">01 · PÁGINA DE VENDAS</div>
+      </div>
+
+      <!-- Badge flutuante direita -->
+      <div class="hero-badge hero-badge-right">
+        <div class="hero-badge-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#00E87A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </div>
+        <div>
+          <div class="hero-badge-desc"><strong>1ª página Google</strong></div>
+          <div class="hero-badge-desc">SEO técnico avançado</div>
+        </div>
+      </div>
+
+    </div>
   </div>
 </section>
 
@@ -840,38 +1611,245 @@ button:hover { background: #00E87A; color: #000; }
     <p class="t-sub">Cada projeto entregue com precisão, performance e design de alto nível.</p>
     <div class="t-trust-badge"><div class="t-badge-inner"><span class="t-pulse-dot"></span>98% de taxa de satisfação em todos os projetos</div></div>
     <div class="t-grid">
-      <div class="t-card"><div class="t-metric"><div class="t-metric-num">+200%</div><div class="t-metric-label">Conversão</div></div><div class="t-stars"><div class="t-star"></div><div class="t-star"></div><div class="t-star"></div><div class="t-star"></div><div class="t-star"></div></div><span class="t-open-quote">"</span><p class="t-text">A landing page dobrou nossas conversões em menos de três semanas. Cada detalhe foi pensado com cuidado — é o tipo de trabalho que você raramente encontra por aí.</p><div class="t-line"></div><div class="t-author"><div class="t-avatar t-av1">LA</div><div><div class="t-name">Lucas Andrade</div><div class="t-role">CEO · Startup Fintech</div></div></div></div>
+      <div class="t-card"><div class="t-metric"><div class="t-metric-num">+200%</div><div class="t-metric-label">Conversão</div></div><div class="t-stars"><div class="t-star"></div><div class="t-star"></div><div class="t-star"></div><div class="t-star"></div><div class="t-star"></div></div><span class="t-open-quote">"</span><p class="t-text">A landing page dobrou nossas conversões em menos de três semanas. Cada detalhe foi pensado com cuidado. O tipo de trabalho que você raramente encontra.</p><div class="t-line"></div><div class="t-author"><div class="t-avatar t-av1">LA</div><div><div class="t-name">Lucas Andrade</div><div class="t-role">CEO · Startup Fintech</div></div></div></div>
       <div class="t-card"><div class="t-metric"><div class="t-metric-num">+40%</div><div class="t-metric-label">Faturamento</div></div><div class="t-stars"><div class="t-star"></div><div class="t-star"></div><div class="t-star"></div><div class="t-star"></div><div class="t-star"></div></div><span class="t-open-quote">"</span><p class="t-text">Execução impecável e entrega no prazo. O faturamento da nossa loja cresceu 40% no mês seguinte ao lançamento. Recomendo sem hesitar a qualquer empreendedor.</p><div class="t-line"></div><div class="t-author"><div class="t-avatar t-av2">MC</div><div><div class="t-name">Mariana Costa</div><div class="t-role">Fundadora · Vela Studio</div></div></div></div>
-      <div class="t-card"><div class="t-metric"><div class="t-metric-num">5★</div><div class="t-metric-label">Qualidade</div></div><div class="t-stars"><div class="t-star"></div><div class="t-star"></div><div class="t-star"></div><div class="t-star"></div><div class="t-star"></div></div><span class="t-open-quote">"</span><p class="t-text">Qualidade premium em cada etapa. O site tem a cara de um produto de ponta — limpo, rápido e estruturado com maestria. Um trabalho verdadeiramente de classe mundial.</p><div class="t-line"></div><div class="t-author"><div class="t-avatar t-av3">RF</div><div><div class="t-name">Rafael Figueiredo</div><div class="t-role">CMO · Helio Brands</div></div></div></div>
+      <div class="t-card"><div class="t-metric"><div class="t-metric-num">5★</div><div class="t-metric-label">Qualidade</div></div><div class="t-stars"><div class="t-star"></div><div class="t-star"></div><div class="t-star"></div><div class="t-star"></div><div class="t-star"></div></div><span class="t-open-quote">"</span><p class="t-text">Qualidade premium em cada etapa. O site tem a cara de um produto de ponta: limpo, rápido e estruturado com maestria. Um trabalho verdadeiramente de classe mundial.</p><div class="t-line"></div><div class="t-author"><div class="t-avatar t-av3">RF</div><div><div class="t-name">Rafael Figueiredo</div><div class="t-role">CMO · Helio Brands</div></div></div></div>
     </div>
     <div class="t-clients-row"><div class="t-clients-label">Empresas que confiam na HybridBots</div><div class="t-client-item">Fintech Co.</div><div class="t-client-item">Vela Studio</div><div class="t-client-item">Helio Brands</div><div class="t-client-item">NovaTech</div><div class="t-client-item">+ 47 outros</div></div>
     <div class="t-cta-wrap"><a href="https://wa.me/5511999999999" target="_blank" class="t-cta">Quero um site assim também <span class="t-cta-arrow">→</span></a></div>
   </div>
 </section>
 
+<div class="section-divider"></div>
+
+<!-- SEÇÃO DOR / PROBLEMA -->
+<section class="pain-section" id="problemas">
+  <div class="pain-inner">
+    <h2 class="pain-headline">Seu site está<br><em>te custando clientes?</em></h2>
+    <p class="pain-sub">Quer vender para o Brasil ou para o mundo todo? Reconhece alguma dessas situações?</p>
+    <div class="pain-grid">
+      <div class="pain-card">
+        <div class="pain-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(220,80,80,0.85)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+        </div>
+        <div class="pain-card-title">Site Lento</div>
+        <p class="pain-card-text">Cada segundo a mais de carregamento afasta visitantes e derruba seu ranqueamento no Google. Clientes não esperam.</p>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(220,80,80,0.85)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+        </div>
+        <div class="pain-card-title">Invisível no Google</div>
+        <p class="pain-card-text">Sem SEO técnico correto, sua empresa simplesmente não existe para quem pesquisa seus serviços. Seus concorrentes estão lá. Você não.</p>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(220,80,80,0.85)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></svg>
+        </div>
+        <div class="pain-card-title">Visitas sem Vendas</div>
+        <p class="pain-card-text">Recebe tráfego mas as pessoas saem sem comprar ou deixar contato? É um problema de estrutura e persuasão, não de quantidade de visitas.</p>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(220,80,80,0.85)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/><line x1="9" y1="7" x2="15" y2="7"/><line x1="9" y1="11" x2="13" y2="11"/><line x1="9" y1="15" x2="11" y2="15"/></svg>
+        </div>
+        <div class="pain-card-title">Horrível no Celular</div>
+        <p class="pain-card-text">Mais de 70% das visitas vêm do celular. Um site que não funciona bem no mobile é receita perdida todos os dias.</p>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(220,80,80,0.85)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><line x1="12" y1="2" x2="12" y2="2.01"/></svg>
+        </div>
+        <div class="pain-card-title">Alcance Limitado</div>
+        <p class="pain-card-text">Um site mal construído te prende no local. Um site de alto nível abre portas para clientes em qualquer cidade, estado ou país.</p>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="rgba(220,80,80,0.85)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <div class="pain-card-title">Design Desatualizado</div>
+        <p class="pain-card-text">A primeira impressão é tudo. Um site amador transmite amadorismo. Clientes escolhem quem parece profissional, mesmo sem te conhecer.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- SEÇÃO SERVIÇOS / SOLUÇÃO -->
+<section class="services-section" id="servicos">
+  <div class="services-inner">
+    <div class="services-eyebrow">O que desenvolvemos</div>
+    <h2 class="services-headline">Soluções que<br>geram resultado</h2>
+    <p class="services-sub">Cada projeto é construído com estratégia, tecnologia de ponta e obsessão por conversão.</p>
+    <div class="services-grid">
+      <div class="srv-card featured">
+        <div class="srv-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(0,232,122,0.85)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
+        <div class="srv-title">Landing Pages de Alta Conversão</div>
+        <p class="srv-desc">Páginas direto ao ponto, estruturadas estrategicamente para transformar visitantes em leads e compradores, sem distrações, sem desperdício de tráfego.</p>
+        <ul class="srv-features">
+          <li>Copy persuasivo orientado a conversão</li>
+          <li>Estrutura de funil de vendas integrada</li>
+          <li>Formulários e CTAs otimizados por dados</li>
+          <li>Integração com WhatsApp, CRM e e-mail</li>
+          <li>A/B testing e métricas de performance</li>
+        </ul>
+      </div>
+      <div class="srv-card">
+        <div class="srv-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(0,232,122,0.85)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg></div>
+        <div class="srv-title">Sites Institucionais</div>
+        <p class="srv-desc">Presença digital que transmite autoridade. Plataformas completas, totalmente responsivas e fáceis de navegar, perfeitas no celular e no computador.</p>
+        <ul class="srv-features">
+          <li>Design exclusivo e identidade visual forte</li>
+          <li>100% responsivo para todos os dispositivos</li>
+          <li>Painel de gestão intuitivo (CMS)</li>
+          <li>Velocidade de carregamento otimizada</li>
+          <li>Certificado SSL e segurança avançada</li>
+        </ul>
+      </div>
+    </div>
+    <div class="services-grid-bottom">
+      <div class="srv-card">
+        <div class="srv-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(0,232,122,0.85)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>
+        <div class="srv-title">E-Commerce</div>
+        <p class="srv-desc">Lojas virtuais completas, preparadas para escalar vendas nacional e internacionalmente com checkout de alta conversão.</p>
+        <ul class="srv-features">
+          <li>Checkout rápido e intuitivo</li>
+          <li>Integração com gateways de pagamento</li>
+          <li>Gestão de estoque e pedidos</li>
+          <li>SEO para produtos e categorias</li>
+        </ul>
+      </div>
+      <div class="srv-card">
+        <div class="srv-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(0,232,122,0.85)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg></div>
+        <div class="srv-title">Manutenção Contínua</div>
+        <p class="srv-desc">Suporte técnico especializado para manter seu site sempre rápido, seguro e atualizado, sem preocupações para você.</p>
+        <ul class="srv-features">
+          <li>Atualizações e correções ilimitadas</li>
+          <li>Backups automáticos diários</li>
+          <li>Monitoramento de uptime 24/7</li>
+          <li>Relatórios mensais de performance</li>
+        </ul>
+      </div>
+      <div class="srv-card">
+        <div class="srv-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="rgba(0,232,122,0.85)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg></div>
+        <div class="srv-title">SEO & Performance</div>
+        <p class="srv-desc">Otimização técnica para você aparecer nas primeiras posições do Google e converter esse tráfego em negócios reais.</p>
+        <ul class="srv-features">
+          <li>Auditoria técnica completa</li>
+          <li>Palavras-chave estratégicas</li>
+          <li>Core Web Vitals otimizados</li>
+          <li>Relatórios de posicionamento</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- SEÇÃO DIFERENCIAIS TÉCNICOS -->
+<section class="tech-section" id="tecnologia">
+  <div class="tech-inner">
+    <div class="tech-layout">
+      <div class="tech-text-col">
+        <div class="tech-eyebrow">Por que nossos sites vendem mais</div>
+        <h2 class="tech-headline">Tecnologia de ponta.<br>Resultados reais.</h2>
+        <p class="tech-body">Utilizamos as mesmas tecnologias das maiores empresas do mundo para entregar sites extremamente rápidos, seguros e com carregamento instantâneo, enquanto a maioria ainda usa ferramentas ultrapassadas que limitam seu crescimento.</p>
+        <div class="tech-stack-row">
+          <span class="tech-tag">React</span>
+          <span class="tech-tag">Next.js</span>
+          <span class="tech-tag">TypeScript</span>
+          <span class="tech-tag">SEO Técnico</span>
+          <span class="tech-tag">Core Web Vitals</span>
+          <span class="tech-tag">Edge Deploy</span>
+          <span class="tech-tag">Schema Markup</span>
+          <span class="tech-tag">SSL / HTTPS</span>
+        </div>
+      </div>
+      <div class="tech-cards-col">
+        <div class="tech-feat-card">
+          <div class="tech-feat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(0,232,122,0.85)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
+          <div>
+            <div class="tech-feat-title">Velocidade de Carregamento Instantâneo</div>
+            <p class="tech-feat-text">React e Next.js entregam tempo de resposta abaixo de 1 segundo, reduzindo a taxa de rejeição e melhorando o ranqueamento no Google.</p>
+          </div>
+        </div>
+        <div class="tech-feat-card">
+          <div class="tech-feat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(0,232,122,0.85)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
+          <div>
+            <div class="tech-feat-title">SEO Perfeito e Código Semântico</div>
+            <p class="tech-feat-text">Desenvolvemos a estrutura exata que os motores de busca exigem. Código limpo, semântico, com schema markup e meta tags perfeitas para sua empresa ser encontrada mais facilmente no Google.</p>
+          </div>
+        </div>
+        <div class="tech-feat-card">
+          <div class="tech-feat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(0,232,122,0.85)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg></div>
+          <div>
+            <div class="tech-feat-title">Segurança e Estabilidade</div>
+            <p class="tech-feat-text">Infraestrutura com SSL, proteção contra ataques, backups automáticos e deploy em edge servers para máxima disponibilidade global.</p>
+          </div>
+        </div>
+        <div class="tech-feat-card">
+          <div class="tech-feat-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="rgba(0,232,122,0.85)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg></div>
+          <div>
+            <div class="tech-feat-title">Conversão como Prioridade</div>
+            <p class="tech-feat-text">Cada elemento é posicionado estrategicamente para guiar o visitante até a ação que você quer: comprar, ligar, preencher, conversar.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- SEÇÃO CTA FINAL -->
+<section class="cta-section" id="contato">
+  <div class="cta-inner">
+    <div class="cta-glow-ring"></div>
+    <div class="cta-eyebrow">Pronto para crescer?</div>
+    <h2 class="cta-headline">Vamos dominar<br>a internet juntos.</h2>
+    <p class="cta-sub">Fale conosco, conte o objetivo do seu negócio e nós montamos a proposta ideal para a sua empresa dominar a internet, seja no Brasil ou no mundo todo.</p>
+    <div class="cta-actions">
+      <a href="https://wa.me/5511999999999" target="_blank" class="cta-primary">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+        Solicitar Orçamento Grátis
+      </a>
+      <a href="https://ctrlplayfran.github.io/Portfolio-Hybridbots-Francielly/" target="_blank" class="cta-secondary">
+        Ver Portfólio →
+      </a>
+    </div>
+    <div class="cta-reassurance">
+      <div class="cta-re-item"><span class="cta-re-dot"></span>Resposta em até 1 hora</div>
+      <div class="cta-re-item"><span class="cta-re-dot"></span>Orçamento sem compromisso</div>
+      <div class="cta-re-item"><span class="cta-re-dot"></span>+50 projetos entregues</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <strong>HybridBots</strong>
+      Criação de Sites & Landing Pages
+    </div>
+    <div class="footer-links">
+      <a href="#hero">Início</a>
+      <a href="#servicos">Serviços</a>
+      <a href="#depoimentos">Depoimentos</a>
+      <a href="#tecnologia">Tecnologia</a>
+      <a href="https://ctrlplayfran.github.io/Portfolio-Hybridbots-Francielly/" target="_blank">Portfólio</a>
+    </div>
+    <div class="footer-copy">
+      © 2025 HybridBots. Todos os direitos reservados.
+    </div>
+  </div>
+</footer>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
-// LOADER CUBOS
-function createLoaderCubes() {
-  const grid = document.getElementById("loaderGrid");
-  if (!grid) return;
-  const size = 15, total = size * size;
-  const center = size/2 - 0.5;
-  const maxDist = Math.sqrt(center*center + center*center);
-  for (let i = 0; i < total; i++) {
-    const container = document.createElement("div");
-    container.className = "cube-container";
-    const row = Math.floor(i / size), col = i % size;
-    const dx = col - center, dy = row - center;
-    const dist = Math.sqrt(dx*dx + dy*dy);
-    const delay = (Math.cos((dist / maxDist) * Math.PI) + 1) / 2;
-    container.innerHTML = `<div class="cube" style="--delay: ${delay}"><div class="face top"></div><div class="face front"></div><div class="face right"></div></div>`;
-    grid.appendChild(container);
-  }
-}
-createLoaderCubes();
-
-// CARROSSEL 3D (sem partículas)
+// CARROSSEL 3D
 const canvasCar = document.getElementById('carousel-canvas');
 const renderer = new THREE.WebGLRenderer({ canvas: canvasCar, alpha: true });
 renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
@@ -889,17 +1867,17 @@ function createFallbackTexture() {
   const tex = new THREE.CanvasTexture(canv); tex.needsUpdate = true; return tex;
 }
 cardTexture = textureLoader.load('telas.png',
-  (tex) => { updateCardsGeometry(tex.image.width/tex.image.height); hideLoading(); },
+  (tex) => { updateCardsGeometry(tex.image.width/tex.image.height); },
   undefined,
-  () => { cardTexture = createFallbackTexture(); updateCardsGeometry(1); hideLoading(); }
+  () => { cardTexture = createFallbackTexture(); updateCardsGeometry(1); }
 );
 
 const serviceData = [
-  { title: 'LANDING PAGE', label: '01 — PÁGINA DE VENDAS' },
-  { title: 'SITE PROFISSIONAL', label: '02 — INSTITUCIONAL' },
-  { title: 'E-COMMERCE', label: '03 — LOJA VIRTUAL' },
-  { title: 'MANUTENÇÃO', label: '04 — SUPORTE CONTÍNUO' },
-  { title: 'SEO & PERFORMANCE', label: '05 — OTIMIZAÇÃO' }
+  { title: 'LANDING PAGE', label: '01 · PÁGINA DE VENDAS' },
+  { title: 'SITE PROFISSIONAL', label: '02 · INSTITUCIONAL' },
+  { title: 'E-COMMERCE', label: '03 · LOJA VIRTUAL' },
+  { title: 'MANUTENÇÃO', label: '04 · SUPORTE CONTÍNUO' },
+  { title: 'SEO & PERFORMANCE', label: '05 · OTIMIZAÇÃO' }
 ];
 const groups = []; const RADIUS = 5.5; const BASE_H = 3.2;
 function makeCard() {
@@ -1023,13 +2001,16 @@ document.addEventListener('click', (e) => {
   }
 });
 
+// IntersectionObserver para todas as animações de entrada
 const observer = new IntersectionObserver((entries) => {
   entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
-}, { threshold: 0.15 });
-document.querySelectorAll('.t-card').forEach(card => observer.observe(card));
+}, { threshold: 0.12 });
 
-function hideLoading() { setTimeout(() => document.getElementById('loadingOverlay')?.classList.add('fade-out'), 2200); }
-setTimeout(() => { if(document.getElementById('loadingOverlay') && !document.getElementById('loadingOverlay').classList.contains('fade-out')) hideLoading(); }, 4800);
+document.querySelectorAll('.t-card, .pain-card, .srv-card, .tech-feat-card').forEach((el, i) => {
+  el.style.transitionDelay = `${(i % 3) * 0.1}s`;
+  observer.observe(el);
+});
+
 </script>
 </body>
 </html>
