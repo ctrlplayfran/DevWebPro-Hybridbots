@@ -678,8 +678,8 @@ button:hover { background: #00E87A; color: #000; }
     margin-bottom: 22px;
     /* limita a 3 linhas para não empurrar CTAs */
     display: -webkit-box;
-    -webkit-line-clamp: 4;
-    -webkit-box-orient: vertical;
+    --webkit-line-clamp: 4;
+    --webkit-box-orient: vertical;
     overflow: hidden;
   }
 
@@ -1194,7 +1194,6 @@ button:hover { background: #00E87A; color: #000; }
   .tech-layout { grid-template-columns: 1fr; gap: 48px; }
   .tech-section { padding: 60px 20px 80px; }
 }
-.tech-text-col {}
 .tech-eyebrow {
   font-family: 'Barlow Condensed', sans-serif;
   font-size: 11px; font-weight: 500;
